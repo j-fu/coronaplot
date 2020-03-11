@@ -48,5 +48,8 @@ function plotcompare(;xshift=1)
     PyPlot.xlabel("Days")
     PyPlot.ylabel("Infections")
     PyPlot.legend(loc="upper left")
-    PyPlot.savefig("infected.pdf")
+    PyPlot.savefig("infected.png")
 end
+
+plotcompare()
+
