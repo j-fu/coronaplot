@@ -14,9 +14,15 @@ function infected()
     CSV.read("infected.dat")
 end
 
-countryrow(df,country)=df[df[:,r_name].==country,:]
-rowdata(row,shift)=sum(convert(Array,row[:,r_datastart-shift:end]),dims=1)'
-countrydata(df,country,shift)=rowdata(countryrow(df,country),shift)
+countryrows(df,country)=df[df[:,r_name].==country,:]
+function countrydata(df,country,shift)
+    crows=countryrows(df,country)
+    if country=="US"
+        sum(convert(Array,crows[1:52,r_datastart-shift:end]),dims=1)'
+    else
+        sum(convert(Array,crows[:,r_datastart-shift:end]),dims=1)'
+    end
+end
 
 function plotcountry(df,country;shift=0,lw=2,lt="-", scale="log")
     plus=""
@@ -50,7 +56,7 @@ function plotcompare(;xshift=1)
     plotcountry(rawdata,"Italy",shift=0*xshift,scale="exp")
     plotcountry(rawdata,"France",shift=-9*xshift,scale="exp")
     plotcountry(rawdata,"US",shift=-11*xshift,lw=3,lt="g-o",scale="exp")
-    plotcountry(rawdata,"United Kingdom",shift=-13*xshift,scale="exp")
+#    plotcountry(rawdata,"United Kingdom",shift=-13*xshift,scale="exp")
     plotcountry(rawdata,"Spain",shift=-9*xshift,scale="exp")
     plotcountry(rawdata,"Iran",shift=-3*xshift,scale="exp")
     plotcountry(rawdata,"Korea, South",shift=4*xshift,scale="exp")
