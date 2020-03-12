@@ -11,6 +11,13 @@ collects and publishes the data of the diesease development.
 After an idea of [Mark Handley](https://twitter.com/MarkJHandley/status/1237119688578138112?s=20) we take the same
 data source and plot the data in a different way for those countries which have more than 1000 cases.
 
+
+The data  for the  US are  based on  the state  data, county  data are
+ignored, and there are some  inconsistencies in the time series. The issue currently is
+[discussed](https://github.com/CSSEGISandData/COVID-19/issues/571)
+with the maintainers of the data.
+
+
 ## Absolute numbers
 ![](infected-exp.png) 
 
