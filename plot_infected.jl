@@ -58,7 +58,7 @@ function plotcompare(;xshift=1)
     PyPlot.savefig("infected.png")
 end
 
-function gitupdate()
-    run(`git commit -a -m "data update"`)
+function publish(;msg="data update")
+    run(`git commit -a -m $(msg)`)
     run(`git push`)
 end
