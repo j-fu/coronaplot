@@ -9,8 +9,10 @@ datasource="https://github.com/CSSEGISandData/COVID-19/raw/master/csse_covid_19_
 dataurl="https://github.com/CSSEGISandData/COVID-19/"
 
 #infected()=CSV.read("time_series_19-covid-Confirmed.csv")
-infected()=CSV.read(download(datasource))
-
+function infected()
+    download(datasource,"infected.dat")
+    CSV.read("infected.dat")
+end
 
 countryrow(df,country)=df[df[:,r_name].==country,:]
 rowdata(row,shift)=sum(convert(Array,row[:,r_datastart-shift:end]),dims=1)'
@@ -42,7 +44,8 @@ function plotcompare(;xshift=1)
     plotcountry(rawdata,"Spain",shift=-9*xshift)
     plotcountry(rawdata,"Iran (Islamic Republic of)",shift=-3*xshift)
     plotcountry(rawdata,"Republic of Korea",shift=4*xshift)
-    plotcountry(rawdata,"Mainland China",shift=36*xshift)
+    plotcountry(rawdata,"China",shift=36*xshift)
+    plotcountry(rawdata,"Vietnam",shift=-20*xshift)
     plotcountry(rawdata,"Germany",shift=-9*xshift,lw=3,lt="r-o")
     PyPlot.grid()
     PyPlot.xlabel("Days")
@@ -51,5 +54,7 @@ function plotcompare(;xshift=1)
     PyPlot.savefig("infected.png")
 end
 
-plotcompare()
-
+function gitupdate()
+    run(`git commit -a -m "data update"`)
+    run(`git push`)
+end
