@@ -1,6 +1,7 @@
 # Plot of corona virus development
 
-![](infected.png) 
+## Absolute numbers
+![](infected-exp.png) 
 
 Development of confirmed  adjusted cases since Jan  22, 2020.  Plotted
 with time shifts in order to compare initial exponential phases
@@ -10,4 +11,10 @@ The data for Italy are plotted without time shift. E.g. the data for Germany are
 backward in time. They show that as of March 12, Germany is very much on the same track as Italy,
 just nine days behind. 
 
+
+
+## Logarithmic scale
+![](infected.png) 
+
+This is the same plot, just with an logarithmic scale of the y-axis.
 
