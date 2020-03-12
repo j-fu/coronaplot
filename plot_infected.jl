@@ -28,6 +28,10 @@ function plotcountry(df,country;shift=0,lw=2,lt="-")
         data=countrydata(df,country,0).+1
         days=collect(shift:shift+length(data)-1)
     end
+    println("$(country), $(maximum(data))")
+    if maximum(data)==1
+        error("$(country) not found")
+    end
     semilogy(days,data,label="$(country) $(plus)$(shift)",lt,linewidth=lw,markersize=6)
 end
 
@@ -39,12 +43,12 @@ function plotcompare(;xshift=1)
     rawdata=infected()
     plotcountry(rawdata,"Italy",shift=0*xshift)
     plotcountry(rawdata,"France",shift=-9*xshift)
-    plotcountry(rawdata,"US",shift=-11*xshift)
-    plotcountry(rawdata,"UK",shift=-13*xshift)
+    plotcountry(rawdata,"US",shift=-11*xshift,lw=3,lt="g-o")
+    plotcountry(rawdata,"United Kingdom",shift=-13*xshift)
     plotcountry(rawdata,"Spain",shift=-9*xshift)
-    plotcountry(rawdata,"Iran (Islamic Republic of)",shift=-3*xshift)
+    plotcountry(rawdata,"Iran",shift=-3*xshift)
     plotcountry(rawdata,"Korea, South",shift=4*xshift)
-    plotcountry(rawdata,"China",shift=36*xshift)
+    plotcountry(rawdata,"China",shift=35*xshift)
     plotcountry(rawdata,"Vietnam",shift=-20*xshift)
     plotcountry(rawdata,"Germany",shift=-9*xshift,lw=3,lt="r-o")
     PyPlot.grid()
