@@ -18,7 +18,7 @@ countryrow(df,country)=df[df[:,r_name].==country,:]
 rowdata(row,shift)=sum(convert(Array,row[:,r_datastart-shift:end]),dims=1)'
 countrydata(df,country,shift)=rowdata(countryrow(df,country),shift)
 
-function plotcountry(df,country;shift=0,lw=2,lt="-")
+function plotcountry(df,country;shift=0,lw=2,lt="-", scale="log")
     plus=""
     if shift<=0
         data=countrydata(df,country,shift).+1
@@ -32,12 +32,18 @@ function plotcountry(df,country;shift=0,lw=2,lt="-")
     if maximum(data)==1
         error("$(country) not found")
     end
-    semilogy(days,data,label="$(country) $(plus)$(shift)",lt,linewidth=lw,markersize=6)
+    if scale=="exp"
+        plot(days,data,label="$(country) $(plus)$(shift)",lt,linewidth=lw,markersize=6)
+        ylim(1:15_000)
+    else
+        semilogy(days,data,label="$(country) $(plus)$(shift)",lt,linewidth=lw,markersize=6)
+    end
+    
 end
 
 function plotcompare(;xshift=1)
     clf()
-    title("Comparison of Corona Virus Development\nSource: $(dataurl)\n$(Dates.now())")
+    title("Comparison of Corona Virus Development\nData source: $(dataurl)\n$(Dates.now())")
     fig = PyPlot.gcf()
     fig.set_size_inches(10,5)
     rawdata=infected()
@@ -56,6 +62,24 @@ function plotcompare(;xshift=1)
     PyPlot.ylabel("Infections")
     PyPlot.legend(loc="upper left")
     PyPlot.savefig("infected.png")
+    #
+    clf()
+    title("Comparison of Corona Virus Development\nData source: $(dataurl)\n$(Dates.now())")
+    plotcountry(rawdata,"Italy",shift=0*xshift,scale="exp")
+    plotcountry(rawdata,"France",shift=-9*xshift,scale="exp")
+    plotcountry(rawdata,"US",shift=-11*xshift,lw=3,lt="g-o",scale="exp")
+    plotcountry(rawdata,"United Kingdom",shift=-13*xshift,scale="exp")
+    plotcountry(rawdata,"Spain",shift=-9*xshift,scale="exp")
+    plotcountry(rawdata,"Iran",shift=-3*xshift,scale="exp")
+    plotcountry(rawdata,"Korea, South",shift=4*xshift,scale="exp")
+    plotcountry(rawdata,"China",shift=35*xshift,scale="exp")
+    plotcountry(rawdata,"Vietnam",shift=-20*xshift,scale="exp")
+    plotcountry(rawdata,"Germany",shift=-9*xshift,lw=3,lt="r-o",scale="exp")
+    PyPlot.grid()
+    PyPlot.xlabel("Days")
+    PyPlot.ylabel("Infections")
+    PyPlot.legend(loc="upper left")
+    PyPlot.savefig("infected-exp.png")
 end
 
 function publish(;msg="data update")
