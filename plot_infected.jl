@@ -26,7 +26,14 @@ end
 # Create a new dataframe wich contains only data for given countries
 # For US and China, data are given state/province/county-wise
 # For former colonial powers with overseas territories etc. there are multiple rows as well
-select_countries_rows(df,countries)=df[occursin.(df[:,c_country],countries),:]
+function select_countries_rows(df,countries)
+    clists=BitArray(undef,length(countries),size(df,1))
+    for i=1:length(countries)
+        clists[i,:].=df[:,c_country].==countries[i]
+    end
+    clist=vec(reduce(|,clists,dims=1))
+    df[clist,:]
+end
 
 # Create shifted timeseries for each countries by cutting of the first `-shift` entries
 function create_countries_timeseries(df,countries,shift)
@@ -76,10 +83,11 @@ function plotcountries(df,countries;
         days=collect(shift:shift+length(data)-1)
     end
     # print for debugging purposes
+    #println(data)
     println("$(label), $(maximum(data))")
-    if maximum(data)==1
-        error("$(label) not found")
-    end
+    # if maximum(data)==1
+    #     error("$(label) not found")
+    # end
 
     # Add to plot
     if scale=="abs"
@@ -92,12 +100,43 @@ end
 
 
 
-
 # Create the plots
-# use shif_multiplyer=0 to plot without shifts
+# use shift_multiplyer=0 to plot without shifts
 function create_plots(;shift_multiplier=1)
-    EU=["Spain","Germany","France","Italy"]
 
+    Europe=[
+        "Austria",
+        "Belgium",
+        "Bulgaria",
+        "Croatia",
+        "Cyprus",
+        "Czechia",
+        "Denmark",
+        "Estonia",
+        "Finland",
+        "France",
+        "Germany",
+        "Greece",
+        "Hungary",
+        "Ireland",
+        "Italy",
+        "Latvia",
+        "Lithuania",
+        "Luxembourg",
+        "Malta",
+        "Netherlands",
+        "Poland",
+        "Portugal",
+        "Romania",
+        "Slovakia",
+        "Slovenia",
+        "Spain",
+        "Sweden",
+        "Norway",
+        "Switzerland",
+        "United Kingdom",
+    ]
+    
     rawdata=read_download_infected()
     
     fig = PyPlot.figure(1)
@@ -109,13 +148,13 @@ function create_plots(;shift_multiplier=1)
     title("Comparison of Corona Virus Development\nData source: $(dataurl)\n$(Dates.now())")
     plotcountries(rawdata,["Italy"],shift=0*shift_multiplier,scale="abs")
     plotcountries(rawdata,["France"],shift=-9*shift_multiplier,scale="abs")
-    plotcountries(rawdata,["US"],shift=-11*shift_multiplier,lw=3,lt="g-o",scale="abs")
     plotcountries(rawdata,["Spain"],shift=-9*shift_multiplier,scale="abs")
     plotcountries(rawdata,["Iran"],shift=-3*shift_multiplier,scale="abs")
     plotcountries(rawdata,["Korea, South"],shift=4*shift_multiplier,scale="abs")
     plotcountries(rawdata,["China"],shift=35*shift_multiplier,scale="abs")
     plotcountries(rawdata,["Germany"],shift=-9*shift_multiplier,lw=3,lt="r-o",scale="abs")
-#    plotcountries(rawdata,EU,label="EU",shift=0*shift_multiplier,scale="abs")
+#    plotcountries(rawdata,Europe,label="Europe",shift=2*shift_multiplier,scale="abs",lt="b-")
+    plotcountries(rawdata,["US"],shift=-11*shift_multiplier,scale="abs",lt="k-")
     PyPlot.ylim(1,15_000)
     PyPlot.grid()
     PyPlot.xlabel("Days")
@@ -131,13 +170,13 @@ function create_plots(;shift_multiplier=1)
     title("Comparison of Corona Virus Development\nData source: $(dataurl)\n$(Dates.now())")
     plotcountries(rawdata,["Italy"],shift=0*shift_multiplier)
     plotcountries(rawdata,["France"],shift=-9*shift_multiplier)
-    plotcountries(rawdata,["US"],shift=-11*shift_multiplier,lw=3,lt="g-o")
     plotcountries(rawdata,["Spain"],shift=-9*shift_multiplier)
     plotcountries(rawdata,["Iran"],shift=-3*shift_multiplier)
     plotcountries(rawdata,["Korea, South"],shift=4*shift_multiplier)
     plotcountries(rawdata,["China"],shift=35*shift_multiplier)
     plotcountries(rawdata,["Germany"],shift=-9*shift_multiplier,lw=3,lt="r-o")
- #   plotcountries(rawdata,EU,label="EU",shift=0*shift_multiplier)
+    plotcountries(rawdata,Europe,label="Europe",shift=2*shift_multiplier,lt="b-")
+    plotcountries(rawdata,["US"],shift=-11*shift_multiplier,lt="k-")
     PyPlot.ylim(1,100_000)
     PyPlot.grid()
     PyPlot.xlabel("Days")

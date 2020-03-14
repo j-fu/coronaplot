@@ -3,19 +3,21 @@
 The Center for Systems Science and Engineering (CSSE)  of Johns Hopkins University
 collects and publishes the data of the diesease development.
 
-- [Blog post describing the project](https://systems.jhu.edu/research/public-health/ncov/)
-- [Github repo containing the current data](https://github.com/CSSEGISandData/COVID-19)
-- [The](https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6) corona virus map
-
-
 After an idea of [Mark Handley](https://twitter.com/MarkJHandley/status/1237119688578138112?s=20) we take the same
 data source and plot the data in a different way for those countries which have more than 1000 cases.
 
 
-The data  for the  US are  based on  the state  data, county  data are
-ignored, and there are some  inconsistencies in the time series. The issue currently is
-[discussed](https://github.com/CSSEGISandData/COVID-19/issues/571)
-with the maintainers of the data.
+- [Blog post describing the project at CSSE](https://systems.jhu.edu/research/public-health/ncov/).
+- [The](https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6) corona virus map.
+- Data for the plots come from the [github repository containing the current data](https://github.com/CSSEGISandData/COVID-19)
+  which are [updated once per day around 23:59 (UTC)](https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data#update-frequency]
+  and may lag behind the data in the map.    
+  Data  for the  US are  based on  the state  data, county  data are
+  ignored.  Data  for  Europe  currently  include   the  EU,
+  Switzerland, Norway, UK only.
+
+
+
 
 
 ## Absolute numbers
