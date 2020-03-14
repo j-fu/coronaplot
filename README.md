@@ -10,7 +10,7 @@ data source and plot the data in a different way for those countries which have 
 - [Blog post describing the project at CSSE](https://systems.jhu.edu/research/public-health/ncov/).
 - [The](https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6) corona virus map.
 - Data for the plots come from the [github repository containing the current data](https://github.com/CSSEGISandData/COVID-19)
-  which are [updated once per day around 23:59 (UTC)](https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data#update-frequency]
+  which are [updated once per day around 23:59 (UTC)](https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data#update-frequency)
   and may lag behind the data in the map.    
   Data  for the  US are  based on  the state  data, county  data are
   ignored.  Data  for  Europe  currently  include   the  EU,
