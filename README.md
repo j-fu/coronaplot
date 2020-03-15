@@ -4,7 +4,7 @@ The Center for Systems Science and Engineering (CSSE)  of Johns Hopkins Universi
 collects and publishes the data of the diesease development.
 
 After an idea of [Mark Handley](https://twitter.com/MarkJHandley/status/1237119688578138112?s=20) we take the same
-data source and plot the data in a different way for those countries which have more than 1000 cases.
+data source and plot the data in a different way for those countries which have more than 2000 cases.
 
 
 - [Blog post describing the project at CSSE](https://systems.jhu.edu/research/public-health/ncov/).
