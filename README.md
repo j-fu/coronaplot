@@ -33,5 +33,5 @@ just nine days behind.
 ## Logarithmic scale
 ![](infected.png) 
 
-This is the same plot, just with an logarithmic scale of the y-axis.
+This is the same plot, just with a logarithmic scale of the y-axis.
 
