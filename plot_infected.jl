@@ -73,12 +73,12 @@ function plotcountries(df,countries;
     # Create shifted time series
     if shift<=0
         # Shift timeseries to the left by cutting of the first `shift` entries
-        plus=""
+        reldays="days behind"
         data=create_countries_timeseries(df,countries,shift).+logscale_correction
         days=collect(0:length(data)-1)
     else
         # Shift timeseries to the right by increasing the entries in `days`
-        plus="+"
+        reldays="days ahead"
         data=create_countries_timeseries(df,countries,0).+logscale_correction
         days=collect(shift:shift+length(data)-1)
     end
@@ -91,9 +91,9 @@ function plotcountries(df,countries;
 
     # Add to plot
     if scale=="abs"
-        plot(days,data,label="$(label) $(plus)$(shift)",lt,linewidth=lw,markersize=6)
+        plot(days,data,label="$(label) $(abs(shift)) $(reldays)",lt,linewidth=lw,markersize=6)
     else
-        semilogy(days,data,label="$(label) $(plus)$(shift)",lt,linewidth=lw,markersize=6)
+        semilogy(days,data,label="$(label) $(abs(shift)) $(reldays)",lt,linewidth=lw,markersize=6)
     end
     
 end
@@ -149,13 +149,15 @@ function create_plots(;shift_multiplier=1)
     plotcountries(rawdata,["Italy"],shift=0*shift_multiplier,scale="abs")
     plotcountries(rawdata,["France"],shift=-9*shift_multiplier,scale="abs")
     plotcountries(rawdata,["Spain"],shift=-7*shift_multiplier,scale="abs")
-    plotcountries(rawdata,["Iran"],shift=-3*shift_multiplier,scale="abs")
+    plotcountries(rawdata,["Iran"],shift=0*shift_multiplier,scale="abs")
     plotcountries(rawdata,["Korea, South"],shift=4*shift_multiplier,scale="abs")
     plotcountries(rawdata,["China"],shift=38*shift_multiplier,scale="abs")
+    plotcountries(rawdata,["Switzerland"],shift=-12*shift_multiplier,scale="abs")
     plotcountries(rawdata,Europe,label="Europe",shift=2*shift_multiplier,scale="abs",lt="b-")
-    plotcountries(rawdata,["US"],shift=-10*shift_multiplier,scale="abs",lt="k-")
     plotcountries(rawdata,["Germany"],shift=-8*shift_multiplier,lw=3,lt="r-o",scale="abs")
+    plotcountries(rawdata,["US"],shift=-10*shift_multiplier,scale="abs",lt="k-")
     PyPlot.ylim(1,15_000)
+    PyPlot.xlim(30,60)
     PyPlot.grid()
     PyPlot.xlabel("Days")
     PyPlot.ylabel("Infections")
@@ -171,17 +173,19 @@ function create_plots(;shift_multiplier=1)
     plotcountries(rawdata,["Italy"],shift=0*shift_multiplier)
     plotcountries(rawdata,["France"],shift=-9*shift_multiplier)
     plotcountries(rawdata,["Spain"],shift=-7*shift_multiplier)
-    plotcountries(rawdata,["Iran"],shift=-3*shift_multiplier)
+    plotcountries(rawdata,["Iran"],shift=0*shift_multiplier)
     plotcountries(rawdata,["Korea, South"],shift=4*shift_multiplier)
     plotcountries(rawdata,["China"],shift=38*shift_multiplier)
+    plotcountries(rawdata,["Switzerland"],shift=-12*shift_multiplier)
     plotcountries(rawdata,Europe,label="Europe",shift=2*shift_multiplier,lt="b-")
-    plotcountries(rawdata,["US"],shift=-10*shift_multiplier,lt="k-")
     plotcountries(rawdata,["Germany"],shift=-8*shift_multiplier,lw=3,lt="r-o")
-    PyPlot.ylim(1,100_000)
+    plotcountries(rawdata,["US"],shift=-10*shift_multiplier,lt="k-")
+    PyPlot.ylim(50,100_000)
+    PyPlot.xlim(20,100)
     PyPlot.grid()
     PyPlot.xlabel("Days")
     PyPlot.ylabel("Infections (logarithmic scale)")
-    PyPlot.legend(loc="upper left")
+    PyPlot.legend(loc="lower right")
     PyPlot.savefig("infected.png")
 end
 
