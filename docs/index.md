@@ -4,41 +4,27 @@ title: Zeitliche Entwicklung des Coronavirus
 
 [Diese Seite auf Englisch](index.en.md)
 
-Das  "Center for Systems Science and Engineering (CSSE)!  der Johns Hopkins University
-sammelt und publiziert Daten der Entwicklung der Krankheit.
+Das  "Center for Systems Science and Engineering (CSSE)" der Johns Hopkins University sammelt und publiziert Daten der Entwicklung der Krankheit.
 
-After an idea of [Mark Handley](https://twitter.com/MarkJHandley/status/1237119688578138112?s=20) we take the same
-data source and plot the data in a different way for those countries which have more than 3000 cases.
+Nach einer Idee von [Mark Handley](https://twitter.com/MarkJHandley/status/1237119688578138112?s=20) nutzen wir hier diese Datenquelle, um den zeitlichen Verlauf im Vergleich der Länder mit mehr als 3000 Infektionen darzustellen.
 
-
-- [Blog post describing the project at CSSE](https://systems.jhu.edu/research/public-health/ncov/).
-- [The](https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6) corona virus map.
-- Data for the plots come from the [github repository containing the current data](https://github.com/CSSEGISandData/COVID-19)
-  which are [updated once per day around 23:59 (UTC)](https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data#update-frequency)
-  and may lag behind the data in the map.    
-  Data  for the  US are  based on  the state  data, county  data are
-  ignored.  Data  for  Europe  currently  include   the  EU,
-  Switzerland, Norway, UK only. All other European countries have
-  (as of March 17) less than 100 infections each.
+- [Blogpost](https://systems.jhu.edu/research/public-health/ncov/), welcher as Projekt am CSSE beschreibt
+- [Die](https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6) bekannte Karte zur Verbreitung des Coronavirus.
+- Die Daten für die Plots kommen aus dem [Github- Repository mit den aktuellen Daten](https://github.com/CSSEGISandData/COVID-19). Diese werden [einmal am Tag um 0:00  (UTC)](https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data#update-frequency) aktualisiert (seltener als die der Karte)
+Die Daten für die USA basieren auf den Angaben für die Bundesstaaten. Die Daten für Europa beinhalten die Daten für die EU-Länder, sowie für die Schweiz, Norwegen und Großbritannien. Alle anderen europäischen Staaten haben zum aktuellen Zeitpunkt (17.3.) jeweils weniger als 100 Fälle.
 
 
 
-
-## Absolute numbers
+## Darstellung in absoluten Zahlem
 ![](infected-exp.png) 
-
-Development of confirmed  adjusted cases since Jan  22, 2020.  Plotted with time shifts in order to compare initial 
-[exponential phases](https://en.wikipedia.org/wiki/Exponential_growth).
-
-The data for Italy are plotted without time shift. E.g. the data for Germany are shifted 8 days backward in time. 
-They show that as of March 16, Germany (my country...) is very much on the same track as Italy,
-just eight days behind. 
+Entwicklung der bestätigten Fälle seit dem 22.1.2020. Dargestellt mit zeitlichen Verschiebungen, um die initialen [exponentiellen Phasen](https://de.wikipedia.org/wiki/Exponentielles_Wachstum) der Ausbreitung zu vergleichen.
+Die Daten für Italien werden ohne zeitliche Verschiebung dargestellt. Die Daten für Deutschland sind z.B. um 8 Tage in die Zukunft verschoben, um sie mit denen für Italien zu vergleichen. Man sieht daher, dass die Entwicklung in Deutschland nur 8 Tage (Stand 16.3.) hinter der Entwicklung in Italien liegt.
 
 
-
-## Logarithmic scale
+## Logarithmische Skale
 ![](infected.png) 
 
-This is the same plot, just with a logarithmic scale of the y-axis.
+Die gleiche Darstellung wie oben, nur mit einer logarithmischen Skala der y-Achse. In diesem Fall entspricht das exponentielle Wachstum einer geraden Linie.
+
 
 
