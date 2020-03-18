@@ -21,7 +21,7 @@ data source and plot the data in a different way for those countries which have 
 
 
 ## Absolute numbers
-![](infected-exp.png) 
+![](docs/infected-exp.png) 
 
 Development of confirmed  adjusted cases since Jan  22, 2020.  Plotted with time shifts in order to compare initial exponential phases.
 
@@ -32,7 +32,7 @@ just eight days behind.
 
 
 ## Logarithmic scale
-![](infected.png) 
+![](docs/infected.png) 
 
 This is the same plot, just with a logarithmic scale of the y-axis.
 
