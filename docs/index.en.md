@@ -41,4 +41,4 @@ just eight days behind.
 
 This is the same plot, just with a logarithmic scale of the y-axis.
 
-[Source code for the creation of the plots](https://github.io/j-fu/coronaplot)
+[Source code for the creation of the plots](https://github.com/j-fu/coronaplot)
