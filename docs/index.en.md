@@ -2,6 +2,7 @@
 title:  Plot of corona virus development
 ---
 
+[This page in German](index.en.md)
 
 The Center for Systems Science and Engineering (CSSE)  of Johns Hopkins University
 collects and publishes the data of the diesease development.

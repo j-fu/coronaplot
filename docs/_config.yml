@@ -1,5 +1,1 @@
 theme: jekyll-theme-tactile
-gems:  ['jekyll-multiple-languages']
-languages: ['en', 'de']
-language_default: 'de'
-
