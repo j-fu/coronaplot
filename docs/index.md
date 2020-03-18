@@ -1,5 +1,5 @@
 ---
-title: Zeitliche Entwicklung des Coronavirus
+title: Zeitliche Entwicklung des Coronavirus (18.3.)
 ---
 
 [Diese Seite auf Englisch](index.en.md)
@@ -15,7 +15,7 @@ Die Daten für die USA basieren auf den Angaben für die Bundesstaaten. Die Date
 
 
 
-## Darstellung in absoluten Zahlem
+## Darstellung in absoluten Zahlen
 ![](infected-exp.png) 
 Entwicklung der bestätigten Fälle seit dem 22.1.2020. Dargestellt mit zeitlichen Verschiebungen, um die initialen [exponentiellen Phasen](https://de.wikipedia.org/wiki/Exponentielles_Wachstum) der Ausbreitung zu vergleichen.
 Die Daten für Italien werden ohne zeitliche Verschiebung dargestellt. Die Daten für Deutschland sind z.B. um 8 Tage in die Zukunft verschoben, um sie mit denen für Italien zu vergleichen. Man sieht daher, dass die Entwicklung in Deutschland nur 8 Tage (Stand 16.3.) hinter der Entwicklung in Italien liegt.

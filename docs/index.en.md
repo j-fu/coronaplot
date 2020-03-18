@@ -1,5 +1,5 @@
 ---
-title:  Plot of corona virus development
+title:  Plot of corona virus development (March 18)
 ---
 
 [This page in German](index.md)
