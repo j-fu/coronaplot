@@ -19,7 +19,7 @@ dataurl="https://github.com/CSSEGISandData/COVID-19/"
 # Download and read data for confirmed infection cases
 # This creates a dataframe
 function read_download_infected()
-#    download(datasource,"infected.dat")
+    download(datasource,"infected.dat")
     CSV.read("infected.dat")
 end
 
@@ -156,7 +156,7 @@ function create_plots(;shift_multiplier=1)
     plotcountries(rawdata,Europe,label="Europe",shift=2*shift_multiplier,scale="abs",lt="b-")
     plotcountries(rawdata,["Germany"],shift=-8*shift_multiplier,lw=3,lt="r-o",scale="abs")
     plotcountries(rawdata,["US"],shift=-10*shift_multiplier,scale="abs",lt="k-")
-    PyPlot.ylim(1,15_000)
+    PyPlot.ylim(1,50_000)
     PyPlot.xlim(30,60)
     PyPlot.grid()
     PyPlot.xlabel("Days")
