@@ -61,7 +61,7 @@ A constant *growth* rate of 10% corresponds to a *growth factor of* 1.1.
 ### Comment on this plot
 
 As described above, the case numbers are biased by the availability of tests.  Increasing availability of tests due to government actions appears to be a possible cause of the initial growth of the rate for most countries and of the very high growth rate (as of March 19) for the US. If all or a fixed percentage of cases would be detected, one should expect a constant growth rate. As a consequence, the  growth rate is overestimated by a unknown extent.
-On th eother hand, if this interpretation is true, this also would mean that when the growth rate of detected cases is going down, the real  growth rate decreases as well.
+On the other hand, if this interpretation is true, this also would mean that when the growth rate of detected cases is going down, the real  growth rate decreases as well.
 
 
 
