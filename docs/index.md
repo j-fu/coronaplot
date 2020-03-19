@@ -2,8 +2,14 @@
 title: Zeitliche Entwicklung des Coronavirus (19.3.)
 ---
 
-[Diese Seite auf Englisch](index.en.md)
+- [Diese Seite auf Englisch](index.en.md)
+- [Einführung](#Einführung)
+- [Darstellung in absoluten Zahlen](#Darstellung-in-absoluten-Zahlen)
+- [Logarithmische Skala](#Logarithmische-Skala)
+- [Entwicklung der täglichen Wachstumsraten](Entwicklung-der-täglichen-Wachstumsraten)
 
+
+## Einführung
 Das  "Center for Systems Science and Engineering (CSSE)" der Johns Hopkins University sammelt und publiziert Daten der Entwicklung der Krankheit.
 
 Nach einer Idee von [Mark Handley](https://twitter.com/MarkJHandley/status/1237119688578138112?s=20) nutzen wir hier diese Datenquelle, um den zeitlichen Verlauf im Vergleich der Länder mit mehr als 3000 Infektionen darzustellen.
