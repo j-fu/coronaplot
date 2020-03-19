@@ -99,10 +99,14 @@ function plotcountries(df,countries;
         semilogy(days,data,label="$(label) $(abs(shift)) $(reldays)",lt,linewidth=lw,markersize=6)
     end
     if kind=="growthrate"
+        xshift=1
+        if shift >0
+            xshift=shift#1
+        end
         grate0=data[2:end]./data[1:end-1]
         delta=delta
-        grate=zeros(length(grate0)-2*delta)
-        j=1
+        grate=ones(length(grate0)-2*delta+xshift-1)
+        j=xshift
         for i=1+delta:length(grate0)-delta
             fac=1.0/(1+2*delta)
             grate[j]=fac*grate0[i]
@@ -112,6 +116,9 @@ function plotcountries(df,countries;
             j=j+1
         end
         grate.=(grate.-1).*100
+        if countries[1]=="China"
+            @show grate
+        end
         plot(grate,label="$(label) $(abs(shift)) $(reldays)",lt,linewidth=lw,markersize=6)
     end
 end
@@ -217,12 +224,12 @@ function create_plots(;shift_multiplier=1)
     plotcountries(rawdata,["Spain"],shift=-7*shift_multiplier,kind="growthrate")
     plotcountries(rawdata,["Iran"],shift=0*shift_multiplier,kind="growthrate")
     plotcountries(rawdata,["Korea, South"],shift=4*shift_multiplier,kind="growthrate")
-    plotcountries(rawdata,["China"],shift=38*shift_multiplier,kind="growthrate")
+    plotcountries(rawdata,["China"],shift=15*shift_multiplier,kind="growthrate")
     plotcountries(rawdata,["Switzerland"],shift=-12*shift_multiplier,kind="growthrate")
     plotcountries(rawdata,Europe,label="Europe",shift=2*shift_multiplier,kind="growthrate",lt="b-")
     plotcountries(rawdata,["Germany"],shift=-8*shift_multiplier,lw=3,lt="r-o",kind="growthrate")
     plotcountries(rawdata,["US"],shift=-10*shift_multiplier,kind="growthrate",lt="k-")
-    # PyPlot.ylim(1,50_000)
+    PyPlot.ylim(0,120)
     PyPlot.xlim(15,50)
     PyPlot.grid()
     PyPlot.xlabel("Days")
