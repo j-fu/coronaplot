@@ -53,6 +53,7 @@ This is the same plot, just with a logarithmic scale of the y-axis.
 ## Development of daily growth rates
 ![](infected-growthrate.png) 
 
-This plot shows the evolution of the daily growth rates, averaged over 15 days. A constant growth rate corresponds to an exponential growth. A constant growth rate of 100% corresponds to daily doubling of case numbers.
+This plot shows the evolution of the daily growth rates, averaged over 15 days. A constant growth rate corresponds to an exponential growth. A constant *growth rate* of 100% corresponds to a *growth factor* of 2 and a daily doubling of case numbers.
+A constant *growth* rate of 10% corresponds to a *growth factor of* 1.1.
 
 [Source code for the creation of the plots](https://github.com/j-fu/coronaplot)
