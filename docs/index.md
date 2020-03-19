@@ -29,7 +29,7 @@ Entwicklung der bestätigten Fälle seit dem 22.1.2020. Dargestellt mit zeitlich
 Die Daten für Italien werden ohne zeitliche Verschiebung dargestellt. Die Daten für Deutschland sind z.B. um 8 Tage in die Zukunft verschoben, um sie mit denen für Italien zu vergleichen. Man sieht daher, dass die Entwicklung in Deutschland nur 8 Tage (Stand 16.3.) hinter der Entwicklung in Italien liegt.
 
 
-## Logarithmische Skale
+## Logarithmische Skala
 ![](infected.png) 
 
 Die gleiche Darstellung wie oben, nur mit einer logarithmischen Skala der y-Achse. In diesem Fall entspricht das exponentielle Wachstum einer geraden Linie.
