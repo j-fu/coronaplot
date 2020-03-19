@@ -2,8 +2,13 @@
 title:  Plot of corona virus development (March 19)
 ---
 
-[This page in German](index.md)
+- [This page in German](index.md)
+- [Introduction](#introduction)
+- [Absolute numbers](#absolute-numbers)
+- [Logarithmic scale](#logarithmic-scale)
+- [Development of daily growth rates](development-of-daily-growth-rates)
 
+## Introduction
 The Center for Systems Science and Engineering (CSSE)  of Johns Hopkins University
 collects and publishes the data of the diesease development.
 
