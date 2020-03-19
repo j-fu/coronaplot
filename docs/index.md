@@ -21,7 +21,8 @@ Nach einer Idee von [Mark Handley](https://twitter.com/MarkJHandley/status/12371
 Die Daten für die USA basieren auf den Angaben für die Bundesstaaten. Die Daten für Europa beinhalten die Daten für die EU-Länder, sowie für die Schweiz, Norwegen und Großbritannien. Alle anderen europäischen Staaten haben zum aktuellen Zeitpunkt (17.3.) jeweils weniger als 100 Fälle.
 - Die Daten hängen von mehreren Faktoren ab, unter anderem:
    - von der realen Zahl der Infektionen
-   - von der Verfügbarkeit von Tests, welche zwischen den einzelnen Ländern stark variiert
+   - von der Verfügbarkeit von Tests.
+   Letztere variiert stark zwischen den einzelnen Ländern, und es kann angenommen werden, dass sie sich aufgrund der Anstrengungen der Regierungen verbessert.
 
 
 ## Darstellung in absoluten Zahlen
@@ -43,3 +44,7 @@ und täglichen Verdopplung der Fallzahlen. Eine konstante *Wachstumsrate* vom 10
 
 
 
+### Kommentr zu dieser Darstellung
+
+Wie in der Einführung beschrieben, sind die hier genutzten Fallzahlen von der Verfügbarkeit von Tests beeinflusst. Eine wachsende Verfügbarkeit von Tests  erscheint als eine mögliche Ursache der anfänglichen Erhöhung der Wachstumsrate, die für die meisten Staaten zu sehen ist, sowie der sehr hohen Wachstumsrate (Stand 19.3.) für die USA. In der Konsequenz würden dadurch die Wachstumsraten in unbekanntem Maße überschätzt.
+Falls diese Interpretation stimmt, hieße das aber auch, dass eine fallende Wachstumsrate in dieser Darstellung eine Verringerung der realen Wachstumsrate anzeigt.

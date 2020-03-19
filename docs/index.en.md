@@ -28,7 +28,8 @@ data source and plot the data in a different way for those countries which have 
   (as of March 17) less than 100 infections each.
 - These data depend on many factors, among these are:
    - the real number of infections
-   - the availability of test which strongly varies between countries.
+   - the availability of tests.
+   The later  strongly varies between countries, and it can plausibly be assumed that it is increasing due to increasing government efforts.
 
 
 
@@ -56,4 +57,11 @@ This is the same plot, just with a logarithmic scale of the y-axis.
 
 This plot shows the evolution of the daily growth rates, averaged over 15 days. A constant growth rate corresponds to an exponential growth. A constant *growth rate* of 100% corresponds to a *growth factor* of 2 and a daily doubling of case numbers.
 A constant *growth* rate of 10% corresponds to a *growth factor of* 1.1.
+
+### Comment on this plot
+
+As described above, the case numbers are biased by the availability of tests.  Increasing availability of tests due to government actions appears to be a possible cause of the initial growth of the rate for most countries and of the very high growth rate (as of March 19) for the US. If all or a fixed percentage of cases would be detected, one should expect a constant growth rate. As a consequence, the  growth rate is overestimated by a unknown extent.
+On th eother hand, if this interpretation is true, this also would mean that when the growth rate of detected cases is going down, the real  growth rate decreases as well.
+
+
 
