@@ -19,7 +19,7 @@ dataurl="https://github.com/CSSEGISandData/COVID-19/"
 # Download and read data for confirmed infection cases
 # This creates a dataframe
 function read_download_infected()
-    download(datasource,"infected.dat")
+#    download(datasource,"infected.dat")
     CSV.read("infected.dat")
 end
 
@@ -41,11 +41,12 @@ function create_countries_timeseries(df,countries,shift)
         error("positive shift not allowed here")
     end
     crows=select_countries_rows(df,countries)
-    if countries===["US"]
+    if countries[1]=="US"
         # For the US we sum up only the 52 state data, luckily they are stored
         # contiguously
         sum(convert(Array,crows[1:52,c_timeseries_start-shift:end]),dims=1)'
     else
+        @show countries
         # For all other countries we sum up all the rows
         sum(convert(Array,crows[:,c_timeseries_start-shift:end]),dims=1)'
     end
@@ -57,29 +58,30 @@ function plotcountries(df,countries;
                        shift=0, # time series shift
                        lw=2, # plot line width
                        lt="-", # plot line type
-                       scale="log" # scaling of y axis: "log" or "abs"
+                       kind="log", # scaling of y axis: "log" or "abs"
+                       delta=7, # average mask: delta days befor and after
                        )
     if label===""
         label=countries[1]
     end
     
-    # Add 1 to data for logscale plot
-    if scale=="log"
-        logscale_correction=1.0e-10
+    # Add 1 to data for logkind plot
+    if kind=="log"
+        logkind_correction=1.0e-10
     else
-        logscale_correction=0
+        logkind_correction=0
     end
 
     # Create shifted time series
     if shift<=0
         # Shift timeseries to the left by cutting of the first `shift` entries
         reldays="days behind"
-        data=create_countries_timeseries(df,countries,shift).+logscale_correction
+        data=create_countries_timeseries(df,countries,shift).+logkind_correction
         days=collect(0:length(data)-1)
     else
         # Shift timeseries to the right by increasing the entries in `days`
         reldays="days ahead"
-        data=create_countries_timeseries(df,countries,0).+logscale_correction
+        data=create_countries_timeseries(df,countries,0).+logkind_correction
         days=collect(shift:shift+length(data)-1)
     end
     # print for debugging purposes
@@ -90,12 +92,28 @@ function plotcountries(df,countries;
     # end
 
     # Add to plot
-    if scale=="abs"
+    if kind=="abs"
         plot(days,data,label="$(label) $(abs(shift)) $(reldays)",lt,linewidth=lw,markersize=6)
-    else
+    end
+    if kind=="log"
         semilogy(days,data,label="$(label) $(abs(shift)) $(reldays)",lt,linewidth=lw,markersize=6)
     end
-    
+    if kind=="growthrate"
+        grate0=data[2:end]./data[1:end-1]
+        delta=delta
+        grate=zeros(length(grate0)-2*delta)
+        j=1
+        for i=1+delta:length(grate0)-delta
+            fac=1.0/(1+2*delta)
+            grate[j]=fac*grate0[i]
+            for d=1:delta
+                grate[j]+=fac*(grate0[i-d]+grate0[i+d])
+            end
+            j=j+1
+        end
+        grate.=(grate.-1).*100
+        plot(grate,label="$(label) $(abs(shift)) $(reldays)",lt,linewidth=lw,markersize=6)
+    end
 end
 
 
@@ -138,38 +156,38 @@ function create_plots(;shift_multiplier=1)
     ]
     
     rawdata=read_download_infected()
-    
+    trailer="\nData source: $(dataurl) $(Dates.today())\nData processing:https://github.com/j-fu/coronaplot"
     fig = PyPlot.figure(1)
     fig = PyPlot.gcf()
     fig.set_size_inches(10,5)
 
     # Plot absolute values to show exponential behavior
     clf()
-    title("Comparison of Corona Virus Development\nData source: $(dataurl)\n$(Dates.now())")
-    plotcountries(rawdata,["Italy"],shift=0*shift_multiplier,scale="abs")
-    plotcountries(rawdata,["France"],shift=-9*shift_multiplier,scale="abs")
-    plotcountries(rawdata,["Spain"],shift=-7*shift_multiplier,scale="abs")
-    plotcountries(rawdata,["Iran"],shift=0*shift_multiplier,scale="abs")
-    plotcountries(rawdata,["Korea, South"],shift=4*shift_multiplier,scale="abs")
-    plotcountries(rawdata,["China"],shift=38*shift_multiplier,scale="abs")
-    plotcountries(rawdata,["Switzerland"],shift=-12*shift_multiplier,scale="abs")
-    plotcountries(rawdata,Europe,label="Europe",shift=2*shift_multiplier,scale="abs",lt="b-")
-    plotcountries(rawdata,["Germany"],shift=-8*shift_multiplier,lw=3,lt="r-o",scale="abs")
-    plotcountries(rawdata,["US"],shift=-10*shift_multiplier,scale="abs",lt="k-")
+    title("Corona Virus Development in countries with more than 3000 infections$(trailer)")
+    plotcountries(rawdata,["Italy"],shift=0*shift_multiplier,kind="abs")
+    plotcountries(rawdata,["France"],shift=-9*shift_multiplier,kind="abs")
+    plotcountries(rawdata,["Spain"],shift=-7*shift_multiplier,kind="abs")
+    plotcountries(rawdata,["Iran"],shift=0*shift_multiplier,kind="abs")
+    plotcountries(rawdata,["Korea, South"],shift=4*shift_multiplier,kind="abs")
+    plotcountries(rawdata,["China"],shift=38*shift_multiplier,kind="abs")
+    plotcountries(rawdata,["Switzerland"],shift=-12*shift_multiplier,kind="abs")
+    plotcountries(rawdata,Europe,label="Europe",shift=2*shift_multiplier,kind="abs",lt="b-")
+    plotcountries(rawdata,["Germany"],shift=-8*shift_multiplier,lw=3,lt="r-o",kind="abs")
+    plotcountries(rawdata,["US"],shift=-10*shift_multiplier,kind="abs",lt="k-")
     PyPlot.ylim(1,50_000)
     PyPlot.xlim(30,60)
     PyPlot.grid()
     PyPlot.xlabel("Days")
     PyPlot.ylabel("Infections")
     PyPlot.legend(loc="upper left")
-    PyPlot.savefig("infected-exp.png")
+    PyPlot.savefig("../docs/infected-exp.png")
 
     # Log plot
     fig = PyPlot.figure(2)
     fig = PyPlot.gcf()
     fig.set_size_inches(10,5)
     clf()
-    title("Comparison of Corona Virus Development\nData source: $(dataurl)\n$(Dates.now())")
+    title("Corona Virus Development in countries with more than 3000 infections$(trailer)")
     plotcountries(rawdata,["Italy"],shift=0*shift_multiplier)
     plotcountries(rawdata,["France"],shift=-9*shift_multiplier)
     plotcountries(rawdata,["Spain"],shift=-7*shift_multiplier)
@@ -180,13 +198,39 @@ function create_plots(;shift_multiplier=1)
     plotcountries(rawdata,Europe,label="Europe",shift=2*shift_multiplier,lt="b-")
     plotcountries(rawdata,["Germany"],shift=-8*shift_multiplier,lw=3,lt="r-o")
     plotcountries(rawdata,["US"],shift=-10*shift_multiplier,lt="k-")
-    PyPlot.ylim(50,100_000)
+    PyPlot.ylim(1000,100_000)
     PyPlot.xlim(20,100)
     PyPlot.grid()
     PyPlot.xlabel("Days")
     PyPlot.ylabel("Infections (logarithmic scale)")
     PyPlot.legend(loc="lower right")
-    PyPlot.savefig("infected.png")
+    PyPlot.savefig("../docs/infected.png")
+
+    # Plot absolute values to show exponential behavior
+    fig = PyPlot.figure(3)
+    fig = PyPlot.gcf()
+    fig.set_size_inches(10,5)
+    clf()
+    title("15 day average of daily growth rate of COVID-19 infections in countries with >3000 infections$(trailer)")
+    plotcountries(rawdata,["Italy"],shift=0*shift_multiplier,kind="growthrate")
+    plotcountries(rawdata,["France"],shift=-9*shift_multiplier,kind="growthrate")
+    plotcountries(rawdata,["Spain"],shift=-7*shift_multiplier,kind="growthrate")
+    plotcountries(rawdata,["Iran"],shift=0*shift_multiplier,kind="growthrate")
+    plotcountries(rawdata,["Korea, South"],shift=4*shift_multiplier,kind="growthrate")
+    plotcountries(rawdata,["China"],shift=38*shift_multiplier,kind="growthrate")
+    plotcountries(rawdata,["Switzerland"],shift=-12*shift_multiplier,kind="growthrate")
+    plotcountries(rawdata,Europe,label="Europe",shift=2*shift_multiplier,kind="growthrate",lt="b-")
+    plotcountries(rawdata,["Germany"],shift=-8*shift_multiplier,lw=3,lt="r-o",kind="growthrate")
+    plotcountries(rawdata,["US"],shift=-10*shift_multiplier,kind="growthrate",lt="k-")
+    # PyPlot.ylim(1,50_000)
+    PyPlot.xlim(15,50)
+    PyPlot.grid()
+    PyPlot.xlabel("Days")
+    PyPlot.ylabel("Daily growth/%")
+    PyPlot.legend(loc="upper right")
+    PyPlot.savefig("../docs/infected-growthrate.png")
+
+
 end
 
 # publish on github

@@ -20,6 +20,9 @@ data source and plot the data in a different way for those countries which have 
   ignored.  Data  for  Europe  currently  include   the  EU,
   Switzerland, Norway, UK only. All other European countries have
   (as of March 17) less than 100 infections each.
+- These data depend on many factors, among these are:
+   - the real number of infections
+   - the availability of test which strongly varies between countries.
 
 
 
@@ -40,5 +43,11 @@ just eight days behind.
 ![](infected.png) 
 
 This is the same plot, just with a logarithmic scale of the y-axis.
+
+
+## Development of daily growth rates
+![](infected-growthrate.png) 
+
+This plot shows the evolution of the daily growth rates, averaged over 15 days. A constant growth rate corresponds to an exponential growth. A constant growth rate of 100% corresponds to daily doubling of case numbers.
 
 [Source code for the creation of the plots](https://github.com/j-fu/coronaplot)
