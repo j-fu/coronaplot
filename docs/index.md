@@ -44,7 +44,7 @@ und täglichen Verdopplung der Fallzahlen. Eine konstante *Wachstumsrate* vom 10
 
 
 
-### Kommentr zu dieser Darstellung
+### Kommentar zu dieser Darstellung
 
-Wie in der Einführung beschrieben, sind die hier genutzten Fallzahlen von der Verfügbarkeit von Tests beeinflusst. Eine wachsende Verfügbarkeit von Tests  erscheint als eine mögliche Ursache der anfänglichen Erhöhung der Wachstumsrate, die für die meisten Staaten zu sehen ist, sowie der sehr hohen Wachstumsrate (Stand 19.3.) für die USA. In der Konsequenz würden dadurch die Wachstumsraten in unbekanntem Maße überschätzt.
+Wie in der Einführung beschrieben, sind die hier genutzten Fallzahlen von der Verfügbarkeit von Tests beeinflusst. Eine wachsende Verfügbarkeit von Tests  erscheint als eine mögliche Ursache der anfänglichen Erhöhung der Wachstumsrate, die für die meisten Staaten zu sehen ist, sowie der sehr hohen Wachstumsrate (Stand 19.3.) für die USA. Wenn alle oder ein fester Prozentsatz der Erkrankungen festgestellt würde, müsste die Wachstumsrate im Wesentlichen konstant sein. In der Konsequenz sind die Wachstumsraten hier in unbekanntem Maße überschätzt.
 Falls diese Interpretation stimmt, hieße das aber auch, dass eine fallende Wachstumsrate in dieser Darstellung eine Verringerung der realen Wachstumsrate anzeigt.
