@@ -7,6 +7,7 @@ title: Zeitliche Entwicklung des Coronavirus (19.3.)
 - [Darstellung in absoluten Zahlen](#darstellung-in-absoluten-zahlen)
 - [Logarithmische Skala](#Logarithmische-Skala)
 - [Entwicklung der täglichen Wachstumsraten](#entwicklung-der-täglichen-wachstumsraten)
+- [Quellcode für die Erzeugung der Plots](https://github.com/j-fu/coronaplot)
 
 
 ## Einführung
@@ -42,4 +43,3 @@ und täglichen Verdopplung der Fallzahlen. Eine konstante *Wachstumsrate* vom 10
 
 
 
-[Quellcode für die Erzeugung der Plots](https://github.com/j-fu/coronaplot)

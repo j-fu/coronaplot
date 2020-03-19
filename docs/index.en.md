@@ -7,6 +7,7 @@ title:  Plot of corona virus development (March 19)
 - [Absolute numbers](#absolute-numbers)
 - [Logarithmic scale](#logarithmic-scale)
 - [Development of daily growth rates](#development-of-daily-growth-rates)
+- [Source code for the creation of the plots](https://github.com/j-fu/coronaplot)
 
 ## Introduction
 The Center for Systems Science and Engineering (CSSE)  of Johns Hopkins University
@@ -56,4 +57,3 @@ This is the same plot, just with a logarithmic scale of the y-axis.
 This plot shows the evolution of the daily growth rates, averaged over 15 days. A constant growth rate corresponds to an exponential growth. A constant *growth rate* of 100% corresponds to a *growth factor* of 2 and a daily doubling of case numbers.
 A constant *growth* rate of 10% corresponds to a *growth factor of* 1.1.
 
-[Source code for the creation of the plots](https://github.com/j-fu/coronaplot)
