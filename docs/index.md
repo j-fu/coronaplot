@@ -3,10 +3,10 @@ title: Zeitliche Entwicklung des Coronavirus (19.3.)
 ---
 
 - [Diese Seite auf Englisch](index.en.md)
-- [Einführung](#Einführung)
-- [Darstellung in absoluten Zahlen](#Darstellung-in-absoluten-Zahlen)
+- [Einführung](#einführung)
+- [Darstellung in absoluten Zahlen](#darstellung-in-absoluten-zahlen)
 - [Logarithmische Skala](#Logarithmische-Skala)
-- [Entwicklung der täglichen Wachstumsraten](Entwicklung-der-täglichen-Wachstumsraten)
+- [Entwicklung der täglichen Wachstumsraten](#entwicklung-der-täglichen-wachstumsraten)
 
 
 ## Einführung
