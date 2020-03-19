@@ -188,6 +188,7 @@ function create_plots(;shift_multiplier=1)
     PyPlot.ylabel("Infections")
     PyPlot.legend(loc="upper left")
     PyPlot.savefig("../docs/infected-exp.png")
+    PyPlot.savefig("../infected-exp.png")
 
     # Log plot
     fig = PyPlot.figure(2)
@@ -212,6 +213,7 @@ function create_plots(;shift_multiplier=1)
     PyPlot.ylabel("Infections (logarithmic scale)")
     PyPlot.legend(loc="lower right")
     PyPlot.savefig("../docs/infected.png")
+    PyPlot.savefig("../infected.png")
 
     # Plot absolute values to show exponential behavior
     fig = PyPlot.figure(3)
@@ -236,6 +238,7 @@ function create_plots(;shift_multiplier=1)
     PyPlot.ylabel("Daily growth/%")
     PyPlot.legend(loc="upper right")
     PyPlot.savefig("../docs/infected-growthrate.png")
+    PyPlot.savefig("../infected-growthrate.png")
 
 
 end
