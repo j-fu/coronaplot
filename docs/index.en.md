@@ -2,7 +2,7 @@
 title:  Plot of corona virus development (March 19)
 ---
 
-- [This page in German](index.md)
+- [Diese Seite auf Deutsch](index.md)
 - [Introduction](#introduction)
 - [Absolute numbers](#absolute-numbers)
 - [Logarithmic scale](#logarithmic-scale)

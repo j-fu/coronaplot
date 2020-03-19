@@ -2,7 +2,7 @@
 title: Zeitliche Entwicklung des Coronavirus (19.3.)
 ---
 
-- [Diese Seite auf Englisch](index.en.md)
+- [This page in English](index.en.md)
 - [Einführung](#einführung)
 - [Darstellung in absoluten Zahlen](#darstellung-in-absoluten-zahlen)
 - [Logarithmische Skala](#Logarithmische-Skala)
