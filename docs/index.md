@@ -39,8 +39,7 @@ Die gleiche Darstellung wie oben, nur mit einer logarithmischen Skala der y-Achs
 ## Entwicklung der täglichen Wachstumsraten
 ![](infected-growthrate.png) 
 
-Diese Darstellung zeigt die Entwicklung über 15 Tage gemittelten täglichen Wachstumsraten der Infektionszahlen. Eine konstante Wachstumsrate entspricht einem exponentiellen Wachstum. Eine konstante *Wachstumsrate* von 100% entspricht einem *Wachstumsfaktor* von 2
-und täglichen Verdopplung der Fallzahlen. Eine konstante *Wachstumsrate* vom 10% entspricht einem Wachstumsfaktor von 1.1 .
+Diese Darstellung zeigt die Entwicklung über 15 Tage gemittelten täglichen Wachstumsraten der Infektionszahlen. Eine konstante Wachstumsrate entspricht einem exponentiellen Wachstum. Eine konstante *Wachstumsrate* von 100% pro Tag entspricht einem *Wachstumsfaktor* von 2 pro Tag  und einer täglichen Verdopplung der Fallzahlen. Eine konstante *Wachstumsrate* von 10% pro Tag entspricht einem Wachstumsfaktor von 1.1 pro Tag.
 
 
 
