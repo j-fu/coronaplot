@@ -1,5 +1,5 @@
 ---
-title: Zeitliche Entwicklung des Coronavirus (18.3.)
+title: Zeitliche Entwicklung des Coronavirus (19.3.)
 ---
 
 [Diese Seite auf Englisch](index.en.md)
