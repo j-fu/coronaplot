@@ -1,5 +1,5 @@
 ---
-title:  Plot of corona virus development (March 19)
+title:  Plot of corona virus development (March 20)
 ---
 
 - [Diese Seite auf Deutsch](index.md)
@@ -40,9 +40,8 @@ data source and plot the data in a different way for those countries which have 
 Development of confirmed  adjusted cases since Jan  22, 2020.  Plotted with time shifts in order to compare initial 
 [exponential phases](https://en.wikipedia.org/wiki/Exponential_growth).
 
-The data for Italy are plotted without time shift. E.g. the data for Germany are shifted 8 days backward in time. 
-They show that as of March 16, Germany (my country...) is very much on the same track as Italy,
-just eight days behind. 
+The data for Italy are plotted without time shift. E.g. the data for Germany are shifted 7 days backward in time. 
+They show that as of March 20, Germany (my country...) is very much on the same track as Italy, just seven days behind. 
 
 
 
