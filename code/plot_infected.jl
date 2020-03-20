@@ -19,7 +19,7 @@ dataurl="https://github.com/CSSEGISandData/COVID-19/"
 # Download and read data for confirmed infection cases
 # This creates a dataframe
 function read_download_infected()
-#    download(datasource,"infected.dat")
+    download(datasource,"infected.dat")
     CSV.read("infected.dat")
 end
 
@@ -46,24 +46,25 @@ function create_countries_timeseries(df,countries,shift)
         # contiguously
         sum(convert(Array,crows[1:52,c_timeseries_start-shift:end]),dims=1)'
     else
-        @show countries
         # For all other countries we sum up all the rows
         sum(convert(Array,crows[:,c_timeseries_start-shift:end]),dims=1)'
     end
 end
 
 # Plot data for countries
-function plotcountries(df,countries;
+function plotcountries(df,
+                       countries,
+                       shifts,
+                       kind;
                        label="", # label
-                       shift=0, # time series shift
                        lw=2, # plot line width
                        lt="-", # plot line type
-                       kind="log", # scaling of y axis: "log" or "abs"
                        delta=7, # average mask: delta days befor and after
                        )
     if label===""
         label=countries[1]
     end
+    shift=shifts[label]
     
     # Add 1 to data for logkind plot
     if kind=="log"
@@ -101,7 +102,7 @@ function plotcountries(df,countries;
     if kind=="growthrate"
         xshift=1
         if shift >0
-            xshift=shift#1
+            xshift=shift
         end
         grate0=data[2:end]./data[1:end-1]
         delta=delta
@@ -116,10 +117,7 @@ function plotcountries(df,countries;
             j=j+1
         end
         grate.=(grate.-1).*100
-        if countries[1]=="China"
-            @show grate
-        end
-        plot(grate,label="$(label) $(abs(shift)) $(reldays)",lt,linewidth=lw,markersize=6)
+        plot(grate[xshift:end],label="$(label) $(abs(shift)) $(reldays)",lt,linewidth=lw,markersize=6)
     end
 end
 
@@ -168,19 +166,32 @@ function create_plots(;shift_multiplier=1)
     fig = PyPlot.gcf()
     fig.set_size_inches(10,5)
 
+    shifts=Dict(
+        "Italy" => 0,
+        "France" => -7,
+        "Spain" => -6,
+        "Iran" => 0,
+        "Korea, South" => 4,
+        "China" => 40,
+        "Switzerland" => -12,
+        "Europe" => +3,
+        "Germany" => -7,
+        "US" => -9
+    )
+    
     # Plot absolute values to show exponential behavior
     clf()
     title("Corona Virus Development in countries with more than 3000 infections$(trailer)")
-    plotcountries(rawdata,["Italy"],shift=0*shift_multiplier,kind="abs")
-    plotcountries(rawdata,["France"],shift=-9*shift_multiplier,kind="abs")
-    plotcountries(rawdata,["Spain"],shift=-7*shift_multiplier,kind="abs")
-    plotcountries(rawdata,["Iran"],shift=0*shift_multiplier,kind="abs")
-    plotcountries(rawdata,["Korea, South"],shift=4*shift_multiplier,kind="abs")
-    plotcountries(rawdata,["China"],shift=38*shift_multiplier,kind="abs")
-    plotcountries(rawdata,["Switzerland"],shift=-12*shift_multiplier,kind="abs")
-    plotcountries(rawdata,Europe,label="Europe",shift=2*shift_multiplier,kind="abs",lt="b-")
-    plotcountries(rawdata,["Germany"],shift=-8*shift_multiplier,lw=3,lt="r-o",kind="abs")
-    plotcountries(rawdata,["US"],shift=-10*shift_multiplier,kind="abs",lt="k-")
+    plotcountries(rawdata,["Italy"],shifts,"abs")
+    plotcountries(rawdata,["France"],shifts,"abs")
+    plotcountries(rawdata,["Spain"],shifts,"abs")
+    plotcountries(rawdata,["Iran"],shifts,"abs")
+    plotcountries(rawdata,["Korea, South"],shifts,"abs")
+    plotcountries(rawdata,["China"],shifts,"abs")
+    plotcountries(rawdata,["Switzerland"],shifts,"abs")
+    plotcountries(rawdata,Europe,label="Europe",shifts,"abs",lt="b-")
+    plotcountries(rawdata,["Germany"],shifts,lw=3,lt="r-o","abs")
+    plotcountries(rawdata,["US"],shifts,"abs",lt="k-")
     PyPlot.ylim(1,50_000)
     PyPlot.xlim(30,60)
     PyPlot.grid()
@@ -196,16 +207,16 @@ function create_plots(;shift_multiplier=1)
     fig.set_size_inches(10,5)
     clf()
     title("Corona Virus Development in countries with more than 3000 infections$(trailer)")
-    plotcountries(rawdata,["Italy"],shift=0*shift_multiplier)
-    plotcountries(rawdata,["France"],shift=-9*shift_multiplier)
-    plotcountries(rawdata,["Spain"],shift=-7*shift_multiplier)
-    plotcountries(rawdata,["Iran"],shift=0*shift_multiplier)
-    plotcountries(rawdata,["Korea, South"],shift=4*shift_multiplier)
-    plotcountries(rawdata,["China"],shift=38*shift_multiplier)
-    plotcountries(rawdata,["Switzerland"],shift=-12*shift_multiplier)
-    plotcountries(rawdata,Europe,label="Europe",shift=2*shift_multiplier,lt="b-")
-    plotcountries(rawdata,["Germany"],shift=-8*shift_multiplier,lw=3,lt="r-o")
-    plotcountries(rawdata,["US"],shift=-10*shift_multiplier,lt="k-")
+    plotcountries(rawdata,["Italy"],shifts,"log")
+    plotcountries(rawdata,["France"],shifts,"log")
+    plotcountries(rawdata,["Spain"],shifts,"log")
+    plotcountries(rawdata,["Iran"],shifts,"log")
+    plotcountries(rawdata,["Korea, South"],shifts,"log")
+    plotcountries(rawdata,["China"],shifts,"log")
+    plotcountries(rawdata,["Switzerland"],shifts,"log")
+    plotcountries(rawdata,Europe,label="Europe",shifts,"log",lt="b-")
+    plotcountries(rawdata,["Germany"],shifts,lw=3,lt="r-o","log")
+    plotcountries(rawdata,["US"],shifts,"log",lt="k-")
     PyPlot.ylim(1000,100_000)
     PyPlot.xlim(20,100)
     PyPlot.grid()
@@ -221,16 +232,16 @@ function create_plots(;shift_multiplier=1)
     fig.set_size_inches(10,5)
     clf()
     title("15 day average of daily growth rate of COVID-19 infections in countries with >3000 infections$(trailer)")
-    plotcountries(rawdata,["Italy"],shift=0*shift_multiplier,kind="growthrate")
-    plotcountries(rawdata,["France"],shift=-9*shift_multiplier,kind="growthrate")
-    plotcountries(rawdata,["Spain"],shift=-7*shift_multiplier,kind="growthrate")
-    plotcountries(rawdata,["Iran"],shift=0*shift_multiplier,kind="growthrate")
-    plotcountries(rawdata,["Korea, South"],shift=4*shift_multiplier,kind="growthrate")
-    plotcountries(rawdata,["China"],shift=15*shift_multiplier,kind="growthrate")
-    plotcountries(rawdata,["Switzerland"],shift=-12*shift_multiplier,kind="growthrate")
-    plotcountries(rawdata,Europe,label="Europe",shift=2*shift_multiplier,kind="growthrate",lt="b-")
-    plotcountries(rawdata,["Germany"],shift=-8*shift_multiplier,lw=3,lt="r-o",kind="growthrate")
-    plotcountries(rawdata,["US"],shift=-10*shift_multiplier,kind="growthrate",lt="k-")
+    plotcountries(rawdata,["Italy"],shifts,"growthrate")
+    plotcountries(rawdata,["France"],shifts,"growthrate")
+    plotcountries(rawdata,["Spain"],shifts,"growthrate")
+    plotcountries(rawdata,["Iran"],shifts,"growthrate")
+    plotcountries(rawdata,["Korea, South"],shifts,"growthrate")
+    plotcountries(rawdata,["China"],shifts,"growthrate")
+    plotcountries(rawdata,["Switzerland"],shifts,"growthrate")
+    plotcountries(rawdata,Europe,label="Europe",shifts,"growthrate",lt="b-")
+    plotcountries(rawdata,["Germany"],shifts,lw=3,lt="r-o","growthrate")
+    plotcountries(rawdata,["US"],shifts,"growthrate",lt="k-")
     PyPlot.ylim(0,120)
     PyPlot.xlim(15,50)
     PyPlot.grid()
