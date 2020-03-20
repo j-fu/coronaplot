@@ -22,7 +22,7 @@ Die Daten für die USA basieren auf den Angaben für die Bundesstaaten. Die Date
 - Die Daten hängen von mehreren Faktoren ab, unter anderem:
    - von der realen Zahl der Infektionen
    - von der Verfügbarkeit von Tests.
-   Letztere variiert stark zwischen den einzelnen Ländern, und es kann angenommen werden, dass sie sich aufgrund der Anstrengungen der Regierungen verbessert.
+   Letztere variiert stark zwischen den einzelnen Ländern. <del>und es kann angenommen werden, dass sie sich aufgrund der Anstrengungen der Regierungen verbessert</del>.
 
 
 ## Darstellung in absoluten Zahlen
@@ -46,4 +46,4 @@ Diese Darstellung zeigt die Entwicklung über 15 Tage gemittelten täglichen Wac
 ### Kommentar zu dieser Darstellung
 
 Wie in der Einführung beschrieben, sind die hier genutzten Fallzahlen von der Verfügbarkeit von Tests beeinflusst. Eine wachsende Verfügbarkeit von Tests  erscheint als eine mögliche Ursache der anfänglichen Erhöhung der Wachstumsrate, die für die meisten Staaten zu sehen ist, sowie der sehr hohen Wachstumsrate (Stand 19.3.) für die USA. Wenn alle oder ein fester Prozentsatz der Erkrankungen festgestellt würde, müsste die Wachstumsrate im Wesentlichen konstant sein. In der Konsequenz sind die Wachstumsraten hier in unbekanntem Maße überschätzt.
-Falls diese Interpretation stimmt, hieße das aber auch, dass eine fallende Wachstumsrate in dieser Darstellung eine Verringerung der realen Wachstumsrate anzeigt.
+Falls diese Interpretation stimmt *und die Verfügbarkeit von Tests nicht sinkt* hieße das aber auch, dass eine fallende Wachstumsrate in dieser Darstellung eine Verringerung der realen Wachstumsrate anzeigt.
