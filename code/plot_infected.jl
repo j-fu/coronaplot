@@ -1,7 +1,7 @@
 using PyPlot
 using Dates
 using CSV
-
+using Printf
 
 
 # Number of column containing country name
@@ -27,15 +27,15 @@ end
 # For US and China, data are given state/province/county-wise
 # For former colonial powers with overseas territories etc. there are multiple rows as well
 function select_countries_rows(df,countries)
-    clists=BitArray(undef,length(countries),size(df,1))
+    countries_mask=BitArray(undef,length(countries),size(df,1))
     for i=1:length(countries)
-        clists[i,:].=df[:,c_country].==countries[i]
+        countries_mask[i,:].=df[:,c_country].==countries[i]
     end
-    clist=vec(reduce(|,clists,dims=1))
-    df[clist,:]
+    mask=vec(reduce(|,countries_mask,dims=1))
+    df[mask,:]
 end
 
-# Create shifted timeseries for each countries by cutting of the first `-shift` entries
+# Create timeseries for list of countries
 function create_countries_timeseries(df,countries)
     crows=select_countries_rows(df,countries)
     if countries[1]=="US"
@@ -49,83 +49,96 @@ function create_countries_timeseries(df,countries)
     data=convert(Vector{Float64},vec(data))
 end
 
+# Calculate growth factor from growth rate (in %)
+growth_factor(growth_rate)=growth_rate/100.0+1
+
+# Calculate doubling time from growth factor
+doubling_time(gfactor)= log(2.0)/log(gfactor)
+
+# Calculate growth rate (in %) from growth factor
+growth_rate(gfactor)=(gfactor-1)*100
+
 # Plot data for countries
-function plotcountries(df,
-                       countries,
-                       kind;
-                       label="", # label
-                       lw=2, # plot line width
-                       lt="-", # plot line type
-                       delta=7, # averaging mask: delta days befor and after
-                       Nstart=500 # starting data for shifting curves
+function plotcountries(df,  
+                       countries,  # Array of countries
+                       kind;       # Kind of plot  
+                       country="", # label
+                       lw=2,       # plot line width
+                       lt="-",     # plot line type
+                       averaging_period=15,   # averaging period: averaging_period days
+                       Nstart=500  # starting data for shifting curves
                        )
-    if label===""
-        label=countries[1]
+
+    # If country name is not given, take the first name from the array
+    if country===""
+        country=countries[1]
     end
     
-    # Add 1 to data for logkind plot
+    # Add 1 to data for allowing to  logarithm or division
     if kind=="log"
-        logkind_correction=1.0e-10
+        logdiv_regularization=1.0e-10
     elseif  kind=="growthrate"
-        logkind_correction=1.0
+        logdiv_regularization=1.0
     else
-        logkind_correction=0.0
+        logdiv_regularization=0.0
     end
 
     # Create shifted time series
-    # Shift timeseries to the left by cutting of the first `shift` entries
-    reldays="days behind"
-    basedata=create_countries_timeseries(df,countries)
-    basedata.=basedata.+logkind_correction
+
+    # Shift timeseries to the left cutting of the days until Nstart infections occur
+    basedata=create_countries_timeseries(df,countries).+logdiv_regularization
     shift=1
     while basedata[shift]<Nstart
         shift=shift+1
     end
     data=basedata[shift:end]
     days=collect(0:length(data)-1)
-    # print for debugging purposes
-    #println(data)
-    println("$(label), $(maximum(data))")
-    # if maximum(data)==1
-    #     error("$(label) not found")
-    # end
+    # print for control purposes (to verify  with the numbers given in the map app)
+    println("$(country), $(maximum(data))")
 
-    # Add to plot
+    # Perform plots
     if kind=="abs"
-        plot(days,data,label="$(label)",lt,linewidth=lw,markersize=6)
+        plot(days,data,label="$(country)",lt,linewidth=lw,markersize=6)
     end
+    
     if kind=="log"
-        semilogy(days,data,label="$(label)",lt,linewidth=lw,markersize=6)
+        semilogy(days,data,label="$(country)",lt,linewidth=lw,markersize=6)
     end
+
     if kind=="growthrate"
-        grate0=basedata[2:end]./basedata[1:end-1]
-        @show grate0
-        
-        grate=ones(length(grate0)-2*delta-1)
+        # Calculat daily growth factors
+        gfactors=basedata[2:end]./basedata[1:end-1]
+
+        # Calculate the average over averaging_period
+        averaged_gfactors=zeros(length(gfactors)-averaging_period)
         j=1
-        for i=1+delta:length(grate0)-delta-1
-            fac=1.0/(1+2*delta)
-            grate[j]=fac*grate0[i]
-            for d=1:delta
-                grate[j]+=fac*(grate0[i-d]+grate0[i+d])
+        for i=averaging_period+1:length(gfactors)
+            for d=1:averaging_period
+                averaged_gfactors[j]+=gfactors[i-d+1]/averaging_period
             end
             j=j+1
         end
-        grate.=(grate.-1).*100
-        
+
+        # Calculate growh rates
+        grates=growth_rate.(averaged_gfactors)
+
+        # Adjust starting day due to change of reporting on US data
         day0=1
-        if countries[1]=="US"
+        if country=="US"
             day0=34
         end
-        plot(day0:length(grate),grate[day0:end],label="$(label)",lt,linewidth=lw,markersize=6)
+        # Plot
+        plot(day0:length(grates),grates[day0:end],label="$(country)",lt,linewidth=lw,markersize=6)
     end
 end
 
 
 
 # Create the plots
-function create_plots(;delta=7,Nstart=500)
+function create_plots(;averaging_period=15,Nstart=500)
 
+    # List of countries belonging to Europa
+    # (omitting those with less than 100 cases)
     Europe=[
         "Austria",
         "Belgium",
@@ -157,33 +170,36 @@ function create_plots(;delta=7,Nstart=500)
         "Norway",
         "Switzerland",
         "United Kingdom",
+        "Serbia"
     ]
     
     rawdata=read_download_infected()
-    trailer="\nData source: $(dataurl) $(Dates.today())\nData processing:https://github.com/j-fu/coronaplot"
+
+
+    trailer="\nData source: $(dataurl) $(Dates.today())\nData processing: https://github.com/j-fu/coronaplot"
+
+    # Plot absolute values (linear Y scale) to show exponential behavior
     fig = PyPlot.figure(1)
     fig = PyPlot.gcf()
     fig.set_size_inches(10,5)
-
-    
-    # Plot absolute values to show exponential behavior
     clf()
     title("Corona Virus Development in countries with more than 3000 infections$(trailer)")
-    plotcountries(rawdata,["Italy"],"abs",delta=delta,Nstart=Nstart)
-    plotcountries(rawdata,["France"],"abs",delta=delta,Nstart=Nstart)
-    plotcountries(rawdata,["Spain"],"abs",delta=delta,Nstart=Nstart)
-    plotcountries(rawdata,["Iran"],"abs",delta=delta,Nstart=Nstart)
-    plotcountries(rawdata,["Korea, South"],"abs",delta=delta,Nstart=Nstart)
-    plotcountries(rawdata,["China"],"abs",delta=delta,Nstart=Nstart)
-    plotcountries(rawdata,["Switzerland"],"abs",delta=delta,Nstart=Nstart)
-    plotcountries(rawdata,Europe,label="Europe","abs",lt="b-",delta=delta,Nstart=Nstart)
-    plotcountries(rawdata,["Germany"],lw=3,lt="r-o","abs",delta=delta,Nstart=Nstart)
-    plotcountries(rawdata,["US"],"abs",lt="k-",delta=delta,Nstart=Nstart)
+    plotcountries(rawdata,["Italy"],"abs",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,["France"],"abs",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,["Spain"],"abs",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,["Iran"],"abs",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,["Korea, South"],"abs",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,["China"],"abs",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,["Switzerland"],"abs",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,["Netherlands"],"abs",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,Europe,country="Europe","abs",lt="b-",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,["Germany"],lw=3,lt="r-o","abs",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,["US"],"abs",lt="k-",averaging_period=averaging_period,Nstart=Nstart)
     PyPlot.ylim(1,80_000)
     PyPlot.xlim(0,30)
     PyPlot.grid()
     PyPlot.xlabel("Days since occurence of at least $(Nstart) infections")
-    PyPlot.ylabel("Infections")
+    PyPlot.ylabel("Number of infections (linear scale)")
     PyPlot.legend(loc="upper left")
     PyPlot.savefig("../docs/infected-exp.png")
     PyPlot.savefig("../infected-exp.png")
@@ -194,46 +210,60 @@ function create_plots(;delta=7,Nstart=500)
     fig.set_size_inches(10,5)
     clf()
     title("Corona Virus Development in countries with more than 3000 infections$(trailer)")
-    plotcountries(rawdata,["Italy"],"log",delta=delta,Nstart=Nstart)
-    plotcountries(rawdata,["France"],"log",delta=delta,Nstart=Nstart)
-    plotcountries(rawdata,["Spain"],"log",delta=delta,Nstart=Nstart)
-    plotcountries(rawdata,["Iran"],"log",delta=delta,Nstart=Nstart)
-    plotcountries(rawdata,["Korea, South"],"log",delta=delta,Nstart=Nstart)
-    plotcountries(rawdata,["China"],"log",delta=delta,Nstart=Nstart)
-    plotcountries(rawdata,["Switzerland"],"log",delta=delta,Nstart=Nstart)
-    plotcountries(rawdata,Europe,label="Europe","log",lt="b-",delta=delta,Nstart=Nstart)
-    plotcountries(rawdata,["Germany"],lw=3,lt="r-o","log",delta=delta,Nstart=Nstart)
-    plotcountries(rawdata,["US"],"log",lt="k-",delta=delta,Nstart=Nstart)
+    plotcountries(rawdata,["Italy"],"log",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,["France"],"log",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,["Spain"],"log",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,["Iran"],"log",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,["Korea, South"],"log",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,["China"],"log",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,["Switzerland"],"log",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,["Netherlands"],"log",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,Europe,country="Europe","log",lt="b-",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,["Germany"],lw=3,lt="r-o","log",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,["US"],"log",lt="k-",averaging_period=averaging_period,Nstart=Nstart)
     PyPlot.xlim(0,40)
     PyPlot.grid()
     PyPlot.xlabel("Days since occurence of at least $(Nstart) infections")
-    PyPlot.ylabel("Infections (logarithmic scale)")
+    PyPlot.ylabel("Number of infections (logarithmic scale)")
     PyPlot.legend(loc="lower right")
     PyPlot.savefig("../docs/infected.png")
     PyPlot.savefig("../infected.png")
 
-    # Plot absolute values to show exponential behavior
+    # Plot evolution of growth rate average
     fig = PyPlot.figure(3)
     fig = PyPlot.gcf()
     fig.set_size_inches(10,5)
     clf()
-    title("$(2*delta+1) day average of daily growth rate of COVID-19 infections in countries with >3000 infections$(trailer)")
-    plotcountries(rawdata,["Italy"],"growthrate",delta=delta,Nstart=Nstart)
-    plotcountries(rawdata,["France"],"growthrate",delta=delta,Nstart=Nstart)
-    plotcountries(rawdata,["Spain"],"growthrate",delta=delta,Nstart=Nstart)
-    plotcountries(rawdata,["Iran"],"growthrate",delta=delta,Nstart=Nstart)
-    plotcountries(rawdata,["Korea, South"],"growthrate",delta=delta,Nstart=Nstart)
-    plotcountries(rawdata,["China"],"growthrate",delta=delta,Nstart=Nstart)
-    plotcountries(rawdata,["Switzerland"],"growthrate",delta=delta,Nstart=Nstart)
-    plotcountries(rawdata,Europe,label="Europe","growthrate",lt="b-",delta=delta,Nstart=Nstart)
-    plotcountries(rawdata,["Germany"],lw=3,lt="r-o","growthrate",delta=delta,Nstart=Nstart)
-    plotcountries(rawdata,["US"],"growthrate",lt="k-",delta=delta,Nstart=Nstart)
+    title("$(averaging_period) day average of daily growth rate of COVID-19 infections in countries with >3000 infections$(trailer)")
+    plotcountries(rawdata,["Italy"],"growthrate",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,["France"],"growthrate",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,["Spain"],"growthrate",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,["Iran"],"growthrate",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,["Korea, South"],"growthrate",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,["China"],"growthrate",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,["Switzerland"],"growthrate",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,["Netherlands"],"growthrate",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,Europe,country="Europe","growthrate",lt="b-",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,["Germany"],lw=3,lt="r-o","growthrate",averaging_period=averaging_period,Nstart=Nstart)
+    plotcountries(rawdata,["US"],"growthrate",lt="k-",averaging_period=averaging_period,Nstart=Nstart)
+
     PyPlot.ylim(0,120)
     PyPlot.xlim(10,45)
     PyPlot.grid()
-    PyPlot.xlabel("Days since January $(22+delta), 2020")
+    PyPlot.xlabel("Days since February $(averaging_period-10), 2020")
     PyPlot.ylabel("Daily growth/%")
     PyPlot.legend(loc="upper left")
+
+    # Add second y axis with doubling time
+    # see  https://stackoverflow.com/a/10517481/8922290
+    ax1 = PyPlot.gca()
+    ax2 = ax1.twinx()
+    ax2.set_ylim(ax1.get_ylim())
+    growth_rates= collect(0:10:120)
+    ax2.set_yticks(growth_rates)
+    dtimes=doubling_time.(growth_factor.(growth_rates))
+    ax2.set_yticklabels([ @sprintf("%.2f",dtimes[i]) for i=1:length(dtimes)])
+    ax2.set_ylabel("Doubling time/days")
     PyPlot.savefig("../docs/infected-growthrate.png")
     PyPlot.savefig("../infected-growthrate.png")
 
@@ -245,3 +275,7 @@ function publish(;msg="data update")
     run(`git commit -a -m $(msg)`)
     run(`git push`)
 end
+
+
+
+

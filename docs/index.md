@@ -1,11 +1,11 @@
 ---
-title: Zeitliche Entwicklung des Coronavirus (21.3.2020)
+title: Zeitliche Entwicklung des Coronavirus (22.3.2020)
 ---
 
 - [This page in English](index.en.md)
 - [Einführung](#einführung)
 - [Darstellung in absoluten Zahlen](#darstellung-in-absoluten-zahlen)
-- [Logarithmische Skala](#Logarithmische-Skala)
+- [Logarithmische Skala](#logarithmische-Skala)
 - [Entwicklung der täglichen Wachstumsraten](#entwicklung-der-täglichen-wachstumsraten)
 - [Quellcode für die Erzeugung der Plots](https://github.com/j-fu/coronaplot)
 - Weitere Informationen
@@ -43,7 +43,7 @@ Die gleiche Darstellung wie oben, nur mit einer logarithmischen Skala der y-Achs
 ## Entwicklung der täglichen Wachstumsraten
 ![](infected-growthrate.png) 
 
-Diese Darstellung zeigt die Entwicklung der über 15 Tage gemittelten täglichen Wachstumsraten der Infektionszahlen. Eine konstante Wachstumsrate entspricht einem exponentiellen Wachstum. Eine konstante *Wachstumsrate* von 100% pro Tag entspricht einem *Wachstumsfaktor* von 2 pro Tag  und einer täglichen Verdopplung der Fallzahlen. Eine konstante *Wachstumsrate* von 10% pro Tag entspricht einem Wachstumsfaktor von 1.1 pro Tag.
+Diese Darstellung zeigt die Entwicklung der über 15 Tage gemittelten täglichen Wachstumsraten der Infektionszahlen. Eine konstante Wachstumsrate entspricht einem exponentiellen Wachstum. Eine konstante *Wachstumsrate* von 100% pro Tag entspricht einem *Wachstumsfaktor* von 2 pro Tag  und einer täglichen Verdopplung der Fallzahlen. Eine konstante *Wachstumsrate* von 10% pro Tag entspricht einem Wachstumsfaktor von 1.1 pro Tag. Die den Wachstumsraten entsprechenden [Generationszeiten](https://de.wikipedia.org/wiki/Generationszeit)  (Zeit in der sich die Fallzahlen verdoppeln) sind auf der rechten Y-Achse aufgetragen.
 
 
 

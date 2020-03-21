@@ -1,5 +1,5 @@
 ---
-title:  Plot of corona virus development (March 21, 2020)
+title:  Plot of corona virus development (March 22, 2020)
 ---
 
 - [Diese Seite auf Deutsch](index.md)
@@ -55,7 +55,10 @@ This is the same plot, just with a logarithmic scale of the y-axis.
 ![](infected-growthrate.png) 
 
 This plot shows the evolution of the daily growth rates, averaged over 15 days. A constant growth rate corresponds to an exponential growth. A constant *growth rate* of 100% per day corresponds to a *growth factor* of 2 per day and a daily doubling of case numbers.
-A constant *growth  rate* of 10% per day corresponds to a *growth factor* of 1.1 per day.
+A constant *growth  rate* of 10% per day corresponds to a *growth factor* of 1.1 per day. The right Y-axis shows the 
+[doubling times](https://en.wikipedia.org/wiki/Doubling_time) (time it takes to double the number of infected)
+corresponding to the different growth rates.
+
 
 ### Comment on this plot
 
