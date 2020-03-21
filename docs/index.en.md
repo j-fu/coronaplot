@@ -8,6 +8,10 @@ title:  Plot of corona virus development (March 21, 2020)
 - [Logarithmic scale](#logarithmic-scale)
 - [Development of daily growth rates](#development-of-daily-growth-rates)
 - [Source code for the creation of the plots](https://github.com/j-fu/coronaplot)
+- Further Links
+    - Interactive [Epidemic Calculator](http://gabgoh.github.io/COVID/index.html)
+      based on a mathematical disease model by Gabriel Goh (thanks, Sabine!)
+    - [Investigation of the outbreak development](https://www.staff.uni-oldenburg.de/bernd.blasius/project/corona/) by Bernd Blasius using the same data
 
 ## Introduction
 The Center for Systems Science and Engineering (CSSE)  of Johns Hopkins University

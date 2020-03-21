@@ -8,6 +8,9 @@ title: Zeitliche Entwicklung des Coronavirus (21.3.2020)
 - [Logarithmische Skala](#Logarithmische-Skala)
 - [Entwicklung der täglichen Wachstumsraten](#entwicklung-der-täglichen-wachstumsraten)
 - [Quellcode für die Erzeugung der Plots](https://github.com/j-fu/coronaplot)
+- Weitere Informationen
+    - Interaktiver ["Epidemic Calculator"](http://gabgoh.github.io/COVID/index.html) auf der Basis eines mathematischen Ausbreitungsmodells von  Gabriel Goh (danke, Sabine!)
+    - [Untersuchung des Ausbruchsgeschehens](https://www.staff.uni-oldenburg.de/bernd.blasius/project/corona/) durch Bernd Blasius unter Nutzung der selben Datenbasis
 
 
 ## Einführung
