@@ -110,12 +110,13 @@ function plotcountries(df,
         gfactors=basedata[2:end]./basedata[1:end-1]
 
         # Calculate the average over averaging_period
-        averaged_gfactors=zeros(length(gfactors)-averaging_period)
+        averaged_gfactors=ones(length(gfactors)-averaging_period)
         j=1
         for i=averaging_period+1:length(gfactors)
             for d=1:averaging_period
-                averaged_gfactors[j]+=gfactors[i-d+1]/averaging_period
+                averaged_gfactors[j]*=gfactors[i-d+1]
             end
+            averaged_gfactors[j]=averaged_gfactors[j]^(1.0/averaging_period)
             j=j+1
         end
 
@@ -247,7 +248,7 @@ function create_plots(;averaging_period=15,Nstart=500)
     plotcountries(rawdata,["Germany"],lw=3,lt="r-o","growthrate",averaging_period=averaging_period,Nstart=Nstart)
     plotcountries(rawdata,["US"],"growthrate",lt="k-",averaging_period=averaging_period,Nstart=Nstart)
 
-    PyPlot.ylim(0,120)
+    PyPlot.ylim(0,80)
     PyPlot.xlim(10,45)
     PyPlot.grid()
     PyPlot.xlabel("Days since February $(averaging_period-10), 2020")
@@ -259,7 +260,7 @@ function create_plots(;averaging_period=15,Nstart=500)
     ax1 = PyPlot.gca()
     ax2 = ax1.twinx()
     ax2.set_ylim(ax1.get_ylim())
-    growth_rates= collect(0:10:120)
+    growth_rates= collect(0:10:80)
     ax2.set_yticks(growth_rates)
     dtimes=doubling_time.(growth_factor.(growth_rates))
     ax2.set_yticklabels([ @sprintf("%.2f",dtimes[i]) for i=1:length(dtimes)])
