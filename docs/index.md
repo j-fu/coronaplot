@@ -7,6 +7,7 @@ title: Zeitliche Entwicklung des Coronavirus (22.3.2020)
 - [Darstellung in absoluten Zahlen](#darstellung-in-absoluten-zahlen)
 - [Logarithmische Skala](#logarithmische-Skala)
 - [Entwicklung der täglichen Wachstumsraten](#entwicklung-der-täglichen-wachstumsraten)
+- [Änderungen in diesem Dokument](#änderungen)
 - [Quellcode für die Erzeugung der Plots](https://github.com/j-fu/coronaplot)
 - Weitere Informationen
     - Interaktiver ["Epidemic Calculator"](http://gabgoh.github.io/COVID/index.html) auf der Basis eines mathematischen Ausbreitungsmodells von  Gabriel Goh (danke, Sabine!)
@@ -53,9 +54,9 @@ Wie in der Einführung beschrieben, sind die hier genutzten Fallzahlen von der V
 
 ## Änderungen
 ### 2020-03-22
-    - Für die Darstellung der Wachstumsraten wird jetzt anstelle des arithmetischen das geometrische [Mittel](https://de.wikipedia.org/wiki/Mittelwert) der Wachstumsfaktoren benutzt.   
+- Für die Darstellung der Wachstumsraten wird jetzt anstelle des arithmetischen das geometrische [Mittel](https://de.wikipedia.org/wiki/Mittelwert) der Wachstumsfaktoren benutzt.   
     Für varierende tägliche Wachstumsfaktoren über einen gegebenen Zeitraum beschreibt das geometrische Mittel den *konstanten* Wachstumsfaktor, der dasselebe Ergebnis geliefert hätte. Damit ist es für den  hier untersuchten Prozess wesentlich adäquater. Insbesondere war die Ratenmittelung für die Vereingten Staaten stark durch Ausreißer beeinflusst. Zum Vergleich hier die alte Version mit den Daten vom 22.3.
-    
-    ![](https://github.com/j-fu/coronaplot/raw/51326c1522407fca8a5c32ba280460d8924d2f06/infected-growthrate.png)
+
+<img src="https://github.com/j-fu/coronaplot/raw/51326c1522407fca8a5c32ba280460d8924d2f06/infected-growthrate.png" width="200">
 
 
