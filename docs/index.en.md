@@ -12,8 +12,7 @@ title:  Plot of corona virus development (March 22, 2020)
     - Interactive [Epidemic Calculator](http://gabgoh.github.io/COVID/index.html)
       based on a mathematical disease model by Gabriel Goh (thanks, Sabine!)
     - [Investigation of the outbreak development](https://www.staff.uni-oldenburg.de/bernd.blasius/project/corona/) by Bernd Blasius using the same data
-    - [Interview with Christian Drosten] (https://www.zeit.de/wissen/gesundheit/2020-03/christian-drosten-coronavirus-pandemic-germany-virologist-charite/komplettansicht) - Virologist
-    and one of the main advisers of the German government during this crisis
+    - [Interview with Christian Drosten](https://www.zeit.de/wissen/gesundheit/2020-03/christian-drosten-coronavirus-pandemic-germany-virologist-charite/komplettansicht) - Virologist  and one of the main advisers of the German government during this crisis
 
 ## Introduction
 The Center for Systems Science and Engineering (CSSE)  of Johns Hopkins University
