@@ -44,8 +44,10 @@ Die gleiche Darstellung wie oben, nur mit einer logarithmischen Skala der y-Achs
 ## Entwicklung der täglichen Wachstumsratentu
 ![](infected-growthrate.png) 
 
-Diese Darstellung zeigt die Entwicklung der mittleren täglichen Wachstumsraten der Infektionszahlen. Eine konstante Wachstumsrate entspricht einem exponentiellen Wachstum. Eine konstante *Wachstumsrate* von 100% pro Tag entspricht einem *Wachstumsfaktor* von 2 pro Tag  und einer täglichen Verdopplung der Fallzahlen. Eine konstante *Wachstumsrate* von 10% pro Tag entspricht einem Wachstumsfaktor von 1.1 pro Tag. Die den Wachstumsraten entsprechenden [Generationszeiten](https://de.wikipedia.org/wiki/Generationszeit)  (Zeit in der sich die Fallzahlen verdoppeln) sind auf der rechten Y-Achse aufgetragen. Die Mittelung basiert auf dem geometrischen Mittel der Wachstumsfaktoren über einen Zeitraum von 15 Tagen.
+![](infected-growthrate-weeklyavg.png) 
 
+
+Diese Darstellungen zeigen die Entwicklung der mittleren täglichen Wachstumsraten der Infektionszahlen. Eine konstante Wachstumsrate entspricht einem exponentiellen Wachstum. Eine konstante *Wachstumsrate* von 100% pro Tag entspricht einem *Wachstumsfaktor* von 2 pro Tag  und einer täglichen Verdopplung der Fallzahlen. Eine konstante *Wachstumsrate* von 10% pro Tag entspricht einem Wachstumsfaktor von 1.1 pro Tag. Die den Wachstumsraten entsprechenden [Generationszeiten](https://de.wikipedia.org/wiki/Generationszeit)  (Zeit in der sich die Fallzahlen verdoppeln) sind auf der rechten Y-Achse aufgetragen. Die Mittelung basiert auf dem geometrischen Mittel der Wachstumsfaktoren.
 
 
 ### Kommentar zu dieser Darstellung
@@ -55,6 +57,7 @@ Wie in der Einführung beschrieben, sind die hier genutzten Fallzahlen von der V
 ## Änderungen
 Hier werden wesentliche Änderungen neben der Aktualisierung der Daten dokumentiert.
 ### 2020-03-22
+- Zusätzliche Darstellung des wöchentlichen Mittels
 - Für die Darstellung der Wachstumsraten wird jetzt anstelle des arithmetischen das geometrische [Mittel](https://de.wikipedia.org/wiki/Mittelwert) der Wachstumsfaktoren benutzt.   
     Für varierende tägliche Wachstumsfaktoren über einen gegebenen Zeitraum beschreibt das geometrische Mittel den *konstanten* Wachstumsfaktor, der dasselebe Ergebnis geliefert hätte. Damit ist es für den  hier untersuchten Prozess wesentlich adäquater. Insbesondere war die Ratenmittelung für die Vereingten Staaten stark durch Ausreißer beeinflusst. Zum Vergleich hier die alte Version mit den Daten vom 22.3.
 
