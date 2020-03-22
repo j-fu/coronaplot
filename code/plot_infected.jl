@@ -251,7 +251,7 @@ function create_plots(;averaging_period=15,Nstart=500)
     PyPlot.xlim(10,45)
     PyPlot.grid()
     PyPlot.xlabel("Days since February $(averaging_period-10), 2020")
-    PyPlot.ylabel("Daily growth/%")
+    PyPlot.ylabel("$(averaging_period) day average of daily growth/%")
     PyPlot.legend(loc="upper left")
 
     # Add second y axis with doubling time

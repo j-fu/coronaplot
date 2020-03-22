@@ -28,8 +28,8 @@ data source and plot the data in a different way for those countries which have 
   and may lag behind the data in the map.    
   Data  for the  US are  based on  the state  data, county  data are
   ignored.  Data  for  Europe  currently  include   the  EU,
-  Switzerland, Norway, UK only. All other European countries have
-  (as of March 20) less than 110 infections each.
+  Switzerland, Norway, UK and Serbia only. All other European countries have
+  (as of March 22) less than 100 infections each.
 - These data depend on many factors, among these are:
    - the real number of infections
    - the availability of tests.
