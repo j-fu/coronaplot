@@ -73,6 +73,9 @@ On the other hand, if this interpretation is true, *and the availability of test
 ### 2020-03-22
     - Switched averaging in the growth rate graph from arithmetic [mean](https://en.wikipedia.org/wiki/Mean) to geometric mean of the growth factors.  
 For varying daily growh factors over the averaging period, the geometric mean tells us what would have been the **constant** daily growth factor  with the same outcome. Therefore, this type of mean is more adequate for this process. In comparison, before, in particular the US data had been biased by outliers. For comparison, here is the old graphs with the data of March 22:
-    ![](https://github.com/j-fu/coronaplot/raw/51326c1522407fca8a5c32ba280460d8924d2f06/infected-growthrate.png?s=200)
+
+![](https://github.com/j-fu/coronaplot/raw/51326c1522407fca8a5c32ba280460d8924d2f06/infected-growthrate.png)
+
+
 
 
