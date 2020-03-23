@@ -176,12 +176,12 @@ function plotcountries(df,
         "Serbia"
     ]
     
-    plotcountry(df,["Italy"],kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df,["Italy"],kind,Nstart=Nstart, lt="o-", averaging_period=averaging_period)
     plotcountry(df,["France"],kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df,["Spain"],kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df,["Iran"],kind,Nstart=Nstart, averaging_period=averaging_period)
-    plotcountry(df,["Korea, South"],kind,Nstart=Nstart, averaging_period=averaging_period)
-    plotcountry(df,["China"],kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df,["Korea, South"],kind,Nstart=Nstart,lt="o-", averaging_period=averaging_period)
+    plotcountry(df,["China"],kind,Nstart=Nstart,lt="o-", averaging_period=averaging_period)
     plotcountry(df,["Switzerland"],kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df,["Netherlands"],kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df,["Belgium"],kind,Nstart=Nstart, averaging_period=averaging_period)
