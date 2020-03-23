@@ -189,6 +189,7 @@ function plotcountries(df,
     plotcountry(df,Europe,label="Europe",kind,lt="b-",Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df,["Germany"],lw=3,lt="r-o",kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df,["US"],kind,lt="k-",Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df,["United Kingdom"],kind,lt="k-o", Nstart=Nstart, averaging_period=averaging_period)
 end
 
 # Create the plots
