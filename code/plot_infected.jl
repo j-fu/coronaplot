@@ -184,6 +184,8 @@ function plotcountries(df,
     plotcountry(df,["China"],kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df,["Switzerland"],kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df,["Netherlands"],kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df,["Belgium"],kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df,["Austria"],kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df,Europe,label="Europe",kind,lt="b-",Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df,["Germany"],lw=3,lt="r-o",kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df,["US"],kind,lt="k-",Nstart=Nstart, averaging_period=averaging_period)

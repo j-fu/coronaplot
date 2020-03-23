@@ -1,5 +1,5 @@
 ---
-title:  Plot of corona virus development (March 22, 2020)
+title:  Plot of corona virus development (March 23, 2020)
 ---
 
 - [Diese Seite auf Deutsch](index.md)
