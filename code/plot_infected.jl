@@ -58,7 +58,7 @@ doubling_time(gfactor)= log(2.0)/log(gfactor)
 # Calculate growth rate (in %) from growth factor
 growth_rate(gfactor)=(gfactor-1)*100
 
-# Plot data for countries
+# Plot data for country
 function plotcountry(df,  
                        countries,  # Array of countries
                        kind;       # Kind of plot  
@@ -134,6 +134,7 @@ function plotcountry(df,
 end
 
 
+# Plot data for all countries
 function plotcountries(df,
                        kind;       # Kind of plot
                        averaging_period=15,   # averaging period: averaging_period days
@@ -194,6 +195,7 @@ function create_plots(;averaging_periods=[7,15],Nstart=500)
     rawdata=read_download_infected()
 
     trailer="\nData source: $(dataurl) $(Dates.today())\nData processing: https://github.com/j-fu/coronaplot"
+
     # Plot absolute values (linear Y scale) to show exponential behavior
     fig = PyPlot.figure(1)
     fig = PyPlot.gcf()

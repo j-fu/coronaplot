@@ -14,6 +14,10 @@ title:  Plot of corona virus development (March 22, 2020)
       based on a mathematical disease model by Gabriel Goh (thanks, Sabine!)
     - [Investigation of the outbreak development](https://www.staff.uni-oldenburg.de/bernd.blasius/project/corona/) by Bernd Blasius using the same data
     - [Interview with Christian Drosten](https://www.zeit.de/wissen/gesundheit/2020-03/christian-drosten-coronavirus-pandemic-germany-virologist-charite/komplettansicht) - Virologist  and one of the main advisers of the German government during this crisis
+    -  Similar projects on  [covid19dashbords.com](https://covid19dashboards.com/):
+       - [Comparison of country trajectories](https://covid19dashboards.com/compare-country-trajectories/)
+       - [Growth analysis](https://covid19dashboards.com/growth-analysis/)
+
 
 ## Introduction
 The Center for Systems Science and Engineering (CSSE)  of Johns Hopkins University

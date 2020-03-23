@@ -13,6 +13,9 @@ title: Zeitliche Entwicklung des Coronavirus (22.3.2020)
     - Interaktiver ["Epidemic Calculator"](http://gabgoh.github.io/COVID/index.html) auf der Basis eines mathematischen Ausbreitungsmodells von  Gabriel Goh (danke, Sabine!)
     - [Untersuchung des Ausbruchsgeschehens](https://www.staff.uni-oldenburg.de/bernd.blasius/project/corona/) durch Bernd Blasius unter Nutzung der selben Datenbasis
     - [Interview   mit Christian Drosten](https://www.zeit.de/wissen/gesundheit/2020-03/christian-drosten-coronavirus-pandemie-deutschland-virologe-charite/komplettansicht), Virologe un einer der wichtigsten Berater der Bundesregierung in dieser Krise
+    - Ähnliche Projekte auf [covid19dashbords.com](https://covid19dashboards.com/):
+       - [Vergleiche der länderspezifischen Entwicklungen](https://covid19dashboards.com/compare-country-trajectories/)
+       - [Wachstumsanalyse](https://covid19dashboards.com/growth-analysis/)
 
 ## Einführung
 Das  "Center for Systems Science and Engineering (CSSE)" der Johns Hopkins University sammelt und publiziert Daten der Entwicklung der Krankheit.
