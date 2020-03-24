@@ -10,7 +10,7 @@ title:  Plot of corona virus development (March 24, 2020)
 - [Changes in this document](#changes)
 - [Source code for the creation of the plots](https://github.com/j-fu/coronaplot)
 - Further Links
-    - [Facemasks for all](https://www.facebook.com/groups/2725984604188343/): Facebook campaign promoting wearing (and making...) facemasks
+    -  [<img src="ms4j.jpg" width="200"> Facemasks for all](https://www.facebook.com/groups/2725984604188343/): Facebook campaign promoting wearing (and making...) facemasks
     - Interactive [Epidemic Calculator](http://gabgoh.github.io/COVID/index.html)
       based on a mathematical disease model by Gabriel Goh (thanks, Sabine!)
     - [Investigation of the outbreak development](https://www.staff.uni-oldenburg.de/bernd.blasius/project/corona/) by Bernd Blasius using the same data

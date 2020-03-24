@@ -10,6 +10,7 @@ title: Zeitliche Entwicklung des Coronavirus (24.3.2020)
 - [Änderungen in diesem Dokument](#änderungen)
 - [Quellcode für die Erzeugung der Plots](https://github.com/j-fu/coronaplot)
 - Weitere Informationen
+    - [<img src="ms4j.jpg" width="200">  Mundschutz für jeden](https://www.facebook.com/groups/2725984604188343/): Facebook-Kampagne zum Tragen (und machen...) von Mundschutzmasken 
     - Interaktiver ["Epidemic Calculator"](http://gabgoh.github.io/COVID/index.html) auf der Basis eines mathematischen Ausbreitungsmodells von  Gabriel Goh (danke, Sabine!)
     - [Untersuchung des Ausbruchsgeschehens](https://www.staff.uni-oldenburg.de/bernd.blasius/project/corona/) durch Bernd Blasius unter Nutzung der selben Datenbasis
     - [Interview   mit Christian Drosten](https://www.zeit.de/wissen/gesundheit/2020-03/christian-drosten-coronavirus-pandemie-deutschland-virologe-charite/komplettansicht), Virologe un einer der wichtigsten Berater der Bundesregierung in dieser Krise
