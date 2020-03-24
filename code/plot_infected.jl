@@ -10,8 +10,18 @@ c_country=2
 # Number of start column of time series
 c_timeseries_start=5
 
+
+#dsname=""
+dsname=""
+
 # Source file for data (for download)
-datasource="https://github.com/CSSEGISandData/COVID-19/raw/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv"
+
+# Old version
+#datasource_old="https://github.com/CSSEGISandData/COVID-19/raw/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv"
+
+# New version
+datasource="https://github.com/CSSEGISandData/COVID-19/raw/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv"
+
 
 # Data URL (for data source in plot)
 dataurl="https://github.com/CSSEGISandData/COVID-19/"
@@ -38,14 +48,16 @@ end
 # Create timeseries for list of countries
 function create_countries_timeseries(df,countries)
     crows=select_countries_rows(df,countries)
-    if countries[1]=="US"
-        # For the US we sum up only the 52 state data, luckily they are stored
-        # contiguously
-        data=sum(convert(Array,crows[1:52,c_timeseries_start:end]),dims=1)'
-    else
-        # For all other countries we sum up all the rows
-        data=sum(convert(Array,crows[:,c_timeseries_start:end]),dims=1)'
-    end
+
+    # In the new version, there is only one row for the whole US.
+    # if countries[1]=="US"
+    #     # For the US we sum up only the 52 state data, luckily they are stored
+    #     # contiguously
+    #     data=sum(convert(Array,crows[1:52,c_timeseries_start:end]),dims=1)'
+    # else
+    #     # For all other countries we sum up all the rows
+    # end
+    data=sum(convert(Array,crows[:,c_timeseries_start:end]),dims=1)'
     data=convert(Vector{Float64},vec(data))
 end
 
@@ -125,9 +137,9 @@ function plotcountry(df,
 
         # Adjust starting day due to change of reporting on US data
         day0=1
-        if label=="US"
-            day0=34
-        end
+        # if label=="US"
+        #     day0=34
+        # end
         # Plot
         plot(day0:length(grates),grates[day0:end],label="$(label)",lt,linewidth=lw,markersize=6)
     end
@@ -240,7 +252,7 @@ function create_plots(;averaging_periods=[7,15],Nstart=500)
         title("$(averaging_period) day average of daily growth rate of COVID-19 infections in countries with >3000 infections$(trailer)")
         plotcountries(rawdata,"growthrate",averaging_period=averaging_period)
         PyPlot.ylim(0,100)
-        PyPlot.xlim(10,45)
+        PyPlot.xlim(10,50)
         PyPlot.grid()
         month="February"
         day=averaging_period-10
@@ -281,7 +293,6 @@ function publish(;msg="data update")
     run(`git commit -a -m $(msg)`)
     run(`git push`)
 end
-
 
 
 

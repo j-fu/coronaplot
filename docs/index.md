@@ -1,5 +1,5 @@
 ---
-title: Zeitliche Entwicklung des Coronavirus (23.3.2020)
+title: Zeitliche Entwicklung des Coronavirus (24.3.2020)
 ---
 
 - [This page in English](index.en.md)
@@ -59,6 +59,10 @@ Wie in der Einführung beschrieben, sind die hier genutzten Fallzahlen von der V
 
 ## Änderungen
 Hier werden wesentliche Änderungen neben der Aktualisierung der Daten dokumentiert.
+### 2020-03-24
+- Der hier benutzte internationale Datensatz hat jetzt ein neues Format, die Daten sind nicht mehr auf Staaten/Counties
+aufgeschlüsselt. Des Weiteren wurden die zurückliegenden Daten bereinigt, und die Zählweise scheint sich etwas geändert
+zu haben. Siehe auch die [Ankündigung der JHU](https://github.com/CSSEGISandData/COVID-19/issues/1250).
 ### 2020-03-22
 - Zusätzliche Darstellung des wöchentlichen Mittels
 - Für die Darstellung der Wachstumsraten wird jetzt anstelle des arithmetischen das geometrische [Mittel](https://de.wikipedia.org/wiki/Mittelwert) der Wachstumsfaktoren benutzt.   

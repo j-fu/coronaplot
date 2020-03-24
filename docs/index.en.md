@@ -1,5 +1,5 @@
 ---
-title:  Plot of corona virus development (March 23, 2020)
+title:  Plot of corona virus development (March 24, 2020)
 ---
 
 - [Diese Seite auf Deutsch](index.md)
@@ -77,6 +77,9 @@ On the other hand, if this interpretation is true, *and the availability of test
 
 ## Changes
 We document here significant changes besides data updates. 
+### 2020-03-24
+- For the international data used here, there is now one US entry in the new format time series files which appearantly
+has been cleaned for the past. Counting seems to have changed. See also the [annoucement by JHU](https://github.com/CSSEGISandData/COVID-19/issues/1250).
 ### 2020-03-22
 - Added 7-day average plot
 - Switched averaging in the growth rate graph from arithmetic [mean](https://en.wikipedia.org/wiki/Mean) to geometric mean of the growth factors.  
