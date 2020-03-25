@@ -1,5 +1,5 @@
 ---
-title: Zeitliche Entwicklung des Coronavirus (24.3.2020)
+title: Zeitliche Entwicklung des Coronavirus (25.3.2020)
 ---
 
 - [This page in English](index.en.md)
