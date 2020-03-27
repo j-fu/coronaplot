@@ -1,5 +1,5 @@
 ---
-title: Zeitliche Entwicklung des Coronavirus (26.3.2020)
+title: Zeitliche Entwicklung des Coronavirus (27.3.2020)
 ---
 
 - [This page in English](index.en.md)
@@ -26,12 +26,11 @@ Nach einer Idee von [Mark Handley](https://twitter.com/MarkJHandley/status/12371
 - [Blogpost](https://systems.jhu.edu/research/public-health/ncov/), welcher as Projekt am CSSE beschreibt
 - [Die](https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6) bekannte Karte zur Verbreitung des Coronavirus.
 - Die Daten für die Plots kommen aus dem [Github- Repository mit den aktuellen Daten](https://github.com/CSSEGISandData/COVID-19). Diese werden [einmal am Tag um 1:00 MEZ](https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data#update-frequency) aktualisiert (seltener als die der Karte)
-Die Daten für die USA basieren auf den Angaben für die Bundesstaaten. Die Daten für Europa beinhalten die Daten für die EU-Länder, sowie für die Schweiz, Norwegen, Großbritannien und Serbien. Alle anderen europäischen Staaten haben zum aktuellen Zeitpunkt (26.3.) jeweils weniger als 300 Fälle.
+Die Daten für die USA basieren auf den Angaben für die Bundesstaaten. Die Daten für Europa beinhalten die Daten für die EU-Länder, sowie für die Schweiz, Norwegen, Großbritannien und Serbien. Alle anderen europäischen Staaten haben zum aktuellen Zeitpunkt (27.3.) jeweils weniger als 300 Fälle.
 - Die Daten hängen von mehreren Faktoren ab, unter anderem:
    - von der realen Zahl der Infektionen
    - von der Verfügbarkeit von Tests.
-   Letztere variiert stark zwischen den einzelnen Ländern. <del>und es kann angenommen werden, dass sie sich aufgrund der Anstrengungen der Regierungen verbessert</del>.
-
+   Letztere variiert stark zwischen den einzelnen Ländern.
 
 ## Darstellung in absoluten Zahlen
 ![](infected-exp.png) 
@@ -56,7 +55,7 @@ Diese Darstellungen zeigen die Entwicklung der mittleren täglichen Wachstumsrat
 
 ### Kommentar zu dieser Darstellung
 
-Wie in der Einführung beschrieben, sind die hier genutzten Fallzahlen von der Verfügbarkeit von Tests beeinflusst. Eine wachsende Verfügbarkeit von Tests  erscheint als eine mögliche Ursache der anfänglichen Erhöhung der Wachstumsrate, die für die meisten Staaten zu sehen ist. Wenn alle oder ein fester Prozentsatz der Erkrankungen festgestellt würde, müsste die Wachstumsrate im Wesentlichen konstant sein. In der Konsequenz sind die Wachstumsraten hier vermutlich in unbekanntem Maße überschätzt. Falls diese Interpretation stimmt *und die Verfügbarkeit von Tests nicht sinkt* hieße das aber auch, dass eine fallende Wachstumsrate in dieser Darstellung eine Verringerung der realen Wachstumsrate anzeigt.
+Wie in der Einführung beschrieben, sind die hier genutzten Fallzahlen von der Verfügbarkeit von Tests beeinflusst. Eine wachsende Verfügbarkeit von Tests  erscheint als eine mögliche Ursache der anfänglichen Erhöhung der Wachstumsrate, die für die meisten Staaten zu sehen ist. Wenn alle oder ein fester Prozentsatz der Erkrankungen festgestellt würde, müsste die Wachstumsrate im Wesentlichen konstant sein. In der Konsequenz sind die Wachstumsraten für die Anfangsphasen vermutlich in unbekanntem Maße überschätzt. Falls diese Interpretation stimmt *und die Verfügbarkeit von Tests nicht sinkt* hieße das aber auch, dass eine fallende Wachstumsrate in dieser Darstellung eine Verringerung der realen Wachstumsrate anzeigt.
 
 ## Änderungen
 Hier werden wesentliche Änderungen neben der Aktualisierung der Daten dokumentiert.

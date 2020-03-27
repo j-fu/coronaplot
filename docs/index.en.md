@@ -1,5 +1,5 @@
 ---
-title:  Plot of corona virus development (March 26, 2020)
+title:  Plot of corona virus development (March 27, 2020)
 ---
 
 - [Diese Seite auf Deutsch](index.md)
@@ -36,12 +36,11 @@ data source and plot the data in a different way for those countries which have 
   Data  for the  US are  based on  the state  data, county  data are
   ignored.  Data  for  Europe  currently  include   the  EU,
   Switzerland, Norway, UK and Serbia only. All other European countries have
-  (as of March 26) less than 200 infections each.
+  (as of March 27) less than 300 infections each.
 - These data depend on many factors, among these are:
    - the real number of infections
    - the availability of tests.
-   The later  strongly varies between countries. <del> and it can plausibly be assumed that it is increasing due to increasing government efforts </del>.
-
+   The later  strongly varies between countries.
 
 
 
@@ -71,7 +70,7 @@ corresponding to the different growth rates. Averaging is based on the geometric
 
 ### Comment on these plots
 
-As described above, the case numbers are biased by the availability of tests.  Increasing availability of tests due to government actions appears to be a possible cause of the initial growth of the rate for most countries. If all or a fixed percentage of cases would be detected, one should expect a constant growth rate. As a consequence, the  growth rate is overestimated by a unknown extent.
+As described above, the case numbers are biased by the availability of tests.  Increasing availability of tests due to government actions appears to be a possible cause of the initial growth of the rate for most countries. If all or a fixed percentage of cases would be detected, one should expect a constant growth rate. As a consequence, the  growth rate in the beginning phase is overestimated by a unknown extent.
 On the other hand, if this interpretation is true, *and the availability of tests does not decrease* this also would mean that when the growth rate of detected cases is going down, the real  growth rate decreases as well.
 
 
