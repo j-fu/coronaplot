@@ -210,7 +210,7 @@ function create_plots(;averaging_periods=[7,15],Nstart=500)
 
     rawdata=read_download_infected()
 
-    trailer="\nData source: $(dataurl) $(Dates.today())\nData processing: https://github.com/j-fu/coronaplot"
+    trailer="\nData source: $(dataurl) $(Dates.today())\nData processing: https://github.com/j-fu/coronaplot  License: CC-BY 2.0"
 
     # Plot absolute values (linear Y scale) to show exponential behavior
     fig = PyPlot.figure(1)
