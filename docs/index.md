@@ -1,5 +1,5 @@
 ---
-title: Zeitliche Entwicklung des Coronavirus (27.3.2020)
+title: Zeitliche Entwicklung des Coronavirus (28.3.2020)
 ---
 
 - [This page in English](index.en.md)
@@ -21,7 +21,7 @@ title: Zeitliche Entwicklung des Coronavirus (27.3.2020)
 ## Einführung
 Das  "Center for Systems Science and Engineering (CSSE)" der Johns Hopkins University sammelt und publiziert Daten der Entwicklung der Krankheit.
 
-Nach einer Idee von [Mark Handley](https://twitter.com/MarkJHandley/status/1237119688578138112?s=20) nutzen wir hier diese Datenquelle, um den zeitlichen Verlauf im Vergleich der Länder mit mehr als 3000 Infektionen darzustellen.
+Nach einer Idee von [Mark Handley](https://twitter.com/MarkJHandley/status/1237119688578138112?s=20) nutzen wir hier diese Datenquelle, um den zeitlichen Verlauf im Vergleich der Länder mit mehr als 5000 Infektionen darzustellen.
 
 - [Blogpost](https://systems.jhu.edu/research/public-health/ncov/), welcher as Projekt am CSSE beschreibt
 - [Die](https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6) bekannte Karte zur Verbreitung des Coronavirus.
