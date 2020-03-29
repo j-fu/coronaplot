@@ -1,5 +1,5 @@
 ---
-title: Zeitliche Entwicklung des Coronavirus (28.3.2020)
+title: Zeitliche Entwicklung des Coronavirus (29.3.2020)
 ---
 
 - [This page in English](index.en.md)
@@ -21,16 +21,16 @@ title: Zeitliche Entwicklung des Coronavirus (28.3.2020)
 ## Einführung
 Das  "Center for Systems Science and Engineering (CSSE)" der Johns Hopkins University sammelt und publiziert Daten der Entwicklung der Krankheit.
 
-Nach einer Idee von [Mark Handley](https://twitter.com/MarkJHandley/status/1237119688578138112?s=20) nutzen wir hier diese Datenquelle, um den zeitlichen Verlauf im Vergleich der Länder mit mehr als 5000 Infektionen darzustellen.
+Nach einer Idee von [Mark Handley](https://twitter.com/MarkJHandley/status/1237119688578138112?s=20) nutzen wir hier diese Datenquelle, um den zeitlichen Verlauf im Vergleich der Länder mit mehr als 7000 Infektionen darzustellen.
 
 - [Blogpost](https://systems.jhu.edu/research/public-health/ncov/), welcher as Projekt am CSSE beschreibt
 - [Die](https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6) bekannte Karte zur Verbreitung des Coronavirus.
 - Die Daten für die Plots kommen aus dem [Github- Repository mit den aktuellen Daten](https://github.com/CSSEGISandData/COVID-19). Diese werden [einmal am Tag um 1:00 MEZ](https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data#update-frequency) aktualisiert (seltener als die der Karte)
-Die Daten für die USA basieren auf den Angaben für die Bundesstaaten. Die Daten für Europa beinhalten die Daten für die EU-Länder, sowie für die Schweiz, Norwegen, Großbritannien und Serbien. Alle anderen europäischen Staaten haben zum aktuellen Zeitpunkt (27.3.) jeweils weniger als 300 Fälle.
+Die Daten für die USA basieren auf den Angaben für die Bundesstaaten. Die Daten für Europa beinhalten die Daten für die EU-Länder, sowie für die Schweiz, Norwegen, Großbritannien und Serbien. Alle anderen europäischen Staaten haben zum aktuellen Zeitpunkt (27.3.) jeweils weniger als 350 Fälle.
 - Die Daten hängen von mehreren Faktoren ab, unter anderem:
    - von der realen Zahl der Infektionen
    - von der Verfügbarkeit von Tests.
-   Letztere variiert stark zwischen den einzelnen Ländern.
+   Letztere variiert stark zeitlich und  zwischen den einzelnen Ländern.
 
 ## Darstellung in absoluten Zahlen
 ![](infected-exp.png) 
@@ -59,6 +59,8 @@ Wie in der Einführung beschrieben, sind die hier genutzten Fallzahlen von der V
 
 ## Änderungen
 Hier werden wesentliche Änderungen neben der Aktualisierung der Daten dokumentiert.
+### 2020-03-29
+- Zusätzliche Aufnahme der Daten des Robert-Koch-Instituts (RKI) für Deutschland. Leider werden dort Zeitreihen nicht publiziert. Allerdings werden diese Zahlen auf [Wikipedia](https://de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland#Infektionsfälle) beobachtet und in zeitlicher Abfolge dargestellt. Die hier verwendeten Daten sind von dort übernommen. 
 
 ### 2020-03-24
 - Der hier benutzte internationale Datensatz hat jetzt ein neues Format, die Daten sind nicht mehr auf Staaten/Counties
@@ -68,7 +70,7 @@ zu haben. Siehe auch die [Ankündigung der JHU](https://github.com/CSSEGISandDat
 ### 2020-03-22
 - Zusätzliche Darstellung des wöchentlichen Mittels
 - Für die Darstellung der Wachstumsraten wird jetzt anstelle des arithmetischen das geometrische [Mittel](https://de.wikipedia.org/wiki/Mittelwert) der Wachstumsfaktoren benutzt.   
-    Für varierende tägliche Wachstumsfaktoren über einen gegebenen Zeitraum beschreibt das geometrische Mittel den *konstanten* Wachstumsfaktor, der dasselebe Ergebnis geliefert hätte. Damit ist es für den  hier untersuchten Prozess wesentlich adäquater. Insbesondere war die Ratenmittelung für die Vereingten Staaten stark durch Ausreißer beeinflusst. Zum Vergleich hier die alte Version mit den Daten vom 22.3.
+    Für variierende tägliche Wachstumsfaktoren über einen gegebenen Zeitraum beschreibt das geometrische Mittel den *konstanten* Wachstumsfaktor, der das gleiche Ergebnis geliefert hätte. Damit ist es für den  hier untersuchten Prozess wesentlich adäquater. Insbesondere war die Ratenmittelung für die Vereingten Staaten stark durch Ausreißer beeinflusst. Zum Vergleich hier die alte Version mit den Daten vom 22.3.
 
 <img src="https://github.com/j-fu/coronaplot/raw/51326c1522407fca8a5c32ba280460d8924d2f06/infected-growthrate.png" width="200">
 

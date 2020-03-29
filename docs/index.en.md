@@ -1,5 +1,5 @@
 ---
-title:  Plot of corona virus development (March 28, 2020)
+title:  Plot of corona virus development (March 29, 2020)
 ---
 
 - [Diese Seite auf Deutsch](index.md)
@@ -25,7 +25,7 @@ The Center for Systems Science and Engineering (CSSE)  of Johns Hopkins Universi
 collects and publishes the data of the diesease development.
 
 After an idea of [Mark Handley](https://twitter.com/MarkJHandley/status/1237119688578138112?s=20) we take the same
-data source and plot the data in a different way for those countries which have more than 5000 cases.
+data source and plot the data in a different way for those countries which have more than 7000 cases.
 
 
 - [Blog post describing the project at CSSE](https://systems.jhu.edu/research/public-health/ncov/).
@@ -36,7 +36,7 @@ data source and plot the data in a different way for those countries which have 
   Data  for the  US are  based on  the state  data, county  data are
   ignored.  Data  for  Europe  currently  include   the  EU,
   Switzerland, Norway, UK and Serbia only. All other European countries have
-  (as of March 27) less than 300 infections each.
+  (as of March 27) less than 350 infections each.
 - These data depend on many factors, among these are:
    - the real number of infections
    - the availability of tests.
@@ -78,6 +78,10 @@ On the other hand, if this interpretation is true, *and the availability of test
 ## Changes
 We document here significant changes besides data updates. 
 
+### 2020-03-29
+- Additional data for Germany from the Robert Koch Institute (RKI). These are not published as time series.
+These data  are watched by [Wikipedia](https://de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland#Infektionsfälle), and time series
+are provided in the article. These data are used here.
 ### 2020-03-24
 - For the international data used here, there is now one US entry in the new format time series files which appearantly
 has been cleaned for the past. Counting seems to have changed. See also the [annoucement by JHU](https://github.com/CSSEGISandData/COVID-19/issues/1250).

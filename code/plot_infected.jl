@@ -1,6 +1,7 @@
 using PyPlot
 using Dates
 using CSV
+using DataFrames
 using Printf
 
 
@@ -28,26 +29,36 @@ dataurl="https://github.com/CSSEGISandData/COVID-19/"
 
 # Download and read data for confirmed infection cases
 # This creates a dataframe
-function read_download_infected()
-    download(datasource,"infected.dat")
-    CSV.read("infected.dat")
+function load_jhu()
+    download(datasource,"jhu.csv")
+    CSV.read("jhu.csv")
 end
+
+# Download and read data for confirmed infection cases
+# This creates a dataframe
+function load_rki()
+    CSV.read("rki.csv")
+end
+
+
 
 # Create a new dataframe wich contains only data for given countries
 # For US and China, data are given state/province/county-wise
 # For former colonial powers with overseas territories etc. there are multiple rows as well
-function select_countries_rows(df,countries)
-    countries_mask=BitArray(undef,length(countries),size(df,1))
+function select_countries_rows(df_jhu,countries)
+    countries_mask=BitArray(undef,length(countries),size(df_jhu,1))
     for i=1:length(countries)
-        countries_mask[i,:].=df[:,c_country].==countries[i]
+        countries_mask[i,:].=df_jhu[:,c_country].==countries[i]
     end
     mask=vec(reduce(|,countries_mask,dims=1))
-    df[mask,:]
+    df_jhu[mask,:]
 end
 
+
+
 # Create timeseries for list of countries
-function create_countries_timeseries(df,countries)
-    crows=select_countries_rows(df,countries)
+function create_countries_timeseries(df_jhu,countries)
+    crows=select_countries_rows(df_jhu,countries)
 
     # In the new version, there is only one row for the whole US.
     # if countries[1]=="US"
@@ -61,6 +72,11 @@ function create_countries_timeseries(df,countries)
     data=convert(Vector{Float64},vec(data))
 end
 
+
+function create_rki_timeseries(df_rki,countries)
+
+end
+
 # Calculate growth factor from growth rate (in %)
 growth_factor(growth_rate)=growth_rate/100.0+1
 
@@ -72,18 +88,21 @@ growth_rate(gfactor)=(gfactor-1)*100
 
 # Plot data for country
 function plotcountry(df,  
-                       countries,  # Array of countries
-                       kind;       # Kind of plot  
-                       label="", # label
-                       lw=2,       # plot line width
-                       lt="-",     # plot line type
-                       averaging_period=15,   # averaging period: averaging_period days
-                       Nstart=500  # starting data for shifting curves
-                       )
-
+                     countries,  # Array of countries
+                     kind;       # Kind of plot  
+                     label="", # label
+                     lw=2,       # plot line width
+                     lt="-",     # plot line type
+                     averaging_period=15,   # averaging period: averaging_period days
+                     Nstart=500  # starting data for shifting curves
+                     )
+    rki=false
     # If label name is not given, take the first name from the array
     if label===""
         label=countries[1]
+    end
+    if label==="Germany/RKI"
+        rki=true
     end
     
     # Add 1 to data for allowing to  logarithm or division
@@ -98,7 +117,12 @@ function plotcountry(df,
     # Create shifted time series
 
     # Shift timeseries to the left cutting of the days until Nstart infections occur
-    basedata=create_countries_timeseries(df,countries).+logdiv_regularization
+
+    if rki
+        basedata=Array{Float64}(df.Gesamt)
+    else
+        basedata=create_countries_timeseries(df,countries).+logdiv_regularization
+    end
     shift=1
     while basedata[shift]<Nstart
         shift=shift+1
@@ -137,17 +161,16 @@ function plotcountry(df,
 
         # Adjust starting day due to change of reporting on US data
         day0=1
-        # if label=="US"
-        #     day0=34
-        # end
-        # Plot
-        plot(day0:length(grates),grates[day0:end],label="$(label)",lt,linewidth=lw,markersize=6)
+        if rki
+            day0=33
+        end
+        plot(day0:day0+length(grates)-1,grates[1:end],label="$(label)",lt,linewidth=lw,markersize=6)
     end
 end
 
 
 # Plot data for all countries
-function plotcountries(df,
+function plotcountries(df_jhu, df_rki,
                        kind;       # Kind of plot
                        averaging_period=15,   # averaging period: averaging_period days
                        Nstart=500  # starting data for shifting curves
@@ -188,29 +211,31 @@ function plotcountries(df,
         "Serbia"
     ]
     
-    plotcountry(df,["Italy"],kind,Nstart=Nstart, lt="o-", averaging_period=averaging_period)
-    plotcountry(df,["France"],kind,Nstart=Nstart, averaging_period=averaging_period)
-    plotcountry(df,["Spain"],kind,Nstart=Nstart, averaging_period=averaging_period)
-    plotcountry(df,["Iran"],kind,Nstart=Nstart, averaging_period=averaging_period)
-    plotcountry(df,["Korea, South"],kind,Nstart=Nstart,lt="o-", averaging_period=averaging_period)
-    plotcountry(df,["China"],kind,Nstart=Nstart,lt="o-", averaging_period=averaging_period)
-    plotcountry(df,["Switzerland"],kind,Nstart=Nstart, averaging_period=averaging_period)
-    plotcountry(df,["Netherlands"],kind,Nstart=Nstart, averaging_period=averaging_period)
-    plotcountry(df,["Austria"],kind,Nstart=Nstart, averaging_period=averaging_period)
-    plotcountry(df,["Belgium"],kind,Nstart=Nstart, averaging_period=averaging_period)
-    plotcountry(df,["Turkey"],kind,Nstart=Nstart, averaging_period=averaging_period)
-    plotcountry(df,Europe,label="Europe",kind,lt="b-o",Nstart=Nstart, averaging_period=averaging_period)
-    plotcountry(df,["Germany"],lw=3,lt="r-o",kind,Nstart=Nstart, averaging_period=averaging_period)
-    plotcountry(df,["US"],kind,lt="k-",Nstart=Nstart, averaging_period=averaging_period)
-    plotcountry(df,["United Kingdom"],kind,lt="k-o", Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_jhu,["Italy"],kind,Nstart=Nstart, lt="o-", averaging_period=averaging_period)
+    plotcountry(df_jhu,["France"],kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_jhu,["Spain"],kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_jhu,["Iran"],kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_jhu,["Korea, South"],kind,Nstart=Nstart,lt="o-", averaging_period=averaging_period)
+    plotcountry(df_jhu,["China"],kind,Nstart=Nstart,lt="o-", averaging_period=averaging_period)
+    plotcountry(df_jhu,["Switzerland"],kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_jhu,["Netherlands"],kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_jhu,["Austria"],kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_jhu,["Belgium"],kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_jhu,["Turkey"],kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_jhu,Europe,label="Europe",kind,lt="b-o",Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_jhu,["Germany"],lw=3,lt="r-o",kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_rki,["Germany/RKI"],lw=3,lt="r-",kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_jhu,["US"],kind,lt="k-",Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_jhu,["United Kingdom"],kind,lt="k-o", Nstart=Nstart, averaging_period=averaging_period)
 end
 
 # Create the plots
 function create_plots(;averaging_periods=[7,15],Nstart=500)
 
-    rawdata=read_download_infected()
+    df_jhu=load_jhu()
+    df_rki=load_rki()
 
-    trailer="\nData source: $(dataurl) $(Dates.today())\nData processing: https://github.com/j-fu/coronaplot  License: CC-BY 2.0"
+    trailer="\nData source: JHU & RKI $(Dates.today())\nData processing: https://github.com/j-fu/coronaplot  License: CC-BY 2.0"
 
     # Plot absolute values (linear Y scale) to show exponential behavior
     fig = PyPlot.figure(1)
@@ -218,7 +243,7 @@ function create_plots(;averaging_periods=[7,15],Nstart=500)
     fig.set_size_inches(10,5)
     clf()
     title("Corona Virus Development in countries with more than 5000 infections$(trailer)")
-    plotcountries(rawdata,"abs",Nstart=Nstart)
+    plotcountries(df_jhu,df_rki,"abs",Nstart=Nstart)
     PyPlot.ylim(1,350_000)
     PyPlot.xlim(0,35)
     PyPlot.grid()
@@ -234,7 +259,7 @@ function create_plots(;averaging_periods=[7,15],Nstart=500)
     fig.set_size_inches(10,5)
     clf()
     title("Corona Virus Development in countries with more than 5000 infections$(trailer)")
-    plotcountries(rawdata,"log",Nstart=Nstart)
+    plotcountries(df_jhu,df_rki,"log",Nstart=Nstart)
     PyPlot.xlim(0,40)
     PyPlot.grid()
     PyPlot.xlabel("Days since occurence of at least $(Nstart) infections")
@@ -251,7 +276,7 @@ function create_plots(;averaging_periods=[7,15],Nstart=500)
         fig.set_size_inches(10,5)
         clf()
         title("$(averaging_period) day average of daily growth rate of COVID-19 infections in countries with >5000 infections$(trailer)")
-        plotcountries(rawdata,"growthrate",averaging_period=averaging_period)
+        plotcountries(df_jhu,df_rki,"growthrate",averaging_period=averaging_period)
         PyPlot.ylim(0,100)
         PyPlot.xlim(10,55)
         PyPlot.grid()
