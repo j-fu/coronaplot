@@ -1,5 +1,5 @@
 ---
-title: Zeitliche Entwicklung des Coronavirus (29.3.2020)
+title: Zeitliche Entwicklung des Coronavirus (30.3.2020)
 ---
 
 - [This page in English](index.en.md)
@@ -17,6 +17,7 @@ title: Zeitliche Entwicklung des Coronavirus (29.3.2020)
     - Ähnliche Projekte auf [covid19dashbords.com](https://covid19dashboards.com/):
        - [Vergleiche der länderspezifischen Entwicklungen](https://covid19dashboards.com/compare-country-trajectories/)
        - [Wachstumsanalyse](https://covid19dashboards.com/growth-analysis/)
+
 
 ## Einführung
 Das  "Center for Systems Science and Engineering (CSSE)" der Johns Hopkins University sammelt und publiziert Daten der Entwicklung der Krankheit.
