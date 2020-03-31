@@ -1,5 +1,5 @@
 ---
-title:  Plot of corona virus development (March 30, 2020)
+title:  Plot of corona virus development (March 31, 2020)
 ---
 
 - [Diese Seite auf Deutsch](index.md)
@@ -25,7 +25,7 @@ The Center for Systems Science and Engineering (CSSE)  of Johns Hopkins Universi
 collects and publishes the data of the diesease development.
 
 After an idea of [Mark Handley](https://twitter.com/MarkJHandley/status/1237119688578138112?s=20) we take the same
-data source and plot the data in a different way for those countries which have more than 7000 cases.
+data source and plot the data in a different way for those countries which have more than 8000 cases.
 
 
 - [Blog post describing the project at CSSE](https://systems.jhu.edu/research/public-health/ncov/).
@@ -36,7 +36,7 @@ data source and plot the data in a different way for those countries which have 
   Data  for the  US are  based on  the state  data, county  data are
   ignored.  Data  for  Europe  currently  include   the  EU,
   Switzerland, Norway, UK and Serbia only. All other European countries have
-  (as of March 27) less than 350 infections each.
+  (as of March 31) less than 400 infections each.
 - These data depend on many factors, among these are:
    - the real number of infections
    - the availability of tests.
