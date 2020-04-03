@@ -260,6 +260,8 @@ function plotbundeslaender(df_jhu,df_rki,
     plotcountry(df_rki,["SL"],kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_rki,["SN"],kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_rki,["ST"],kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_rki,["SH"],lt="y-",kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_rki,["TH"],lt="k-",kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_rki,["Gesamt"],lw=3,lt="r-o",kind,Nstart=Nstart, averaging_period=averaging_period)
 end
 
