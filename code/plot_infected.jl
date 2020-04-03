@@ -246,7 +246,7 @@ function plotbundeslaender(df_jhu,df_rki,
                            )
     
     plotcountry(df_jhu,["Germany"], label="JHU",lw=3,lt="r-",kind,Nstart=Nstart, averaging_period=averaging_period)
-    plotcountry(df_rki,["BW"],lt="g-o",kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_rki,["BW"],lt="y-o",kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_rki,["BY"],lt="k-o",kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_rki,["BB"],kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_rki,["BE"],lw=3,lt="g-o",kind,Nstart=Nstart, averaging_period=averaging_period)
@@ -374,7 +374,7 @@ function create_blaender(;averaging_periods=[7,15],Nstart=100)
     PyPlot.xlabel("Tage seit dem Auftreten von $(Nstart) Infektionen")
     PyPlot.ylabel("Anzahl der Infektionen (lineare Skala)")
     PyPlot.legend(loc="upper left")
-    PyPlot.savefig("../docs/b-infected-exp.png")
+    PyPlot.savefig("../docs/de-infected-exp.png")
 
     # Log plot
     fig = PyPlot.figure(2)
@@ -388,7 +388,7 @@ function create_blaender(;averaging_periods=[7,15],Nstart=100)
     PyPlot.xlabel("Tage seit dem Auftreten von $(Nstart) Infektionen")
     PyPlot.ylabel("Anzahl der Infektionen (logarithmische Skala)")
     PyPlot.legend(loc="lower right")
-    PyPlot.savefig("../docs/b-infected.png")
+    PyPlot.savefig("../docs/de-infected.png")
 
     ifig=3
     for averaging_period in averaging_periods
@@ -400,7 +400,7 @@ function create_blaender(;averaging_periods=[7,15],Nstart=100)
         title("$(averaging_period)-Tage-Mittel der täglichen Wachstumsraten der COVID19-Infektionen in Deutschland$(trailer)")
         plotbundeslaender(df_jhu,df_rki,"growthrate",averaging_period=averaging_period)
         PyPlot.ylim(0,60)
-        PyPlot.xlim(30,55)
+        PyPlot.xlim(30,60)
         PyPlot.grid()
         month="Februar"
         day=averaging_period-10
@@ -424,10 +424,10 @@ function create_blaender(;averaging_periods=[7,15],Nstart=100)
         ax2.set_yticklabels([ @sprintf("%.2f",dtimes[i]) for i=1:length(dtimes)])
         ax2.set_ylabel("Generationszeiten")
         if averaging_period==15
-            PyPlot.savefig("../docs/b-infected-growthrate.png")
+            PyPlot.savefig("../docs/de-infected-growthrate.png")
         end
         if averaging_period==7
-            PyPlot.savefig("../docs/b-infected-growthrate-weeklyavg.png")
+            PyPlot.savefig("../docs/de-infected-growthrate-weeklyavg.png")
         end
         ifig=ifig+1
     end

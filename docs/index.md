@@ -3,6 +3,7 @@ title: Zeitliche Entwicklung des Coronavirus (3.4.2020)
 ---
 
 - [This page in English](index.en.md)
+- [Darstellung für Deutschland](de-plots.md)
 - [Einführung](#einführung)
 - [Darstellung in absoluten Zahlen](#darstellung-in-absoluten-zahlen)
 - [Logarithmische Skala](#logarithmische-Skala)
@@ -60,6 +61,8 @@ Wie in der Einführung beschrieben, sind die hier genutzten Fallzahlen von der V
 
 ## Änderungen
 Hier werden wesentliche Änderungen neben der Aktualisierung der Daten dokumentiert.
+### 2020-04-03
+-  Zusätzliche [Darstellung für Deutschland](de-plots.md)
 ### 2020-03-29
 - Zusätzliche Aufnahme der Daten des Robert-Koch-Instituts (RKI) für Deutschland. Leider werden dort Zeitreihen nicht publiziert. Allerdings werden diese Zahlen auf [Wikipedia](https://de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland#Infektionsfälle) beobachtet und in zeitlicher Abfolge dargestellt. Die hier verwendeten Daten sind von dort übernommen. 
 

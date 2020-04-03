@@ -3,6 +3,7 @@ title:  Plot of corona virus development (April 3, 2020)
 ---
 
 - [Diese Seite auf Deutsch](index.md)
+- [Plots for  Germany](de-plots.md) (in German)
 - [Introduction](#introduction)
 - [Absolute numbers](#absolute-numbers)
 - [Logarithmic scale](#logarithmic-scale)
@@ -77,7 +78,8 @@ On the other hand, if this interpretation is true, *and the availability of test
 
 ## Changes
 We document here significant changes besides data updates. 
-
+### 2020-04-03
+-  Additional [plots for  Germany](de-plots.md)
 ### 2020-03-29
 - Additional data for Germany from the Robert Koch Institute (RKI). These are not published as time series.
 These data  are watched by [Wikipedia](https://de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland#Infektionsfälle), and time series
