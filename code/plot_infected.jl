@@ -94,15 +94,16 @@ function plotcountry(df,
                      lw=2,       # plot line width
                      lt="-",     # plot line type
                      averaging_period=15,   # averaging period: averaging_period days
-                     Nstart=500  # starting data for shifting curves
+                     Nstart=100  # starting data for shifting curves
                      )
     rki=false
+    if size(df,2) <20
+        rki=true
+    end
+    
     # If label name is not given, take the first name from the array
     if label===""
         label=countries[1]
-    end
-    if label==="Germany/RKI" || label==="Berlin"
-        rki=true
     end
     
     # Add 1 to data for allowing to  logarithm or division
@@ -119,10 +120,7 @@ function plotcountry(df,
     # Shift timeseries to the left cutting of the days until Nstart infections occur
 
     if rki
-        basedata=Array{Float64}(df.Gesamt)
-        if label==="Berlin"
-            basedata=Array{Float64}(df.BE)
-        end
+        basedata=Array{Float64}(df[Symbol(label)])
     else
         basedata=create_countries_timeseries(df,countries).+logdiv_regularization
     end
@@ -147,6 +145,10 @@ function plotcountry(df,
     if kind=="growthrate"
         # Calculate daily growth factors
         gfactors=basedata[2:end]./basedata[1:end-1]
+        if averaging_period > length(gfactors)-1
+            println("skip: $(label)")
+            return 
+        end
 
         # Calculate the average over averaging_period
         averaged_gfactors=ones(length(gfactors)-averaging_period)
@@ -173,7 +175,7 @@ end
 
 
 # Plot data for all countries
-function plotcountries(df_jhu, df_rki,
+function plotcountries(df_jhu,df_rki,
                        kind;       # Kind of plot
                        averaging_period=15,   # averaging period: averaging_period days
                        Nstart=500  # starting data for shifting curves
@@ -228,11 +230,40 @@ function plotcountries(df_jhu, df_rki,
     plotcountry(df_jhu,["Canada"],kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_jhu,Europe,label="Europe",kind,lt="b-o",Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_jhu,["Germany"],lw=3,lt="r-o",kind,Nstart=Nstart, averaging_period=averaging_period)
-    plotcountry(df_rki,["Germany/RKI"],lw=3,lt="r-",kind,Nstart=Nstart, averaging_period=averaging_period)
-#    plotcountry(df_rki,["Berlin"],lw=3,lt="g-o",kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_jhu,["US"],kind,lt="k-",Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_jhu,["United Kingdom"],kind,lt="k-o", Nstart=Nstart, averaging_period=averaging_period)
 end
+
+
+
+
+
+# Plot data for all countries
+function plotbundeslaender(df_jhu,df_rki,
+                           kind;       # Kind of plot
+                           averaging_period=15,   # averaging period: averaging_period days
+                           Nstart=100  # starting data for shifting curves
+                           )
+    
+    plotcountry(df_jhu,["Germany"], label="JHU",lw=3,lt="r-",kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_rki,["BW"],lt="g-o",kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_rki,["BY"],lt="k-o",kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_rki,["BB"],kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_rki,["BE"],lw=3,lt="g-o",kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_rki,["HB"],kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_rki,["HH"],kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_rki,["HE"],kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_rki,["MV"],kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_rki,["NI"],kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_rki,["NW"],lt="b-o",kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_rki,["RP"],kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_rki,["SL"],kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_rki,["SN"],kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_rki,["ST"],kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_rki,["Gesamt"],lw=3,lt="r-o",kind,Nstart=Nstart, averaging_period=averaging_period)
+end
+
+
 
 # Create the plots
 function create_plots(;averaging_periods=[7,15],Nstart=500)
@@ -240,7 +271,7 @@ function create_plots(;averaging_periods=[7,15],Nstart=500)
     df_jhu=load_jhu()
     df_rki=load_rki()
 
-    trailer="\nData source: JHU & RKI $(Dates.today())\nData processing: https://github.com/j-fu/coronaplot  License: CC-BY 2.0"
+    trailer="\nData source: JHU $(Dates.today())\nData processing: https://github.com/j-fu/coronaplot  License: CC-BY 2.0"
 
     # Plot absolute values (linear Y scale) to show exponential behavior
     fig = PyPlot.figure(1)
@@ -319,6 +350,90 @@ function create_plots(;averaging_periods=[7,15],Nstart=500)
     end
 
 end
+
+
+# Create the plots
+function create_blaender(;averaging_periods=[7,15],Nstart=100)
+
+    df_jhu=load_jhu()
+    df_rki=load_rki()
+
+    trailer="\nDatenquelle: RKI+ JHU $(Dates.today())\nDatenverarbeitung: https://github.com/j-fu/coronaplot  Lizenz: CC-BY 2.0"
+
+    # Plot absolute values (linear Y scale) to show exponential behavior
+    fig = PyPlot.figure(1)
+    fig = PyPlot.gcf()
+    fig.set_size_inches(10,5)
+    clf()
+    title("Entwicklung der COVID19-Infektionszahlen in Deutschland$(trailer)")
+    plotbundeslaender(df_jhu,df_rki,"abs",Nstart=Nstart)
+#    PyPlot.ylim(1,350_000)
+    PyPlot.ylim(1,100_000)
+    PyPlot.xlim(0,35)
+    PyPlot.grid()
+    PyPlot.xlabel("Tage seit dem Auftreten von $(Nstart) Infektionen")
+    PyPlot.ylabel("Anzahl der Infektionen (lineare Skala)")
+    PyPlot.legend(loc="upper left")
+    PyPlot.savefig("../docs/b-infected-exp.png")
+
+    # Log plot
+    fig = PyPlot.figure(2)
+    fig = PyPlot.gcf()
+    fig.set_size_inches(10,5)
+    clf()
+    title("Entwicklung der COVID19-Infektionszahlen in Deutschland$(trailer)")
+    plotbundeslaender(df_jhu,df_rki,"log",Nstart=Nstart)
+    PyPlot.xlim(0,40)
+    PyPlot.grid()
+    PyPlot.xlabel("Tage seit dem Auftreten von $(Nstart) Infektionen")
+    PyPlot.ylabel("Anzahl der Infektionen (logarithmische Skala)")
+    PyPlot.legend(loc="lower right")
+    PyPlot.savefig("../docs/b-infected.png")
+
+    ifig=3
+    for averaging_period in averaging_periods
+        # Plot evolution of growth rate average
+        fig = PyPlot.figure(ifig)
+        fig = PyPlot.gcf()
+        fig.set_size_inches(10,5)
+        clf()
+        title("$(averaging_period)-Tage-Mittel der täglichen Wachstumsraten der COVID19-Infektionen in Deutschland$(trailer)")
+        plotbundeslaender(df_jhu,df_rki,"growthrate",averaging_period=averaging_period)
+        PyPlot.ylim(0,60)
+        PyPlot.xlim(30,55)
+        PyPlot.grid()
+        month="Februar"
+        day=averaging_period-10
+        if day<=0
+            month="Januar"
+            day=averaging_period+22
+            PyPlot.xlim(30,65)
+        end
+        PyPlot.xlabel("Tage seit $(day). $(month)  2020")
+        PyPlot.ylabel("$(averaging_period)-tägiges Mittel der täglichen Wachstumsraten/%")
+        PyPlot.legend(loc="upper left")
+        
+        # Add second y axis with doubling time
+        # see  https://stackoverflow.com/a/10517481/8922290
+        ax1 = PyPlot.gca()
+        ax2 = ax1.twinx()
+        ax2.set_ylim(ax1.get_ylim())
+        growth_rates= collect(0:2.5:60)
+        ax2.set_yticks(growth_rates)
+        dtimes=doubling_time.(growth_factor.(growth_rates))
+        ax2.set_yticklabels([ @sprintf("%.2f",dtimes[i]) for i=1:length(dtimes)])
+        ax2.set_ylabel("Generationszeiten")
+        if averaging_period==15
+            PyPlot.savefig("../docs/b-infected-growthrate.png")
+        end
+        if averaging_period==7
+            PyPlot.savefig("../docs/b-infected-growthrate-weeklyavg.png")
+        end
+        ifig=ifig+1
+    end
+
+end
+
 
 # publish on github
 function publish(;msg="data update")
