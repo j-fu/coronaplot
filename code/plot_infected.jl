@@ -227,7 +227,7 @@ function plotcountries(df_jhu,df_rki,
     plotcountry(df_jhu,["Austria"],kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_jhu,["Belgium"],kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_jhu,["Turkey"],kind,Nstart=Nstart, averaging_period=averaging_period)
-    plotcountry(df_jhu,["Canada"],kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_jhu,["Canada"],lt="y-",kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_jhu,Europe,label="Europe",kind,lt="b-o",Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_jhu,["Germany"],lw=3,lt="r-o",kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_jhu,["US"],kind,lt="k-",Nstart=Nstart, averaging_period=averaging_period)
@@ -268,11 +268,11 @@ end
 
 
 # Create the plots
-function create_plots(;averaging_periods=[7,15],Nstart=500)
+function create_world(;averaging_periods=[7,15],Nstart=500)
 
     df_jhu=load_jhu()
     df_rki=load_rki()
-
+    N0=10000
     trailer="\nData source: JHU $(Dates.today())\nData processing: https://github.com/j-fu/coronaplot  License: CC-BY 2.0"
 
     # Plot absolute values (linear Y scale) to show exponential behavior
@@ -280,7 +280,7 @@ function create_plots(;averaging_periods=[7,15],Nstart=500)
     fig = PyPlot.gcf()
     fig.set_size_inches(10,5)
     clf()
-    title("Corona Virus Development in countries with more than 9000 infections$(trailer)")
+    title("Corona Virus Development in countries with more than $(N0) infections$(trailer)")
     plotcountries(df_jhu,df_rki,"abs",Nstart=Nstart)
 #    PyPlot.ylim(1,350_000)
     PyPlot.ylim(1,100_000)
@@ -297,7 +297,7 @@ function create_plots(;averaging_periods=[7,15],Nstart=500)
     fig = PyPlot.gcf()
     fig.set_size_inches(10,5)
     clf()
-    title("Corona Virus Development in countries with more than 9000 infections$(trailer)")
+    title("Corona Virus Development in countries with more than  $(N0) infections$(trailer)")
     plotcountries(df_jhu,df_rki,"log",Nstart=Nstart)
     PyPlot.xlim(0,40)
     PyPlot.grid()
@@ -314,7 +314,7 @@ function create_plots(;averaging_periods=[7,15],Nstart=500)
         fig = PyPlot.gcf()
         fig.set_size_inches(10,5)
         clf()
-        title("$(averaging_period) day average of daily growth rate of COVID-19 infections in countries with >9000 infections$(trailer)")
+        title("$(averaging_period) day average of daily growth rate of COVID-19 infections in countries with > $(N0) infections$(trailer)")
         plotcountries(df_jhu,df_rki,"growthrate",averaging_period=averaging_period)
         PyPlot.ylim(0,100)
         PyPlot.xlim(10,60)
@@ -324,7 +324,7 @@ function create_plots(;averaging_periods=[7,15],Nstart=500)
         if day<=0
             month="January"
             day=averaging_period+22
-            PyPlot.xlim(16,65)
+            PyPlot.xlim(16,70)
         end
         PyPlot.xlabel("Days since $(month) $(day), 2020")
         PyPlot.ylabel("$(averaging_period) day average of daily growth/%")
@@ -436,7 +436,10 @@ function create_blaender(;averaging_periods=[7,15],Nstart=100)
 
 end
 
-
+function create_plots()
+    create_world()
+    create_blaender()
+end
 # publish on github
 function publish(;msg="data update")
     run(`git commit -a -m $(msg)`)

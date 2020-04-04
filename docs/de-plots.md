@@ -1,5 +1,5 @@
 ---
-title: Zeitliche Entwicklung des Coronavirus in Deutschland (3.4.2020)
+title: Zeitliche Entwicklung des Coronavirus in Deutschland (4.4.2020)
 ---
 
 Hier findet sich dieselbe Darstellung für Deutschland auf der Basis der Daten des RKI,
