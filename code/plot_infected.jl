@@ -385,7 +385,7 @@ function create_blaender(;averaging_periods=[7,15],Nstart=100)
     clf()
     title("Entwicklung der COVID19-Infektionszahlen in Deutschland$(trailer)")
     plotbundeslaender(df_jhu,df_rki,"log",Nstart=Nstart)
-    PyPlot.xlim(0,40)
+    PyPlot.xlim(0,45)
     PyPlot.grid()
     PyPlot.xlabel("Tage seit dem Auftreten von $(Nstart) Infektionen")
     PyPlot.ylabel("Anzahl der Infektionen (logarithmische Skala)")
@@ -409,7 +409,7 @@ function create_blaender(;averaging_periods=[7,15],Nstart=100)
         if day<=0
             month="Januar"
             day=averaging_period+22
-            PyPlot.xlim(30,65)
+            PyPlot.xlim(30,70)
         end
         PyPlot.xlabel("Tage seit $(day). $(month)  2020")
         PyPlot.ylabel("$(averaging_period)-tägiges Mittel der täglichen Wachstumsraten/%")

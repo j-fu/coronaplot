@@ -1,5 +1,5 @@
 ---
-title:  Plot of corona virus development (April 4, 2020)
+title:  Plot of corona virus development (April 5, 2020)
 ---
 
 - [Diese Seite auf Deutsch](index.md)
@@ -36,8 +36,8 @@ data source and plot the data in a different way for selected countries.
   and may lag behind the data in the map.    
   Data  for the  US are  based on  the state  data, county  data are
   ignored.  Data  for  Europe  currently  include   the  EU,
-  Switzerland, Norway, UK and Serbia only. All other European countries have
-  (as of April 4) less than 500 infections each.
+  Switzerland, Norway, UK and Serbia only. All other European countries had
+  on April 4 less than 500 infections each.
 - These data depend on many factors, among these are:
    - the real number of infections
    - the availability of tests.
