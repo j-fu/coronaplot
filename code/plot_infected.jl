@@ -402,7 +402,7 @@ function create_blaender(;averaging_periods=[7,15],Nstart=100)
         title("$(averaging_period)-Tage-Mittel der täglichen Wachstumsraten der COVID19-Infektionen in Deutschland$(trailer)")
         plotbundeslaender(df_jhu,df_rki,"growthrate",averaging_period=averaging_period)
         PyPlot.ylim(0,60)
-        PyPlot.xlim(30,60)
+        PyPlot.xlim(30,65)
         PyPlot.grid()
         month="Februar"
         day=averaging_period-10
