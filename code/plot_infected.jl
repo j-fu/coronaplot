@@ -317,7 +317,7 @@ function create_world(;averaging_periods=[7,15],Nstart=500)
         title("$(averaging_period) day average of daily growth rate of COVID-19 infections in countries with > $(N0) infections$(trailer)")
         plotcountries(df_jhu,df_rki,"growthrate",averaging_period=averaging_period)
         PyPlot.ylim(0,100)
-        PyPlot.xlim(10,60)
+        PyPlot.xlim(10,65)
         PyPlot.grid()
         month="February"
         day=averaging_period-10
