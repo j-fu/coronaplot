@@ -1,5 +1,5 @@
 ---
-title:  Plot of corona virus development (April 8, 2020)
+title:  Plot of corona virus development (April 9, 2020)
 ---
 
 - [Diese Seite auf Deutsch](index.md)
