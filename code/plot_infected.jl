@@ -228,6 +228,8 @@ function plotcountries(df_jhu,df_rki,
     plotcountry(df_jhu,["Belgium"],kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_jhu,["Turkey"],kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_jhu,["Canada"],lt="y-",kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_jhu,["Russia"],kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_jhu,["Brazil"],kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_jhu,Europe,label="Europe",kind,lt="b-o",Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_jhu,["Germany"],lw=3,lt="r-o",kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_jhu,["US"],kind,lt="k-",Nstart=Nstart, averaging_period=averaging_period)
@@ -324,7 +326,7 @@ function create_world(;averaging_periods=[7,15],Nstart=500)
         if day<=0
             month="January"
             day=averaging_period+22
-            PyPlot.xlim(16,70)
+            PyPlot.xlim(16,75)
         end
         PyPlot.xlabel("Days since $(month) $(day), 2020")
         PyPlot.ylabel("$(averaging_period) day average of daily growth/%")
@@ -409,7 +411,7 @@ function create_blaender(;averaging_periods=[7,15],Nstart=100)
         if day<=0
             month="Januar"
             day=averaging_period+22
-            PyPlot.xlim(30,70)
+            PyPlot.xlim(30,75)
         end
         PyPlot.xlabel("Tage seit $(day). $(month)  2020")
         PyPlot.ylabel("$(averaging_period)-tägiges Mittel der täglichen Wachstumsraten/%")
