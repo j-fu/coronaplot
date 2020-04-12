@@ -1,5 +1,5 @@
 ---
-title: Zeitliche Entwicklung des Coronavirus (11.4.2020)
+title: Zeitliche Entwicklung des Coronavirus (12.4.2020)
 ---
 
 - [This page in English](index.en.md)
