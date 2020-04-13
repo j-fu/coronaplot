@@ -18,7 +18,7 @@ Entwicklung der bestätigten Fälle seit dem ersten Tag mit mehr als 100 Infekti
 
 Die gleiche Darstellung wie oben, nur mit einer logarithmischen Skala der y-Achse. In diesem Fall entspricht das exponentielle Wachstum einer geraden Linie.
 
-## Entwicklung der täglichen Wachstumsratentu
+## Entwicklung der Verdopplungszeiten
 ![](de-infected-growthrate.png) 
 
 ![](de-infected-growthrate-weeklyavg.png) 

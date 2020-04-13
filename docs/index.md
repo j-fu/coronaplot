@@ -46,7 +46,7 @@ in den einzelnen Ländern.
 
 Die gleiche Darstellung wie oben, nur mit einer logarithmischen Skala der y-Achse. In diesem Fall entspricht das exponentielle Wachstum einer geraden Linie.
 
-## Entwicklung der täglichen Wachstumsraten
+## Entwicklung der Verdopplungszeiten (Generationszeiten)
 ![](infected-growthrate.png) 
 
 ![](infected-growthrate-weeklyavg.png) 

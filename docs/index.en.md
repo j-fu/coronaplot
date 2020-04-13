@@ -58,7 +58,7 @@ Development of confirmed  adjusted cases since the first day with more than 500 
 This is the same plot, just with a logarithmic scale of the y-axis.
 
 
-## Development of daily growth rates
+## Evolution of doubling times
 ![](infected-growthrate.png) 
 
 ![](infected-growthrate-weeklyavg.png) 
