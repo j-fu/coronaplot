@@ -83,6 +83,8 @@ growth_factor(growth_rate)=growth_rate/100.0+1
 # Calculate doubling time from growth factor
 doubling_time(gfactor)= log(2.0)/log(gfactor)
 
+growth_factor_from_doubling_time(dtime)=exp(log(2.0)/dtime)
+
 # Calculate growth rate (in %) from growth factor
 growth_rate(gfactor)=(gfactor-1)*100
 
@@ -110,6 +112,8 @@ function plotcountry(df,
     if kind=="log"
         logdiv_regularization=1.0e-10
     elseif  kind=="growthrate"
+        logdiv_regularization=1.0
+    elseif  kind=="doublingtime"
         logdiv_regularization=1.0
     else
         logdiv_regularization=0.0
@@ -142,7 +146,7 @@ function plotcountry(df,
         semilogy(days,data,label="$(label)",lt,linewidth=lw,markersize=6)
     end
 
-    if kind=="growthrate"
+    if kind=="growthrate" || kind=="doublingtime"
         # Calculate daily growth factors
         gfactors=basedata[2:end]./basedata[1:end-1]
         if averaging_period > length(gfactors)-1
@@ -163,13 +167,20 @@ function plotcountry(df,
 
         # Calculate growth rates
         grates=growth_rate.(averaged_gfactors)
+        dtimes=doubling_time.(averaged_gfactors)
 
         # Adjust starting day due to change of reporting on US data
         day0=1
         if rki
             day0=33
         end
-        plot(day0:day0+length(grates)-1,grates[1:end],label="$(label)",lt,linewidth=lw,markersize=6)
+
+        if kind=="growthrate"
+            plot(day0:day0+length(grates)-1,grates[1:end],label="$(label)",lt,linewidth=lw,markersize=6)
+        end
+        if kind=="doublingtime"
+            plot(day0:day0+length(grates)-1,dtimes[1:end],label="$(label)",lt,linewidth=lw,markersize=6)
+        end
     end
 end
 
@@ -270,7 +281,7 @@ end
 
 
 # Create the plots
-function create_world(;averaging_periods=[7,15],Nstart=500)
+function create_world(;averaging_periods=[7,15],Nstart=500,dtime=true)
 
     df_jhu=load_jhu()
     df_rki=load_rki()
@@ -309,6 +320,7 @@ function create_world(;averaging_periods=[7,15],Nstart=500)
     PyPlot.savefig("../docs/infected.png")
     PyPlot.savefig("../infected.png")
 
+    
     ifig=3
     for averaging_period in averaging_periods
         # Plot evolution of growth rate average
@@ -316,10 +328,20 @@ function create_world(;averaging_periods=[7,15],Nstart=500)
         fig = PyPlot.gcf()
         fig.set_size_inches(10,5)
         clf()
-        title("$(averaging_period) day average of daily growth rate of COVID-19 infections in countries with > $(N0) infections$(trailer)")
-        plotcountries(df_jhu,df_rki,"growthrate",averaging_period=averaging_period)
-        PyPlot.ylim(0,100)
+        if dtime
+            title("$(averaging_period) day average of doubling time in countries with > $(N0) infections$(trailer)")
+            plotcountries(df_jhu,df_rki,"doublingtime",averaging_period=averaging_period)
+        else
+            title("$(averaging_period) day average of daily growth rate of COVID-19 infections in countries with > $(N0) infections$(trailer)")
+            plotcountries(df_jhu,df_rki,"growthrate",averaging_period=averaging_period)
+        end
         PyPlot.xlim(10,65)
+        if dtime
+            PyPlot.ylim(0,40)
+        else
+            PyPlot.ylim(0,100)
+        end
+        
         PyPlot.grid()
         month="February"
         day=averaging_period-10
@@ -329,19 +351,38 @@ function create_world(;averaging_periods=[7,15],Nstart=500)
             PyPlot.xlim(16,75)
         end
         PyPlot.xlabel("Days since $(month) $(day), 2020")
-        PyPlot.ylabel("$(averaging_period) day average of daily growth/%")
+
+        dtime_label="Doubling time/days"
+        grate_label="$(averaging_period) day average of daily growth/%"
+        if dtime
+            PyPlot.ylabel(dtime_label)
+        else
+            PyPlot.ylabel(grate_label)
+        end
         PyPlot.legend(loc="upper left")
-        
-        # Add second y axis with doubling time
+
+        # Add second y axis
         # see  https://stackoverflow.com/a/10517481/8922290
-        ax1 = PyPlot.gca()
-        ax2 = ax1.twinx()
-        ax2.set_ylim(ax1.get_ylim())
-        growth_rates= collect(0:5:100)
-        ax2.set_yticks(growth_rates)
-        dtimes=doubling_time.(growth_factor.(growth_rates))
-        ax2.set_yticklabels([ @sprintf("%.2f",dtimes[i]) for i=1:length(dtimes)])
-        ax2.set_ylabel("Doubling time/days")
+        if dtime
+            ax1 = PyPlot.gca()
+            ax2 = ax1.twinx()
+            ax2.set_ylim(ax1.get_ylim())
+            dtimes=collect(0:5:40)
+            ax2.set_yticks(dtimes)
+            grates=growth_rate.(growth_factor_from_doubling_time.(dtimes))
+            ax2.set_yticklabels([ @sprintf("%.2f",grates[i]) for i=1:length(dtimes)])
+            ax2.set_ylabel(grate_label)
+        else
+            ax1 = PyPlot.gca()
+            ax2 = ax1.twinx()
+            ax2.set_ylim(ax1.get_ylim())
+            growth_rates= collect(0:5:100)
+            ax2.set_yticks(growth_rates)
+            dtimes=doubling_time.(growth_factor.(growth_rates))
+            ax2.set_yticklabels([ @sprintf("%.2f",dtimes[i]) for i=1:length(dtimes)])
+            ax2.set_ylabel(dtime_label)
+        end
+            
         if averaging_period==15
             PyPlot.savefig("../docs/infected-growthrate.png")
             PyPlot.savefig("../infected-growthrate.png")
@@ -357,7 +398,7 @@ end
 
 
 # Create the plots
-function create_blaender(;averaging_periods=[7,15],Nstart=100)
+function create_blaender(;averaging_periods=[7,15],Nstart=100,dtime=true)
 
     df_jhu=load_jhu()
     df_rki=load_rki()
@@ -401,9 +442,18 @@ function create_blaender(;averaging_periods=[7,15],Nstart=100)
         fig = PyPlot.gcf()
         fig.set_size_inches(10,5)
         clf()
-        title("$(averaging_period)-Tage-Mittel der täglichen Wachstumsraten der COVID19-Infektionen in Deutschland$(trailer)")
-        plotbundeslaender(df_jhu,df_rki,"growthrate",averaging_period=averaging_period)
-        PyPlot.ylim(0,60)
+        if dtime
+            title("$(averaging_period)-Tage-Mittel der Vertopplungszeiten$(trailer)")
+            plotbundeslaender(df_jhu,df_rki,"doublingtime",averaging_period=averaging_period)
+        else
+            title("$(averaging_period)-Tage-Mittel der täglichen Wachstumsraten der COVID19-Infektionen in Deutschland$(trailer)")
+            plotbundeslaender(df_jhu,df_rki,"growthrate",averaging_period=averaging_period)
+        end
+        if dtime
+            PyPlot.ylim(0,30)
+        else
+            PyPlot.ylim(0,60)
+        end
         PyPlot.xlim(30,65)
         PyPlot.grid()
         month="Februar"
@@ -414,19 +464,38 @@ function create_blaender(;averaging_periods=[7,15],Nstart=100)
             PyPlot.xlim(30,75)
         end
         PyPlot.xlabel("Tage seit $(day). $(month)  2020")
-        PyPlot.ylabel("$(averaging_period)-tägiges Mittel der täglichen Wachstumsraten/%")
+        dtime_label="Vedopplungszeinten/d"
+        grate_label="$(averaging_period)-tägiges Mittel der täglichen Wachstumsraten/%"
+        
+        if dtime
+            PyPlot.ylabel(dtime_label)
+        else
+            PyPlot.ylabel(grate_label)
+        end
+        
         PyPlot.legend(loc="upper left")
         
         # Add second y axis with doubling time
         # see  https://stackoverflow.com/a/10517481/8922290
-        ax1 = PyPlot.gca()
-        ax2 = ax1.twinx()
-        ax2.set_ylim(ax1.get_ylim())
-        growth_rates= collect(0:2.5:60)
-        ax2.set_yticks(growth_rates)
-        dtimes=doubling_time.(growth_factor.(growth_rates))
-        ax2.set_yticklabels([ @sprintf("%.2f",dtimes[i]) for i=1:length(dtimes)])
-        ax2.set_ylabel("Generationszeiten")
+        if dtime
+            ax1 = PyPlot.gca()
+            ax2 = ax1.twinx()
+            ax2.set_ylim(ax1.get_ylim())
+            dtimes=collect(0:5:30)
+            ax2.set_yticks(dtimes)
+            grates=growth_rate.(growth_factor_from_doubling_time.(dtimes))
+            ax2.set_yticklabels([ @sprintf("%.2f",grates[i]) for i=1:length(dtimes)])
+            ax2.set_ylabel(grate_label)
+        else
+            ax1 = PyPlot.gca()
+            ax2 = ax1.twinx()
+            ax2.set_ylim(ax1.get_ylim())
+            growth_rates= collect(0:2.5:60)
+            ax2.set_yticks(growth_rates)
+            dtimes=doubling_time.(growth_factor.(growth_rates))
+            ax2.set_yticklabels([ @sprintf("%.2f",dtimes[i]) for i=1:length(dtimes)])
+            ax2.set_ylabel("dtime_label")
+        end            
         if averaging_period==15
             PyPlot.savefig("../docs/de-infected-growthrate.png")
         end

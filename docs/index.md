@@ -1,5 +1,5 @@
 ---
-title: Zeitliche Entwicklung des Coronavirus (12.4.2020)
+title: Entwicklung der bestätigten Infektionszahlen mit SARS-CoV-2 (13.4.2020)
 ---
 
 - [This page in English](index.en.md)
@@ -61,6 +61,8 @@ Wie in der Einführung beschrieben, sind die hier genutzten Fallzahlen von der V
 
 ## Änderungen
 Hier werden wesentliche Änderungen neben der Aktualisierung der Daten dokumentiert.
+### 2020-04-13
+- Auftragung der Wachstumsraten nach Verdopplungszeiten (Vertauschung der Y-Achsen)
 ### 2020-04-03
 -  Zusätzliche [Darstellung für Deutschland](de-plots.md)
 ### 2020-03-29

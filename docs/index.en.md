@@ -1,5 +1,5 @@
 ---
-title:  Plot of corona virus development (April 12, 2020)
+title: Evolution of confirmed SARS-CoV-2 infection numbers  (April 13, 2020)
 ---
 
 - [Diese Seite auf Deutsch](index.md)
@@ -78,6 +78,8 @@ On the other hand, if this interpretation is true, *and the availability of test
 
 ## Changes
 We document here significant changes besides data updates. 
+### 2020-04-13
+- Growth rate plot now uses doubling time as primary data, y-axes have been switched
 ### 2020-04-03
 -  Additional [plots for  Germany](de-plots.md)
 ### 2020-03-29
