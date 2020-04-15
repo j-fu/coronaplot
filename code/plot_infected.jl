@@ -296,8 +296,8 @@ function create_world(;averaging_periods=[7,15],Nstart=500,dtime=true)
     title("Corona Virus Development in countries with more than $(N0) infections$(trailer)")
     plotcountries(df_jhu,df_rki,"abs",Nstart=Nstart)
 #    PyPlot.ylim(1,350_000)
-    PyPlot.ylim(1,150_000)
-    PyPlot.xlim(0,40)
+    PyPlot.ylim(1,200_000)
+    PyPlot.xlim(0,60)
     PyPlot.grid()
     PyPlot.xlabel("Days since occurence of at least $(Nstart) infections")
     PyPlot.ylabel("Number of infections (linear scale)")
@@ -312,7 +312,7 @@ function create_world(;averaging_periods=[7,15],Nstart=500,dtime=true)
     clf()
     title("Corona Virus Development in countries with more than  $(N0) infections$(trailer)")
     plotcountries(df_jhu,df_rki,"log",Nstart=Nstart)
-    PyPlot.xlim(0,50)
+    PyPlot.xlim(0,60)
     PyPlot.grid()
     PyPlot.xlabel("Days since occurence of at least $(Nstart) infections")
     PyPlot.ylabel("Number of infections (logarithmic scale)")
@@ -335,7 +335,7 @@ function create_world(;averaging_periods=[7,15],Nstart=500,dtime=true)
             title("$(averaging_period) day average of daily growth rate of COVID-19 infections in countries with > $(N0) infections$(trailer)")
             plotcountries(df_jhu,df_rki,"growthrate",averaging_period=averaging_period)
         end
-        PyPlot.xlim(10,65)
+        PyPlot.xlim(10,70)
         if dtime
             PyPlot.ylim(0,40)
         else
@@ -348,7 +348,7 @@ function create_world(;averaging_periods=[7,15],Nstart=500,dtime=true)
         if day<=0
             month="January"
             day=averaging_period+22
-            PyPlot.xlim(16,75)
+            PyPlot.xlim(16,80)
         end
         PyPlot.xlabel("Days since $(month) $(day), 2020")
 
@@ -413,8 +413,8 @@ function create_blaender(;averaging_periods=[7,15],Nstart=100,dtime=true)
     title("Entwicklung der COVID19-Infektionszahlen in Deutschland$(trailer)")
     plotbundeslaender(df_jhu,df_rki,"abs",Nstart=Nstart)
 #    PyPlot.ylim(1,350_000)
-    PyPlot.ylim(1,35_000)
-    PyPlot.xlim(0,40)
+    PyPlot.ylim(1,40_000)
+    PyPlot.xlim(0,45)
     PyPlot.grid()
     PyPlot.xlabel("Tage seit dem Auftreten von $(Nstart) Infektionen")
     PyPlot.ylabel("Anzahl der Infektionen (lineare Skala)")
@@ -428,7 +428,7 @@ function create_blaender(;averaging_periods=[7,15],Nstart=100,dtime=true)
     clf()
     title("Entwicklung der COVID19-Infektionszahlen in Deutschland$(trailer)")
     plotbundeslaender(df_jhu,df_rki,"log",Nstart=Nstart)
-    PyPlot.xlim(0,45)
+    PyPlot.xlim(0,50)
     PyPlot.grid()
     PyPlot.xlabel("Tage seit dem Auftreten von $(Nstart) Infektionen")
     PyPlot.ylabel("Anzahl der Infektionen (logarithmische Skala)")
@@ -450,18 +450,18 @@ function create_blaender(;averaging_periods=[7,15],Nstart=100,dtime=true)
             plotbundeslaender(df_jhu,df_rki,"growthrate",averaging_period=averaging_period)
         end
         if dtime
-            PyPlot.ylim(0,30)
+            PyPlot.ylim(0,35)
         else
             PyPlot.ylim(0,60)
         end
-        PyPlot.xlim(30,65)
+        PyPlot.xlim(30,70)
         PyPlot.grid()
         month="Februar"
         day=averaging_period-10
         if day<=0
             month="Januar"
             day=averaging_period+22
-            PyPlot.xlim(30,75)
+            PyPlot.xlim(30,80)
         end
         PyPlot.xlabel("Tage seit $(day). $(month)  2020")
         dtime_label="Vedopplungszeinten/d"
