@@ -450,7 +450,7 @@ function create_blaender(;averaging_periods=[7,15],Nstart=100,dtime=true)
             plotbundeslaender(df_jhu,df_rki,"growthrate",averaging_period=averaging_period)
         end
         if dtime
-            PyPlot.ylim(0,35)
+            PyPlot.ylim(0,40)
         else
             PyPlot.ylim(0,60)
         end
