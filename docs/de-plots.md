@@ -1,5 +1,5 @@
 ---
-title: Entwicklung der bestätigten Infektionszahlen mit SARS-CoV-2 in Deutschland (19.4.2020)
+title: Entwicklung der bestätigten Infektionszahlen mit SARS-CoV-2 in Deutschland (20.4.2020)
 ---
 
 Hier findet sich dieselbe Darstellung für Deutschland auf der Basis der Daten des RKI,
