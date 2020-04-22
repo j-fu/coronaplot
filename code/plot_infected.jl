@@ -335,7 +335,7 @@ function create_world(;averaging_periods=[7,15],Nstart=500,dtime=true)
             title("$(averaging_period) day average of daily growth rate of COVID-19 infections in countries with > $(N0) infections$(trailer)")
             plotcountries(df_jhu,df_rki,"growthrate",averaging_period=averaging_period)
         end
-        PyPlot.xlim(10,75)
+        PyPlot.xlim(10,80)
         if dtime
             PyPlot.ylim(0,40)
         else
@@ -454,7 +454,7 @@ function create_blaender(;averaging_periods=[7,15],Nstart=100,dtime=true)
         else
             PyPlot.ylim(0,60)
         end
-        PyPlot.xlim(30,75)
+        PyPlot.xlim(30,80)
         PyPlot.grid()
         month="Februar"
         day=averaging_period-10

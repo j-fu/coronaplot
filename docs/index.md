@@ -1,5 +1,5 @@
 ---
-title: Entwicklung der bestätigten Infektionszahlen mit SARS-CoV-2 (21.4.2020)
+title: Entwicklung der bestätigten Infektionszahlen mit SARS-CoV-2 (22.4.2020)
 ---
 
 - [This page in English](index.en.md)

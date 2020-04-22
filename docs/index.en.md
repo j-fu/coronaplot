@@ -1,5 +1,5 @@
 ---
-title: Evolution of confirmed SARS-CoV-2 infection numbers  (April 21, 2020)
+title: Evolution of confirmed SARS-CoV-2 infection numbers  (April 22, 2020)
 ---
 
 - [Diese Seite auf Deutsch](index.md)
