@@ -316,7 +316,7 @@ function create_world(;averaging_periods=[7,15],Nstart=500,dtime=true)
     PyPlot.grid()
     PyPlot.xlabel("Days since occurence of at least $(Nstart) infections")
     PyPlot.ylabel("Number of infections (logarithmic scale)")
-    PyPlot.legend(loc="lower right")
+    PyPlot.legend(loc="upper left")
     PyPlot.savefig("../docs/infected.png")
     PyPlot.savefig("../infected.png")
 
@@ -335,9 +335,9 @@ function create_world(;averaging_periods=[7,15],Nstart=500,dtime=true)
             title("$(averaging_period) day average of daily growth rate of COVID-19 infections in countries with > $(N0) infections$(trailer)")
             plotcountries(df_jhu,df_rki,"growthrate",averaging_period=averaging_period)
         end
-        PyPlot.xlim(10,80)
+        PyPlot.xlim(10,85)
         if dtime
-            PyPlot.ylim(0,40)
+            PyPlot.ylim(0,50)
         else
             PyPlot.ylim(0,100)
         end
@@ -348,7 +348,7 @@ function create_world(;averaging_periods=[7,15],Nstart=500,dtime=true)
         if day<=0
             month="January"
             day=averaging_period+22
-            PyPlot.xlim(16,85)
+            PyPlot.xlim(16,90)
         end
         PyPlot.xlabel("Days since $(month) $(day), 2020")
 
@@ -450,7 +450,7 @@ function create_blaender(;averaging_periods=[7,15],Nstart=100,dtime=true)
             plotbundeslaender(df_jhu,df_rki,"growthrate",averaging_period=averaging_period)
         end
         if dtime
-            PyPlot.ylim(0,45)
+            PyPlot.ylim(0,60)
         else
             PyPlot.ylim(0,60)
         end
@@ -461,7 +461,7 @@ function create_blaender(;averaging_periods=[7,15],Nstart=100,dtime=true)
         if day<=0
             month="Januar"
             day=averaging_period+22
-            PyPlot.xlim(30,85)
+            PyPlot.xlim(30,90)
         end
         PyPlot.xlabel("Tage seit $(day). $(month)  2020")
         dtime_label="Vedopplungszeinten/d"
@@ -481,7 +481,7 @@ function create_blaender(;averaging_periods=[7,15],Nstart=100,dtime=true)
             ax1 = PyPlot.gca()
             ax2 = ax1.twinx()
             ax2.set_ylim(ax1.get_ylim())
-            dtimes=collect(0:5:30)
+            dtimes=collect(0:5:60)
             ax2.set_yticks(dtimes)
             grates=growth_rate.(growth_factor_from_doubling_time.(dtimes))
             ax2.set_yticklabels([ @sprintf("%.2f",grates[i]) for i=1:length(dtimes)])
