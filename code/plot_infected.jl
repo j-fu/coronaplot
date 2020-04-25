@@ -195,7 +195,7 @@ function plotcountries(df_jhu,df_rki,
     # (omitting those with less than 100 cases)
     Europe=[
         "Austria",
-        "Belgium",
+        "Sweden",
         "Bulgaria",
         "Croatia",
         "Cyprus",
@@ -236,7 +236,7 @@ function plotcountries(df_jhu,df_rki,
     plotcountry(df_jhu,["Switzerland"],kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_jhu,["Netherlands"],kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_jhu,["Austria"],kind,Nstart=Nstart, averaging_period=averaging_period)
-    plotcountry(df_jhu,["Belgium"],kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_jhu,["Sweden"],kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_jhu,["Turkey"],kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_jhu,["Canada"],lt="y-",kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_jhu,["Russia"],kind,Nstart=Nstart, averaging_period=averaging_period)
@@ -337,7 +337,7 @@ function create_world(;averaging_periods=[7,15],Nstart=500,dtime=true)
         end
         PyPlot.xlim(10,85)
         if dtime
-            PyPlot.ylim(0,50)
+            PyPlot.ylim(0,60)
         else
             PyPlot.ylim(0,100)
         end
@@ -367,7 +367,7 @@ function create_world(;averaging_periods=[7,15],Nstart=500,dtime=true)
             ax1 = PyPlot.gca()
             ax2 = ax1.twinx()
             ax2.set_ylim(ax1.get_ylim())
-            dtimes=collect(0:5:40)
+            dtimes=collect(0:5:60)
             ax2.set_yticks(dtimes)
             grates=growth_rate.(growth_factor_from_doubling_time.(dtimes))
             ax2.set_yticklabels([ @sprintf("%.2f",grates[i]) for i=1:length(dtimes)])
@@ -450,7 +450,7 @@ function create_blaender(;averaging_periods=[7,15],Nstart=100,dtime=true)
             plotbundeslaender(df_jhu,df_rki,"growthrate",averaging_period=averaging_period)
         end
         if dtime
-            PyPlot.ylim(0,60)
+            PyPlot.ylim(0,70)
         else
             PyPlot.ylim(0,60)
         end
