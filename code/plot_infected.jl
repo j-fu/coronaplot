@@ -239,8 +239,8 @@ function plotcountries(df_jhu,df_rki,
     plotcountry(df_jhu,["Sweden"],kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_jhu,["Turkey"],kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_jhu,["Canada"],lt="y-",kind,Nstart=Nstart, averaging_period=averaging_period)
-    plotcountry(df_jhu,["Russia"],kind,Nstart=Nstart, averaging_period=averaging_period)
-    plotcountry(df_jhu,["Brazil"],kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_jhu,["Russia"],lt="mo-",kind,Nstart=Nstart, averaging_period=averaging_period)
+    plotcountry(df_jhu,["Brazil"],lt="g-",kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_jhu,Europe,label="Europe",kind,lt="b-o",Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_jhu,["Germany"],lw=3,lt="r-o",kind,Nstart=Nstart, averaging_period=averaging_period)
     plotcountry(df_jhu,["US"],kind,lt="k-",Nstart=Nstart, averaging_period=averaging_period)
@@ -335,9 +335,9 @@ function create_world(;averaging_periods=[7,15],Nstart=500,dtime=true)
             title("$(averaging_period) day average of daily growth rate of COVID-19 infections in countries with > $(N0) infections$(trailer)")
             plotcountries(df_jhu,df_rki,"growthrate",averaging_period=averaging_period)
         end
-        PyPlot.xlim(10,85)
+        PyPlot.xlim(10,90)
         if dtime
-            PyPlot.ylim(0,60)
+            PyPlot.ylim(0,80)
         else
             PyPlot.ylim(0,100)
         end
@@ -348,7 +348,7 @@ function create_world(;averaging_periods=[7,15],Nstart=500,dtime=true)
         if day<=0
             month="January"
             day=averaging_period+22
-            PyPlot.xlim(16,90)
+            PyPlot.xlim(16,95)
         end
         PyPlot.xlabel("Days since $(month) $(day), 2020")
 
@@ -450,18 +450,18 @@ function create_blaender(;averaging_periods=[7,15],Nstart=100,dtime=true)
             plotbundeslaender(df_jhu,df_rki,"growthrate",averaging_period=averaging_period)
         end
         if dtime
-            PyPlot.ylim(0,70)
+            PyPlot.ylim(0,100)
         else
             PyPlot.ylim(0,60)
         end
-        PyPlot.xlim(30,80)
+        PyPlot.xlim(50,90)
         PyPlot.grid()
         month="Februar"
         day=averaging_period-10
         if day<=0
             month="Januar"
             day=averaging_period+22
-            PyPlot.xlim(30,90)
+            PyPlot.xlim(50,95)
         end
         PyPlot.xlabel("Tage seit $(day). $(month)  2020")
         dtime_label="Vedopplungszeinten/d"
