@@ -17,11 +17,10 @@ dsname=""
 
 # Source file for data (for download)
 
-# Old version
-#datasource_old="https://github.com/CSSEGISandData/COVID-19/raw/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv"
-
 # New version
-datasource="https://github.com/CSSEGISandData/COVID-19/raw/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv"
+jhu_infected="https://github.com/CSSEGISandData/COVID-19/raw/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv"
+jhu_deaths="https://github.com/CSSEGISandData/COVID-19/raw/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv"
+jhu_recovered="https://github.com/CSSEGISandData/COVID-19/raw/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv"
 
 
 # Data URL (for data source in plot)
@@ -29,9 +28,24 @@ dataurl="https://github.com/CSSEGISandData/COVID-19/"
 
 # Download and read data for confirmed infection cases
 # This creates a dataframe
-function load_jhu()
-    download(datasource,"jhu.csv")
-    CSV.read("jhu.csv")
+function load_jhu_infected(;download=true)
+    if download
+        Base.download(jhu_infected,"jhu_infected.csv")
+    end
+    CSV.read("jhu_infected.csv")
+end
+
+function load_jhu_recovered(;download=true)
+    if download
+        Base.download(jhu_recovered,"jhu_recovered.csv")
+    end
+    CSV.read("jhu_recovered.csv")
+end
+function load_jhu_deaths(;download=true)
+    if download
+        Base.download(jhu_deaths,"jhu_deaths.csv")
+    end
+    CSV.read("jhu_deaths.csv")
 end
 
 # Download and read data for confirmed infection cases
@@ -59,15 +73,6 @@ end
 # Create timeseries for list of countries
 function create_countries_timeseries(df_jhu,countries)
     crows=select_countries_rows(df_jhu,countries)
-
-    # In the new version, there is only one row for the whole US.
-    # if countries[1]=="US"
-    #     # For the US we sum up only the 52 state data, luckily they are stored
-    #     # contiguously
-    #     data=sum(convert(Array,crows[1:52,c_timeseries_start:end]),dims=1)'
-    # else
-    #     # For all other countries we sum up all the rows
-    # end
     data=sum(convert(Array,crows[:,c_timeseries_start:end]),dims=1)'
     data=convert(Vector{Float64},vec(data))
 end
@@ -185,6 +190,8 @@ function plotcountry(df,
 end
 
 
+
+
 # Plot data for all countries
 function plotcountries(df_jhu,df_rki,
                        kind;       # Kind of plot
@@ -283,7 +290,7 @@ end
 # Create the plots
 function create_world(;averaging_periods=[7,15],Nstart=500,dtime=true)
 
-    df_jhu=load_jhu()
+    df_jhu=load_jhu_infected()
     df_rki=load_rki()
     N0=10000
     trailer="\nData source: JHU $(Dates.today())\nData processing: https://github.com/j-fu/coronaplot  License: CC-BY 2.0"
@@ -400,7 +407,7 @@ end
 # Create the plots
 function create_blaender(;averaging_periods=[7,15],Nstart=100,dtime=true)
 
-    df_jhu=load_jhu()
+    df_jhu=load_jhu_infected()
     df_rki=load_rki()
 
     trailer="\nDatenquelle: RKI+ JHU $(Dates.today())\nDatenverarbeitung: https://github.com/j-fu/coronaplot  Lizenz: CC-BY 2.0"
@@ -517,5 +524,281 @@ function publish(;msg="data update")
     run(`git push`)
 end
 
+function mvavg(ts,window,start)
+    tsavg=[]
+    for i=start:length(ts)-window
+        wsum=sum(ts[i:i+window])/window
+        push!(tsavg,wsum)
+    end
+    tsavg
+end
 
+function r0(ts,window,start)
+    r0=[]
+    for i=start+window:length(ts)-window
+        @show length(ts[i:i+window-1]),length(ts[i-window:i-1])
+        new=sum(ts[i:i+window-1])
+        old=sum(ts[i-window:i-1])
+        push!(r0,new/old)
+    end
+    r0
+end
+
+function startsince(ts,since)
+    for i=1:length(ts)
+        if ts[i]>since
+            return i
+        end
+    end
+end
+
+function leftpad(ts,len;pad=0.0)
+    ts_padded=[]
+    padlen=len-length(ts)
+    for i=1:padlen
+        push!(ts_padded,pad)
+    end
+    for i=1:length(ts)
+        push!(ts_padded,ts[i])
+    end
+    ts_padded
+end
+
+function alldata_world(;download=false)
+    (dead=load_jhu_deaths(download=download),
+     infected=load_jhu_infected(download=download),
+     recovered=load_jhu_recovered(download=download),
+     #     https://data.worldbank.org/indicator/SP.POP.TOTL
+     popdata=CSV.read("population.csv"))
+end
+
+function alldata_blaender(;download=false)
+    (dead=nothing,
+     infected=CSV.read("rki.csv"),
+     recovered=nothing,
+     #     https://www.statistik-bw.de/VGRdL/tbls/tab.jsp?rev=RV2014&tbl=tab20&lang=de-DE
+     popdata=CSV.read("einwohnerzahl-bundeslaender.csv"))
+end
+
+function country_results(data, country; avg_window=7,since=0,active_period=20, infection_period=7)
+    
+    (dead,infected,recovered,popdata)=data
+    println(country)
+
+    population=filter((row)-> row[1]==country, popdata)[1,2]
+
+    popfac=100_000.0/population
+    if dead!=nothing
+        ts_dead=create_countries_timeseries(dead,[country]).*popfac
+    end
+
+    if dead!=nothing
+        ts_infected=create_countries_timeseries(infected,[country]).*popfac
+    else
+        ts_infected=Array{Float64}(infected[Symbol(country)]).*popfac
+    end
+    
+
+    if recovered!=nothing
+        ts_recovered=create_countries_timeseries(recovered,[country]).*popfac
+    end
+
+    start=startsince(ts_infected,since)
+    start=1
+
+    if dead!=nothing
+        mvavg_dead=mvavg(ts_dead,avg_window,start)
+    else
+        mvavg_dead=nothing
+    end
+    mvavg_infected=mvavg(ts_infected,avg_window,start)
+    if recovered!=nothing
+        mvavg_recovered=mvavg(ts_recovered,avg_window,start)
+        mvavg_active=mvavg_infected-mvavg_recovered-mvavg_dead
+    else
+        mvavg_recovered=nothing
+        mvavg_active=nothing
+    end
+    
+    ts_new=mvavg_infected[2:end]-mvavg_infected[1:end-1]
+    mvavg_new=mvavg(ts_new,infection_period,start)
+
+    if recovered!=nothing
+        date_start=Date(2020,1,22)+Day(start)+Day(avg_window)
+    else
+        date_start=Date(2020,2,24)+Day(start)+Day(avg_window)
+    end        
+    dates=[date_start+Day(i-1) for i=1:length(mvavg_infected)]
+
+    
+
+
+    est_active=leftpad(mvavg_infected[active_period+1:end]-mvavg_infected[1:end-active_period],length(dates))
+
+#    https://www.heise.de/newsticker/meldung/Corona-Pandemie-Die-Mathematik-hinter-den-Reproduktionszahlen-R-4712676.html
+    est_r0=leftpad(mvavg_new[infection_period+1:end]./mvavg_new[1:end-infection_period],length(dates))
+
+    (mvavg_dead=mvavg_dead,
+     mvavg_infected=mvavg_infected,
+     mvavg_recovered=mvavg_recovered,
+     mvavg_active=mvavg_active,
+     est_active=est_active,
+     est_r0=est_r0,
+     population=population,
+     dates=dates)
+end
+
+
+
+
+function testplot(;download=false, world=true,country="Germany",avg_window=7,since=0,active_period=20, infection_period=7)
+
+    if world
+        data=alldata_world(download=download)
+    else
+        data=alldata_blaender()
+    end
+    results=country_results(data,country,avg_window=avg_window,active_period=active_period, infection_period=infection_period)
+    
+    
+    fig = PyPlot.figure(1)
+    fig = PyPlot.gcf()
+    fig.set_size_inches(10,5)
+    clf()
+    title(@sprintf("Country: %s, population: %.1f million",country,results.population/1.0e6))
+    
+    d0=1
+    PyPlot.plot_date(results.dates[d0:end],results.mvavg_infected[d0:end],label="infected","b-")
+    PyPlot.plot_date(results.dates[d0:end],results.est_active[d0:end],label="active (est)","rx")
+    if world
+        PyPlot.plot_date(results.dates[d0:end],results.mvavg_active[d0:end],label="active (jhu)","r-")
+        PyPlot.plot_date(results.dates[d0:end],results.mvavg_recovered[d0:end],label="recovered","g-")
+        PyPlot.plot_date(results.dates[d0:end],results.mvavg_dead[d0:end],label="dead","k-")
+    end
+    PyPlot.xlabel("Date")
+    PyPlot.ylabel("Cases per 100000 inhabitants")
+    PyPlot.legend(loc="upper left")
+    PyPlot.grid()
+    
+    ax1 = PyPlot.gca()
+    ax2 = ax1.twinx()
+    ax2.set_ylim(0,4)
+    ax2.plot_date(results.dates[d0:end],results.est_r0[d0:end],label="R0","m--")
+    ax2.plot_date(results.dates[d0:end],[1.0 for i=d0:length(results.dates)],label="R0=1","m-",linewidth=2)
+    ax2.set_ylabel("R0")
+    ax2.legend(loc="upper right")
+    
+    PyPlot.show()
+end
+
+function countrylist()
+   [
+    ["Italy", "o-"],
+    ["France", "-"],
+    ["Spain", "-"],
+    ["Iran", "-"],
+    ["Korea, South","o-"],
+    ["China","o-"],
+    ["Switzerland", "-"],
+    ["Netherlands", "-"],
+    ["Austria", "-"],
+    ["Sweden", "-"],
+    ["Turkey", "-"],
+    ["Canada","y-"],
+    ["Russia","mo-"],
+    ["Brazil","g-"],
+    ["Germany","r-o"],
+    ["US","k-"],
+    ["United Kingdom","k-o"]
+   ]
+end
+
+function blaenderlist()
+[
+["BW","y-o" ],
+["BY","k-o" ],
+["BB","-"   ],
+["HB","-"   ],
+["HH","-"   ],
+["HE","-"   ],
+["MV","-"   ],
+["NI","-"   ],
+["NW","b-o" ],
+["RP","-"   ],
+["SL","-"   ],
+["SN","-"   ],
+["ST","-"   ],
+["SH","y-"  ],
+["TH","k-"  ],
+["BE","g-o" ],
+["DE","r-o" ]
+]
+end
+
+
+    
+
+
+    
+function testplot_all(;download=false, world=true )
+    if world
+        data=alldata_world(download=download)
+        countries=countrylist()
+    else
+        data=alldata_blaender()
+        countries=blaenderlist()
+    end
+    fig = PyPlot.figure(1)
+    fig = PyPlot.gcf()
+    PyPlot.clf()
+    fig.set_size_inches(10,5)
+    if world
+        d0=40
+    else
+        d0=20
+    end
+
+    if world
+        PyPlot.title("Estimated number of active COVID-19 cases in selected countries\nData source: JHU $(Dates.today())\nData processing: https://github.com/j-fu/coronaplot  License: CC-BY 2.0")
+    else
+        PyPlot.title("Estimated number of active COVID-19 cases in German states\nData source: RKI via de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland  $(Dates.today())\nData processing: https://github.com/j-fu/coronaplot  License: CC-BY 2.0")
+    end
+    
+    for country in countries
+        @show country[1]
+        results=country_results(data,country[1])
+        PyPlot.plot_date(results.dates[d0:end],results.est_active[d0:end],label=country[1],country[2])
+    end
+
+    PyPlot.xlabel("Date")
+    PyPlot.ylabel("Cases per 100000 inhabitants")
+    PyPlot.legend(loc="upper left")
+    PyPlot.grid()
+    PyPlot.show()
+
+    fig = PyPlot.figure(2)
+    fig = PyPlot.gcf()
+    PyPlot.clf()
+    if world
+        PyPlot.title("Estimated reproduction rate of SARS CoV-2 infections in selected countries\nData source: JHU $(Dates.today())\nData processing: https://github.com/j-fu/coronaplot  License: CC-BY 2.0")
+    else
+        PyPlot.title("Estimated reproduction rate of SARS CoV-2 infections in German states\nData source: RKI $(Dates.today())\nData processing: https://github.com/j-fu/coronaplot  License: CC-BY 2.0")
+    end
+    fig.set_size_inches(10,5)
+    PyPlot.ylim(0,3)
+    for country in countries
+        @show country[1]
+        results=country_results(data,country[1])
+        PyPlot.plot_date(results.dates[d0:end],results.est_r0[d0:end],label=country[1],country[2])
+        if country[1]=="Italy" || country[1]=="BY"
+            PyPlot.plot_date(results.dates[d0:end],[1.0 for i=d0:length(results.dates)],"k--",linewidth=2)
+        end
+    end
+    PyPlot.xlabel("Date")
+    PyPlot.ylabel("R0")
+    PyPlot.legend(loc="upper left")
+    PyPlot.grid()
+    PyPlot.show()
+
+end
 
