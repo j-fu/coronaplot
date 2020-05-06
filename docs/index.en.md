@@ -10,7 +10,7 @@ title: Development of the COVID-19 pandemic
    - a mathematical analysis by my colleagues [M. Kantner and Th. Koprucki](https://arxiv.org/abs/2004.09471)
      on possible strategies during the opening period
      
-## Einführung
+## Introduction
 
 The widespread depiction of absolute numbers of confirmed infections tells a lot about
 the initial phase of a pandemic. It however does not help to understand the next phases.
@@ -54,13 +54,15 @@ We document here significant changes besides data updates.
 ### 2020-05-06 
 - We plot different data now. The last "old" plots are here:
 
-<img src="https://github.com/j-fu/coronaplot/blob/master/docs/infected-exp.png" width="200">
 
-<img src="https://github.com/j-fu/coronaplot/blob/master/docs/infected.png" width="200"> 
 
-<img src="https://github.com/j-fu/coronaplot/blob/master/docs/infected-growthrate.png" width="200"> 
+<img src="https://github.com/j-fu/coronaplot/raw/master/docs/infected-exp.png" width="200">
 
-<img src="https://github.com/j-fu/coronaplot/blob/master/docs/infected-growthrate-weeklyavg.png" width="200">
+<img src="https://github.com/j-fu/coronaplot/raw/master/docs/infected.png" width="200"> 
+
+<img src="https://github.com/j-fu/coronaplot/raw/master/docs/infected-growthrate.png" width="200"> 
+
+<img src="https://github.com/j-fu/coronaplot/raw/master/docs/infected-growthrate-weeklyavg.png" width="200">
 
 ### 2020-04-13
 - Growth rate plot now uses doubling time as primary data, y-axes have been switched
