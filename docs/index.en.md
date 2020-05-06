@@ -1,83 +1,67 @@
 ---
-title: Evolution of confirmed SARS-CoV-2 infection numbers  (May 2, 2020)
+title: Development of the COVID-19 pandemic
 ---
 
-- [Diese Seite auf Deutsch](index.md)
-- [Plots for  Germany](de-plots.md) (in German)
-- [Introduction](#introduction)
-- [Absolute numbers](#absolute-numbers)
-- [Logarithmic scale](#logarithmic-scale)
-- [Development of daily growth rates](#development-of-daily-growth-rates)
-- [Changes in this document](#changes)
-- [Source code for the creation of the plots](https://github.com/j-fu/coronaplot)
-- Further Links
-    -  [<img src="ms4j.jpg" width="200"> Facemasks for all](https://www.facebook.com/groups/2725984604188343/): Facebook campaign promoting wearing (and making...) of facemasks
-    - Interactive [Epidemic Calculator](http://gabgoh.github.io/COVID/index.html)
-      based on a mathematical disease model by Gabriel Goh (thanks, Sabine!)
-    - [Investigation of the outbreak development](https://www.staff.uni-oldenburg.de/bernd.blasius/project/corona/) by Bernd Blasius using the same data
-    - [Interview with Christian Drosten](https://www.zeit.de/wissen/gesundheit/2020-03/christian-drosten-coronavirus-pandemic-germany-virologist-charite/komplettansicht) - Virologist  and one of the main advisers of the German government during this crisis
-    -  Similar projects on  [covid19dashbords.com](https://covid19dashboards.com/):
-       - [Comparison of country trajectories](https://covid19dashboards.com/compare-country-trajectories/)
-       - [Growth analysis](https://covid19dashboards.com/growth-analysis/)
+- [Diese Seite auf Deutsch](index.md) mit Plots für die deutschen Bundesländer
+- [Source code](https://github.com/j-fu/coronaplot)
+- Further links
+   - the plots are inspired by the very similar [analysis by my colleague J. Polzehl](https://www.wias-berlin.de/people/polzehl/COVID-19.jsp),
+     partially based on different data sources and including plots for the US states
+   - a mathematical analysis by my colleagues [M. Kantner and Th. Koprucki](https://arxiv.org/abs/2004.09471)
+     on possible strategies during the opening period
+     
+## Einführung
+
+The widespread depiction of absolute numbers of confirmed infections tells a lot about
+the initial phase of a pandemic. It however does not help to understand the next phases.
+The same is true for the relative increase of infection numbers and the doubling times.
+These are useful for understanding the lockdown phase.
+
+To understand the development during the opening period, some other numbers are more useful.
 
 
-## Introduction
-The Center for Systems Science and Engineering (CSSE)  of Johns Hopkins University
-collects and publishes the data of the diesease development.
+## Number of new infections during the previous 7 Tagen per 100000 inhabitants
 
-After an idea of [Mark Handley](https://twitter.com/MarkJHandley/status/1237119688578138112?s=20) we take the same
-data source and plot the data in a different way for selected countries.
+![](world-new.png)
 
+This number is inspired by the "emergency brake" criterion introduced in Germany
+on May 6, 2020.
 
-- [Blog post describing the project at CSSE](https://systems.jhu.edu/research/public-health/ncov/).
-- [The](https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6) corona virus map.
-- Data for the plots come from the [github repository containing the current data](https://github.com/CSSEGISandData/COVID-19)
-  which are [updated once per day around 23:59 (UTC)](https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data#update-frequency)
-  and may lag behind the data in the map.    
-  Data  for the  US are  based on  the state  data, county  data are
-  ignored.  Data  for  Europe  currently  include   the  EU,
-  Switzerland, Norway, UK and Serbia only. All other European countries had
-  on April 4 less than 500 infections each.
-- These data depend on many factors, among these are:
-   - the real number of infections
-   - the availability of tests.
-   The later  strongly varies between countries.
+## Estimate of the number of infectious persons
+
+![](world-active.png)
+
+Here we try a conservative estimate of the number of  infectious persons.
+We assume that an infected person is infectious on average 15 days.
+In order to remove daily fluctuations, the calculations are bases on a 7 day moving 
+average of the number of infected people.
 
 
 
-## Absolute numbers
-![](infected-exp.png) 
+## Estimate of the reproduction numbers
+![](world-repro.png)
 
-Development of confirmed  adjusted cases since the first day with more than 500 reported infections. This representation compares the initial 
-[exponential phases](https://en.wikipedia.org/wiki/Exponential_growth) of the spread of the virus.
-
-
-## Logarithmic scale
-![](infected.png) 
-
-This is the same plot, just with a logarithmic scale of the y-axis.
-
-
-## Evolution of doubling times
-![](infected-growthrate.png) 
-
-![](infected-growthrate-weeklyavg.png) 
-
-These plots show the evolution of the average daily growth rates. A constant growth rate corresponds to an exponential growth. A constant *growth rate* of 100% per day corresponds to a *growth factor* of 2 per day and a daily doubling of case numbers.
-A constant *growth  rate* of 10% per day corresponds to a *growth factor* of 1.1 per day. The right Y-axis shows the 
-[doubling times](https://en.wikipedia.org/wiki/Doubling_time) (time it takes to double the number of infected)
-corresponding to the different growth rates. Averaging is based on the geometric average of the growth factors.
-
-
-### Comment on these plots
-
-As described above, the case numbers are biased by the availability of tests.  Increasing availability of tests due to government actions appears to be a possible cause of the initial growth of the rate for most countries. If all or a fixed percentage of cases would be detected, one should expect a constant growth rate. As a consequence, the  growth rate in the beginning phase is overestimated by a unknown extent.
-On the other hand, if this interpretation is true, *and the availability of tests does not decrease* this also would mean that when the growth rate of detected cases is going down, the real  growth rate decreases as well.
+The German Robert Koch Institute (RKI) uses estimates the reproduction number based
+on a method e.g. described [here](https://www.heise.de/newsticker/meldung/Corona-Pandemie-Die-Mathematik-hinter-den-Reproduktionszahlen-R-4712676.html).
+Here, we use the same method, howver based on the 7 day moving 
+average of the number of infected people instead of  RKI's "nowcast".
 
 
 
 ## Changes
 We document here significant changes besides data updates. 
+
+### 2020-05-06 
+- We plot different data now. The last "old" plots are here:
+
+<img src="https://github.com/j-fu/coronaplot/blob/master/docs/infected-exp.png" width="200">
+
+<img src="https://github.com/j-fu/coronaplot/blob/master/docs/infected.png" width="200"> 
+
+<img src="https://github.com/j-fu/coronaplot/blob/master/docs/infected-growthrate.png" width="200"> 
+
+<img src="https://github.com/j-fu/coronaplot/blob/master/docs/infected-growthrate-weeklyavg.png" width="200">
+
 ### 2020-04-13
 - Growth rate plot now uses doubling time as primary data, y-axes have been switched
 ### 2020-04-03

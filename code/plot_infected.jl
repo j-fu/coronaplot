@@ -55,6 +55,22 @@ function load_rki()
 end
 
 
+function alldata_world(;download=false)
+    (dead=load_jhu_deaths(download=download),
+     infected=load_jhu_infected(download=download),
+     recovered=load_jhu_recovered(download=download),
+     #     https://data.worldbank.org/indicator/SP.POP.TOTL
+     popdata=CSV.read("population.csv"))
+end
+
+function alldata_blaender(;download=false)
+    (dead=nothing,
+     infected=CSV.read("rki.csv"),
+     recovered=nothing,
+     #     https://www.statistik-bw.de/VGRdL/tbls/tab.jsp?rev=RV2014&tbl=tab20&lang=de-DE
+     popdata=CSV.read("einwohnerzahl-bundeslaender.csv"))
+end
+
 
 # Create a new dataframe wich contains only data for given countries
 # For US and China, data are given state/province/county-wise
@@ -524,38 +540,45 @@ function publish(;msg="data update")
     run(`git push`)
 end
 
-function mvavg(ts,window,start)
+
+#####################################################################
+# New plots for active cases and r0
+
+
+"""
+Moving average of timeseries over window
+"""
+function mvavg(ts,window)
     tsavg=[]
-    for i=start:length(ts)-window
-        wsum=sum(ts[i:i+window])/window
-        push!(tsavg,wsum)
+    for i=1:length(ts)-window
+        push!(tsavg,sum(ts[i:i+window])/window)
     end
     tsavg
 end
 
-function r0(ts,window,start)
+"""
+Estimate of reproduction rate from time series.
+"""
+function r0(ts,window)
     r0=[]
-    for i=start+window:length(ts)-window
-        @show length(ts[i:i+window-1]),length(ts[i-window:i-1])
-        new=sum(ts[i:i+window-1])
-        old=sum(ts[i-window:i-1])
-        push!(r0,new/old)
+    for i=window:length(ts)-window
+        # Newly infected during the current period
+        new=ts[i+1:i+window]
+        # Newly infected during previous period
+        old=ts[i-window+1:i]
+#        @show length(old), length(new)
+        push!(r0,sum(new)/sum(old))
     end
     r0
 end
 
-function startsince(ts,since)
-    for i=1:length(ts)
-        if ts[i]>since
-            return i
-        end
-    end
-end
-
+"""
+Adjust length of times series to len, padding with values at the
+beginning
+"""
 function leftpad(ts,len;pad=0.0)
     ts_padded=[]
-    padlen=len-length(ts)
-    for i=1:padlen
+    for i=1:len-length(ts)
         push!(ts_padded,pad)
     end
     for i=1:length(ts)
@@ -564,80 +587,82 @@ function leftpad(ts,len;pad=0.0)
     ts_padded
 end
 
-function alldata_world(;download=false)
-    (dead=load_jhu_deaths(download=download),
-     infected=load_jhu_infected(download=download),
-     recovered=load_jhu_recovered(download=download),
-     #     https://data.worldbank.org/indicator/SP.POP.TOTL
-     popdata=CSV.read("population.csv"))
-end
+"""
+Calculate results for given country
+"""
+function country_results(data, country;
+                         world=true,   # do we have country or bundesland ?
+                         avg_window=7, # Window for moving average of time series of infected people
+                         active_period=15, # Period during which we assume an infection is active 
+                         infection_period=5, # Time it takes for an infected person to infect the next (RKI uses 4)
+                         population_base=100_000.0
+                         )
 
-function alldata_blaender(;download=false)
-    (dead=nothing,
-     infected=CSV.read("rki.csv"),
-     recovered=nothing,
-     #     https://www.statistik-bw.de/VGRdL/tbls/tab.jsp?rev=RV2014&tbl=tab20&lang=de-DE
-     popdata=CSV.read("einwohnerzahl-bundeslaender.csv"))
-end
-
-function country_results(data, country; avg_window=7,since=0,active_period=20, infection_period=7)
-    
+    # Access data frames via tuple
     (dead,infected,recovered,popdata)=data
-    println(country)
-
+    
+    # Filter population data for country
     population=filter((row)-> row[1]==country, popdata)[1,2]
 
-    popfac=100_000.0/population
-    if dead!=nothing
-        ts_dead=create_countries_timeseries(dead,[country]).*popfac
-    end
+    popfac=Float64(population_base)/population
 
-    if dead!=nothing
+
+    # Create time series from data
+    if world
+        ts_dead=create_countries_timeseries(dead,[country]).*popfac
         ts_infected=create_countries_timeseries(infected,[country]).*popfac
+        ts_recovered=create_countries_timeseries(recovered,[country]).*popfac
+        mvavg_dead=mvavg(ts_dead,avg_window)
     else
         ts_infected=Array{Float64}(infected[Symbol(country)]).*popfac
-    end
-    
-
-    if recovered!=nothing
-        ts_recovered=create_countries_timeseries(recovered,[country]).*popfac
-    end
-
-    start=startsince(ts_infected,since)
-    start=1
-
-    if dead!=nothing
-        mvavg_dead=mvavg(ts_dead,avg_window,start)
-    else
         mvavg_dead=nothing
     end
-    mvavg_infected=mvavg(ts_infected,avg_window,start)
-    if recovered!=nothing
-        mvavg_recovered=mvavg(ts_recovered,avg_window,start)
+
+    
+    mvavg_infected=mvavg(ts_infected,avg_window)
+
+    if world
+        mvavg_recovered=mvavg(ts_recovered,avg_window)
         mvavg_active=mvavg_infected-mvavg_recovered-mvavg_dead
     else
         mvavg_recovered=nothing
         mvavg_active=nothing
     end
-    
+
+    # Estimate number of active cases. We just assume that reported
+    # cases are active during the active period. If this number is chosen
+    # large enough, we seem to get some crude, but conservative estimate.
+    #
+    # Just subtract the number from `active_period` ago from th ecurrent one
+    # We base this on the moving average calculated before
+    est_active=leftpad(mvavg_infected[active_period+1:end]-mvavg_infected[1:end-active_period],length(mvavg_infected))
+
+
+    # Calculate time series of new cases from moving average of infected people
+    ts_new=ts_infected[2:end]-ts_infected[1:end-1]
+    weekly_new=[]
+    for i=8:length(ts_new)
+        push!(weekly_new,sum(ts_new[i-6:i]))
+    end
+    # This is based on the description given in 
+    # https://www.heise.de/newsticker/meldung/Corona-Pandemie-Die-Mathematik-hinter-den-Reproduktionszahlen-R-4712676.html
+    # describing the RKI method for estimating R0.
+    #
+    # There are two main differences here: we possibly assume a longer infection period,
+    # and we base the results on the moving average of the timeseries of infected instead of the "nowcast"
     ts_new=mvavg_infected[2:end]-mvavg_infected[1:end-1]
-    mvavg_new=mvavg(ts_new,infection_period,start)
-
-    if recovered!=nothing
-        date_start=Date(2020,1,22)+Day(start)+Day(avg_window)
-    else
-        date_start=Date(2020,2,24)+Day(start)+Day(avg_window)
-    end        
-    dates=[date_start+Day(i-1) for i=1:length(mvavg_infected)]
-
+    est_r0=leftpad(r0(ts_new,infection_period),length(mvavg_infected))
     
 
-
-    est_active=leftpad(mvavg_infected[active_period+1:end]-mvavg_infected[1:end-active_period],length(dates))
-
-#    https://www.heise.de/newsticker/meldung/Corona-Pandemie-Die-Mathematik-hinter-den-Reproduktionszahlen-R-4712676.html
-    est_r0=leftpad(mvavg_new[infection_period+1:end]./mvavg_new[1:end-infection_period],length(dates))
-
+    # Create a time series of dates to get the x axis right
+    if world
+        date_start=Date(2020,1,22)+Day(avg_window)-Day(1)
+    else
+        date_start=Date(2020,2,24)+Day(avg_window)-Day(1)
+    end        
+    dates=[date_start+Day(i) for i=1:length(mvavg_infected)]
+    
+    
     (mvavg_dead=mvavg_dead,
      mvavg_infected=mvavg_infected,
      mvavg_recovered=mvavg_recovered,
@@ -645,20 +670,28 @@ function country_results(data, country; avg_window=7,since=0,active_period=20, i
      est_active=est_active,
      est_r0=est_r0,
      population=population,
+     mvavg_new=leftpad(weekly_new,length(mvavg_infected)),
      dates=dates)
 end
 
 
 
 
-function testplot(;download=false, world=true,country="Germany",avg_window=7,since=0,active_period=20, infection_period=7)
+function plot_active_r0(country;download=false,world=true)
 
     if world
         data=alldata_world(download=download)
     else
         data=alldata_blaender()
     end
-    results=country_results(data,country,avg_window=avg_window,active_period=active_period, infection_period=infection_period)
+
+    population_base=100_000
+    results=country_results(data,country,
+                            world=world,
+                            avg_window=7, # Window for moving average of time series of infected people
+                            active_period=15, # Period during which we assume an infection is active 
+                            infection_period=5, # Time it takes for an infected person to infect the next (RKI uses 4)
+                            population_base=population_base)
     
     
     fig = PyPlot.figure(1)
@@ -669,6 +702,7 @@ function testplot(;download=false, world=true,country="Germany",avg_window=7,sin
     
     d0=1
     PyPlot.plot_date(results.dates[d0:end],results.mvavg_infected[d0:end],label="infected","b-")
+    PyPlot.plot_date(results.dates[d0:end],results.mvavg_new[d0:end],label="new","y-")
     PyPlot.plot_date(results.dates[d0:end],results.est_active[d0:end],label="active (est)","rx")
     if world
         PyPlot.plot_date(results.dates[d0:end],results.mvavg_active[d0:end],label="active (jhu)","r-")
@@ -676,7 +710,7 @@ function testplot(;download=false, world=true,country="Germany",avg_window=7,sin
         PyPlot.plot_date(results.dates[d0:end],results.mvavg_dead[d0:end],label="dead","k-")
     end
     PyPlot.xlabel("Date")
-    PyPlot.ylabel("Cases per 100000 inhabitants")
+    PyPlot.ylabel("Cases per $(population_base) inhabitants")
     PyPlot.legend(loc="upper left")
     PyPlot.grid()
     
@@ -694,8 +728,8 @@ end
 function countrylist()
    [
     ["Italy", "o-"],
-    ["France", "-"],
-    ["Spain", "-"],
+    ["France", "o-"],
+    ["Spain", "o-"],
     ["Iran", "-"],
     ["Korea, South","o-"],
     ["China","o-"],
@@ -735,18 +769,21 @@ function blaenderlist()
 ]
 end
 
-
     
 
 
     
-function testplot_all(;download=false, world=true )
+function plot_active_r0(;download=false, world=true )
     if world
         data=alldata_world(download=download)
         countries=countrylist()
+        trailer="Data source: JHU $(Dates.today())\nData processing: https://github.com/j-fu/coronaplot  License: CC-BY 2.0"
+        prefix="world"
     else
         data=alldata_blaender()
         countries=blaenderlist()
+        trailer="Datenquelle: RKI via de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland $(Dates.today())\nDatenverarbeitung: https://github.com/j-fu/coronaplot  Lizenz: CC-BY 2.0"
+        prefix="de"
     end
     fig = PyPlot.figure(1)
     fig = PyPlot.gcf()
@@ -757,48 +794,93 @@ function testplot_all(;download=false, world=true )
     else
         d0=20
     end
+    population_base=100_000
 
     if world
-        PyPlot.title("Estimated number of active COVID-19 cases in selected countries\nData source: JHU $(Dates.today())\nData processing: https://github.com/j-fu/coronaplot  License: CC-BY 2.0")
+        PyPlot.title("Estimated number of infectious persons in selected countries\n$(trailer)")
     else
-        PyPlot.title("Estimated number of active COVID-19 cases in German states\nData source: RKI via de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland  $(Dates.today())\nData processing: https://github.com/j-fu/coronaplot  License: CC-BY 2.0")
+        PyPlot.title("Schätzung der Zahl der infektiösen Personen\n$(trailer)")
     end
     
     for country in countries
-        @show country[1]
-        results=country_results(data,country[1])
+        results=country_results(data,country[1],
+                                world=world,
+                                avg_window=7, # Window for moving average of time series of infected people
+                                active_period=15, # Period during which we assume an infection is active 
+                                infection_period=5, # Time it takes for an infected person to infect the next (RKI uses 4)
+                                population_base=population_base)
         PyPlot.plot_date(results.dates[d0:end],results.est_active[d0:end],label=country[1],country[2])
     end
 
-    PyPlot.xlabel("Date")
-    PyPlot.ylabel("Cases per 100000 inhabitants")
+    if world
+        PyPlot.xlabel("Date")
+        PyPlot.ylabel("Cases per $(population_base) inhabitants")
+    else
+        PyPlot.xlabel("Datum")
+        PyPlot.ylabel("Fälle pro $(population_base) Einwohner")
+    end
     PyPlot.legend(loc="upper left")
     PyPlot.grid()
     PyPlot.show()
+    PyPlot.savefig("../docs/$(prefix)-active.png")
 
+    ###########################################################################################################################
     fig = PyPlot.figure(2)
     fig = PyPlot.gcf()
     PyPlot.clf()
     if world
-        PyPlot.title("Estimated reproduction rate of SARS CoV-2 infections in selected countries\nData source: JHU $(Dates.today())\nData processing: https://github.com/j-fu/coronaplot  License: CC-BY 2.0")
+        PyPlot.title("Estimated reproduction number of SARS CoV-2 infections in selected countries\n$(trailer)")
     else
-        PyPlot.title("Estimated reproduction rate of SARS CoV-2 infections in German states\nData source: RKI $(Dates.today())\nData processing: https://github.com/j-fu/coronaplot  License: CC-BY 2.0")
+        PyPlot.title("Schätzung der Reproduktionszahl für die SARS CoV-2 Pandemie in den Bundesländern\n$(trailer)")
     end
     fig.set_size_inches(10,5)
-    PyPlot.ylim(0,3)
+    PyPlot.ylim(0,2)
     for country in countries
         @show country[1]
-        results=country_results(data,country[1])
+        results=country_results(data,country[1],world=world)
         PyPlot.plot_date(results.dates[d0:end],results.est_r0[d0:end],label=country[1],country[2])
         if country[1]=="Italy" || country[1]=="BY"
             PyPlot.plot_date(results.dates[d0:end],[1.0 for i=d0:length(results.dates)],"k--",linewidth=2)
         end
     end
-    PyPlot.xlabel("Date")
-    PyPlot.ylabel("R0")
+    if world
+        PyPlot.xlabel("Date")
+        PyPlot.ylabel("Reproduction number")
+    else
+        PyPlot.xlabel("Datum")
+        PyPlot.ylabel("Reproduktionszahl")
+    end
     PyPlot.legend(loc="upper left")
     PyPlot.grid()
     PyPlot.show()
+    PyPlot.savefig("../docs/$(prefix)-repro.png")
+
+    ###########################################################################################################################
+    fig = PyPlot.figure(3)
+    fig = PyPlot.gcf()
+    PyPlot.clf()
+    if world
+        PyPlot.title("Number of newly infected SARS-CoV2 infections in the last 7 days\n$(trailer)")
+    else
+        PyPlot.title("Anzahl der Neuinfektionen in den zurückliegenden 7 Tagen\n$(trailer)")
+    end
+    fig.set_size_inches(10,5)
+    for country in countries
+        @show country[1]
+        results=country_results(data,country[1],world=world)
+        PyPlot.plot_date(results.dates[d0:end],results.mvavg_new[d0:end],label=country[1],country[2])
+    end
+    if world
+        PyPlot.xlabel("Date")
+        PyPlot.ylabel("Cases per $(population_base) inhabitants")
+    else
+        PyPlot.xlabel("Datum")
+        PyPlot.ylabel("Fälle pro $(population_base) Einwohner")
+    end
+    PyPlot.legend(loc="upper left")
+    PyPlot.grid()
+    PyPlot.show()
+    PyPlot.savefig("../docs/$(prefix)-new.png")
 
 end
 

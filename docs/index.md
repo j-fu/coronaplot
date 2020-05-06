@@ -1,66 +1,64 @@
 ---
-title: Entwicklung der bestätigten Infektionszahlen mit SARS-CoV-2 (2.5.2020)
+title: Entwicklung der COVID-19 - Pandemie in Deutschland
 ---
 
-- [This page in English](index.en.md)
-- [Darstellung für Deutschland](de-plots.md)
-- [Einführung](#einführung)
-- [Darstellung in absoluten Zahlen](#darstellung-in-absoluten-zahlen)
-- [Logarithmische Skala](#logarithmische-Skala)
-- [Entwicklung der täglichen Wachstumsraten](#entwicklung-der-täglichen-wachstumsraten)
-- [Änderungen in diesem Dokument](#änderungen)
-- [Quellcode für die Erzeugung der Plots](https://github.com/j-fu/coronaplot)
-- Weitere Informationen
-    - [<img src="ms4j.jpg" width="200">  Mundschutz für jeden](https://www.facebook.com/groups/2725984604188343/): Facebook-Kampagne zum Tragen (und machen...) von Mundschutzmasken 
-    - Interaktiver ["Epidemic Calculator"](http://gabgoh.github.io/COVID/index.html) auf der Basis eines mathematischen Ausbreitungsmodells von  Gabriel Goh (danke, Sabine!)
-    - [Untersuchung des Ausbruchsgeschehens](https://www.staff.uni-oldenburg.de/bernd.blasius/project/corona/) durch Bernd Blasius unter Nutzung der selben Datenbasis
-    - [Interview   mit Christian Drosten](https://www.zeit.de/wissen/gesundheit/2020-03/christian-drosten-coronavirus-pandemie-deutschland-virologe-charite/komplettansicht), Virologe un einer der wichtigsten Berater der Bundesregierung in dieser Krise
-    - Ähnliche Projekte auf [covid19dashbords.com](https://covid19dashboards.com/):
-       - [Vergleiche der länderspezifischen Entwicklungen](https://covid19dashboards.com/compare-country-trajectories/)
-       - [Wachstumsanalyse](https://covid19dashboards.com/growth-analysis/)
-
-
+- [This page in English](index.en.md) with the plots for selected countries.
+- [Quellcode](https://github.com/j-fu/coronaplot)
+- Weitere Links
+   - die Darstellungen sind inspiriert durch die sehr ähnliche [Analyse meines Kollegen J. Polzehl](https://www.wias-berlin.de/people/polzehl/COVID-19.jsp),   teilweise auf anderer Datengrundlage und mit Darstellung für die US-Bundesstaaten
+   - eine mathematische Analyse meiner Kollegen [M. Kantner und Th. Koprucki](https://arxiv.org/abs/2004.09471)
+     zur mögkichen Steuerung in der Lockerungsphase
+     
 ## Einführung
-Das  "Center for Systems Science and Engineering (CSSE)" der Johns Hopkins University sammelt und publiziert Daten der Entwicklung der Krankheit.
 
-Nach einer Idee von [Mark Handley](https://twitter.com/MarkJHandley/status/1237119688578138112?s=20) nutzen wir hier diese Datenquelle, um den zeitlichen Verlauf im Vergleich verschiedener darzustellen.
+Die weit verbreitete Darstellung der absoluten Zahlen der bestätigten Infektionen sagt viel über die Anfangsphase
+der Pandemie aus, ist aber ungeignet, die Entwicklung in weiteren Infektionsphasen darzustellen. Dasselbe gilt für
+die Darstellung der relativen Zunahme und der Verdopplungszeiten, welche gut  geeignet sind, den Effekt der Maßnahmen zum
+Stopp der akuten exponentiellen Ausbreitung abzubilden. 
 
-- [Blogpost](https://systems.jhu.edu/research/public-health/ncov/), welcher as Projekt am CSSE beschreibt
-- [Die](https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6) bekannte Karte zur Verbreitung des Coronavirus.
-- Die Daten für die Plots kommen aus dem [Github- Repository mit den aktuellen Daten](https://github.com/CSSEGISandData/COVID-19). Diese werden [einmal am Tag um 1:00 MEZ](https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data#update-frequency) aktualisiert (seltener als die der Karte)
-Die Daten für Europa beinhalten die Daten für die EU-Länder, sowie für die Schweiz, Norwegen, Großbritannien und Serbien. Alle anderen europäischen Staaten hatten  am 4.4. jeweils weniger als 500 Fälle.
-- Die Daten hängen von mehreren Faktoren ab, unter anderem:
-   - von der realen Zahl der Infektionen
-   - von der Verfügbarkeit von Tests.
-   Letztere variiert stark zeitlich und  zwischen den einzelnen Ländern.
-
-## Darstellung in absoluten Zahlen
-![](infected-exp.png) 
-Entwicklung der bestätigten Fälle seit dem ersten Tag mit mehr als 500 Infektionen. 
-Diese zeitlich verschobene Darstellung vergleicht die [exponentiellen Phasen](https://de.wikipedia.org/wiki/Exponentielles_Wachstum)
-in den einzelnen Ländern.
+Der Verlauf der Öffnungsphase lässt sich mit anderen Kennzahlen besser verstehen.
 
 
-## Logarithmische Skala
-![](infected.png) 
+## Anzahl der Neuinfektionen in den zurückliegenden 7 Tagen pro 100000 Einwohner.
 
-Die gleiche Darstellung wie oben, nur mit einer logarithmischen Skala der y-Achse. In diesem Fall entspricht das exponentielle Wachstum einer geraden Linie.
+![](de-new.png)
 
-## Entwicklung der Verdopplungszeiten (Generationszeiten)
-![](infected-growthrate.png) 
+Diese Darstellung richtet sich nach dem Kriterium für die am 6.5.2020 festgelegte
+"Notbremse" für die Öffnung.
 
-![](infected-growthrate-weeklyavg.png) 
+## Schätzung der Anzahl der aktiven Infektionen pro 100000 Einwohner
+
+![](de-active.png)
+
+Hier wird versucht, eine konservative Schätzung der aktiv infizierten Personen vorzunehmen. 
+Es wird angenommen, dass eine als infiziert gemeldete Patientin im Mittel 15 Tage lang infektiös ist.
+Um tägliche Schwankugen herauszurechnen und längerfristige Trends zu sehen, wird zunächst 
+eine gleitendes 7-Tage-Mittel der Infektionszahlen berechnet. 
 
 
-Diese Darstellungen zeigen die Entwicklung der mittleren täglichen Wachstumsraten der Infektionszahlen. Eine konstante Wachstumsrate entspricht einem exponentiellen Wachstum. Eine konstante *Wachstumsrate* von 100% pro Tag entspricht einem *Wachstumsfaktor* von 2 pro Tag  und einer täglichen Verdopplung der Fallzahlen. Eine konstante *Wachstumsrate* von 10% pro Tag entspricht einem Wachstumsfaktor von 1.1 pro Tag. Die den Wachstumsraten entsprechenden [Generationszeiten](https://de.wikipedia.org/wiki/Generationszeit)  (Zeit in der sich die Fallzahlen verdoppeln) sind auf der rechten Y-Achse aufgetragen. Die Mittelung basiert auf dem geometrischen Mittel der Wachstumsfaktoren.
+## Abschätzung der Reproduktionszahl
+![](de-repro.png)
+
+Die vom Robert-Koch-Institut benutzte Methodik zur Abschätzung der Reproduktionszahl
+ist z.B. [hier](https://www.heise.de/newsticker/meldung/Corona-Pandemie-Die-Mathematik-hinter-den-Reproduktionszahlen-R-4712676.html)
+beschrieben. Hier wird dieselbe Methodik benutzt, allerdings wird die Berechnung nicht aufgrund der 
+"Nowcast"- Daten vorgenommen, sondern aufgrund des 7-tägigen gleitenden Mittels der Infektionszahlen.
 
 
-### Kommentar zu dieser Darstellung
-
-Wie in der Einführung beschrieben, sind die hier genutzten Fallzahlen von der Verfügbarkeit von Tests beeinflusst. Eine wachsende Verfügbarkeit von Tests  erscheint als eine mögliche Ursache der anfänglichen Erhöhung der Wachstumsrate, die für die meisten Staaten zu sehen ist. Wenn alle oder ein fester Prozentsatz der Erkrankungen festgestellt würde, müsste die Wachstumsrate im Wesentlichen konstant sein. In der Konsequenz sind die Wachstumsraten für die Anfangsphasen vermutlich in unbekanntem Maße überschätzt. Falls diese Interpretation stimmt *und die Verfügbarkeit von Tests nicht sinkt* hieße das aber auch, dass eine fallende Wachstumsrate in dieser Darstellung eine Verringerung der realen Wachstumsrate anzeigt.
 
 ## Änderungen
 Hier werden wesentliche Änderungen neben der Aktualisierung der Daten dokumentiert.
+
+### 2020-05-06 
+- Umstellung der Plots. Hier sind die letzten "alten" Plots zu sehen.
+<img src="https://github.com/j-fu/coronaplot/blob/master/docs/de-infected-exp.png" width="200">
+
+<img src="https://github.com/j-fu/coronaplot/blob/master/docs/de-infected.png" width="200"> 
+
+<img src="https://github.com/j-fu/coronaplot/blob/master/docs/de-infected-growthrate.png" width="200"> 
+
+<img src="https://github.com/j-fu/coronaplot/blob/master/docs/de-infected-growthrate-weeklyavg.png" width="200">
+
 ### 2020-04-13
 - Auftragung der Wachstumsraten nach Verdopplungszeiten (Vertauschung der Y-Achsen)
 ### 2020-04-03
