@@ -304,7 +304,7 @@ end
 
 
 # Create the plots
-function create_world(;averaging_periods=[7,15],Nstart=500,dtime=true)
+function create_world_old(;averaging_periods=[7,15],Nstart=500,dtime=true)
 
     df_jhu=load_jhu_infected()
     df_rki=load_rki()
@@ -421,7 +421,7 @@ end
 
 
 # Create the plots
-function create_blaender(;averaging_periods=[7,15],Nstart=100,dtime=true)
+function create_blaender_old(;averaging_periods=[7,15],Nstart=100,dtime=true)
 
     df_jhu=load_jhu_infected()
     df_rki=load_rki()
@@ -530,9 +530,9 @@ function create_blaender(;averaging_periods=[7,15],Nstart=100,dtime=true)
 
 end
 
-function create_plots()
-    create_world()
-    create_blaender()
+function create_plots_old()
+    create_world_old()
+    create_blaender_old()
 end
 # publish on github
 function publish(;msg="data update")
@@ -884,3 +884,13 @@ function plot_active_r0(;download=false, world=true )
 
 end
 
+function create_plots()
+    plot_active_r0(download=true, world=true )
+    plot_active_r0(download=false, world=false )
+end
+
+# publish on github
+function publish(;msg="data update")
+    run(`git commit -a -m $(msg)`)
+    run(`git push`)
+end

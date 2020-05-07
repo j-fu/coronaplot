@@ -51,8 +51,6 @@ Hier werden wesentliche Änderungen neben der Aktualisierung der Daten dokumenti
 
 ### 2020-05-06 
 - Umstellung der Plots. Hier sind die letzten "alten" Plots zu sehen.
-<img src="https://github.com/j-fu/coronaplot/raw/master/docs/de-infected-exp.png" width="200">
-
 <img src="https://github.com/j-fu/coronaplot/raw/master/docs/de-infected.png" width="200"> 
 
 <img src="https://github.com/j-fu/coronaplot/raw/master/docs/de-infected-growthrate.png" width="200"> 
