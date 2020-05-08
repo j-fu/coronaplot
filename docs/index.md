@@ -8,7 +8,8 @@ title: Entwicklung der COVID-19 - Pandemie in Deutschland
    - die Darstellungen sind inspiriert durch die sehr ähnliche [Analyse meines Kollegen J. Polzehl](https://www.wias-berlin.de/people/polzehl/COVID-19.jsp),   teilweise auf anderer Datengrundlage und mit Darstellung für die US-Bundesstaaten
    - eine mathematische Analyse meiner Kollegen [M. Kantner und Th. Koprucki](https://arxiv.org/abs/2004.09471)
      zur mögkichen Steuerung in der Lockerungsphase
-     
+   - Coronavirus Charts auf [xkcd](https://xkcd.com/2294/)
+
 ## Einführung
 
 Die weit verbreitete Darstellung der absoluten Zahlen der bestätigten Infektionen sagt viel über die Anfangsphase

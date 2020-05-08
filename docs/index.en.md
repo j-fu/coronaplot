@@ -9,6 +9,7 @@ title: Development of the COVID-19 pandemic
      partially based on different data sources and including plots for the US states
    - a mathematical analysis by my colleagues [M. Kantner and Th. Koprucki](https://arxiv.org/abs/2004.09471)
      on possible strategies during the opening period
+   - Coronavirus Charts on [xkcd](https://xkcd.com/2294/)
      
 ## Introduction
 

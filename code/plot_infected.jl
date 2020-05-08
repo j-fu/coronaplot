@@ -656,9 +656,9 @@ function country_results(data, country;
 
     # Create a time series of dates to get the x axis right
     if world
-        date_start=Date(2020,1,22)+Day(avg_window)-Day(1)
+        date_start=Date(2020,1,22)+Day(avg_window)
     else
-        date_start=Date(2020,2,24)+Day(avg_window)-Day(1)
+        date_start=Date(2020,2,23)+Day(avg_window)
     end        
     dates=[date_start+Day(i) for i=1:length(mvavg_infected)]
     
