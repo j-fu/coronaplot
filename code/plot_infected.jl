@@ -21,7 +21,7 @@ dsname=""
 jhu_infected="https://github.com/CSSEGISandData/COVID-19/raw/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv"
 jhu_deaths="https://github.com/CSSEGISandData/COVID-19/raw/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv"
 jhu_recovered="https://github.com/CSSEGISandData/COVID-19/raw/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv"
-
+rki_nowcast="https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Projekte_RKI/Nowcasting_Zahlen.xlsx?__blob=publicationFile"
 
 # Data URL (for data source in plot)
 dataurl="https://github.com/CSSEGISandData/COVID-19/"
@@ -51,9 +51,25 @@ end
 # Download and read data for confirmed infection cases
 # This creates a dataframe
 function load_rki()
-    CSV.read("rki.csv")
+    csv=CSV.read("rki.csv")
 end
 
+function load_nowcast(;download=false)
+    if download
+        Base.download(rki_nowcast,"Nowcasting_Zahlen.xlsx")
+    end
+    xf=XLSX.readxlsx("Nowcasting_Zahlen.xlsx")
+    sheet=xf["Nowcast_R"]
+    nowcast=[]
+    i=1
+    for row in XLSX.eachrow(sheet)
+        if i>1
+            push!(nowcast,row[2])
+        end
+        i=i+1
+    end
+    nowcast
+end
 
 function alldata_world(;download=false)
     (dead=load_jhu_deaths(download=download),
@@ -587,6 +603,8 @@ function leftpad(ts,len;pad=0.0)
     ts_padded
 end
 
+
+
 """
 Calculate results for given country
 """
@@ -594,7 +612,7 @@ function country_results(data, country;
                          world=true,   # do we have country or bundesland ?
                          avg_window=7, # Window for moving average of time series of infected people
                          active_period=15, # Period during which we assume an infection is active 
-                         infection_period=5, # Time it takes for an infected person to infect the next (RKI uses 4)
+                         infection_period=4, # Time it takes for an infected person to infect the next (RKI uses 4)
                          population_base=100_000.0
                          )
 
@@ -675,6 +693,32 @@ function country_results(data, country;
 end
 
 
+function nowcast_results(nowcast;
+                         active_period=15,   # Period during which we assume an infection is active 
+                         infection_period=4, # Time it takes for an infected person to infect the next (RKI uses 4)
+                         population_base=100_000)
+    pop=82927922.0
+    popfac=population_base/pop
+    newly=nowcast*popfac
+    date_start=Date(2020,3,2)
+    dates=[date_start+Day(i) for i=1:length(nowcast)]
+    active=[]
+    for i=active_period+1:length(nowcast)
+        push!(active,sum(newly[i-active_period:i]))
+    end
+    active=leftpad(active,length(nowcast))
+    est_r0=leftpad(r0(newly,infection_period),length(nowcast))
+    est_new=[]
+    for i=8:length(nowcast)
+        push!(est_new,sum(newly[i-7:i]))
+    end
+    est_new=leftpad(est_new,length(nowcast))
+    
+    (dates=dates,
+     est_new=est_new,
+     est_active=active,
+     est_r0=est_r0)
+end
 
 
 function plot_active_r0(country;download=false,world=true)
@@ -784,6 +828,7 @@ function plot_active_r0(;download=false, world=true )
         countries=blaenderlist()
         trailer="Datenquelle: RKI via de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland $(Dates.today())\nDatenverarbeitung: https://github.com/j-fu/coronaplot  Lizenz: CC-BY 2.0"
         prefix="de"
+        nowcast=load_nowcast(download=download)
     end
     fig = PyPlot.figure(1)
     fig = PyPlot.gcf()
@@ -792,7 +837,7 @@ function plot_active_r0(;download=false, world=true )
     if world
         d0=40
     else
-        d0=20
+        d0=10
     end
     population_base=100_000
 
@@ -807,9 +852,13 @@ function plot_active_r0(;download=false, world=true )
                                 world=world,
                                 avg_window=7, # Window for moving average of time series of infected people
                                 active_period=15, # Period during which we assume an infection is active 
-                                infection_period=5, # Time it takes for an infected person to infect the next (RKI uses 4)
+                                infection_period=4, # Time it takes for an infected person to infect the next (RKI uses 4)
                                 population_base=population_base)
         PyPlot.plot_date(results.dates[d0:end],results.est_active[d0:end],label=country[1],country[2])
+    end
+    if !world
+        results=nowcast_results(nowcast,active_period=15,infection_period=4,population_base=population_base)
+        PyPlot.plot_date(results.dates[d0:end],results.est_active[d0:end],label="nowcast","r*-",linewidth=2)
     end
 
     if world
@@ -843,6 +892,10 @@ function plot_active_r0(;download=false, world=true )
             PyPlot.plot_date(results.dates[d0:end],[1.0 for i=d0:length(results.dates)],"k--",linewidth=2)
         end
     end
+    if !world
+        results=nowcast_results(nowcast,active_period=15,infection_period=4,population_base=population_base)
+        PyPlot.plot_date(results.dates[d0:end],results.est_r0[d0:end],label="nowcast","r*-")
+    end
     if world
         PyPlot.xlabel("Date")
         PyPlot.ylabel("Reproduction number")
@@ -866,9 +919,12 @@ function plot_active_r0(;download=false, world=true )
     end
     fig.set_size_inches(10,5)
     for country in countries
-        @show country[1]
         results=country_results(data,country[1],world=world)
         PyPlot.plot_date(results.dates[d0:end],results.mvavg_new[d0:end],label=country[1],country[2])
+    end
+    if !world
+        results=nowcast_results(nowcast,active_period=15,infection_period=4,population_base=population_base)
+        PyPlot.plot_date(results.dates[d0:end],results.est_new[d0:end],label="nowcast","r*-")
     end
     if world
         PyPlot.xlabel("Date")

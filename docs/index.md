@@ -5,11 +5,15 @@ title: Entwicklung der COVID-19 - Pandemie in Deutschland
 - [This page in English](index.en.md) with the plots for selected countries.
 - [Quellcode](https://github.com/j-fu/coronaplot)
 - Weitere Links
-   - die Darstellungen sind inspiriert durch die sehr ähnliche [Analyse meines Kollegen J. Polzehl](https://www.wias-berlin.de/people/polzehl/COVID-19.jsp),   teilweise auf anderer Datengrundlage und mit Darstellung für die US-Bundesstaaten
-   - eine mathematische Analyse meiner Kollegen [M. Kantner und Th. Koprucki](https://arxiv.org/abs/2004.09471)
+    - Die Mathematik hinter den Reporduktionszahlen [(heise.de)](https://www.heise.de/newsticker/meldung/Corona-Pandemie-Die-Mathematik-hinter-den-Reproduktionszahlen-R-4712676.html)
+    - Seite des RKI zu [Nowcasting](https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Projekte_RKI/Nowcasting.html)
+    - Beitrag des [NDR](https://www.ndr.de/nachrichten/info/Corona-Daten-unter-Verschluss-RKI-bremst-Diskurs-aus,rki118.html)
+      zur Datentransparenz des RKI
+    - die Darstellungen sind inspiriert durch die sehr ähnliche [Analyse meines Kollegen J. Polzehl](https://www.wias-berlin.de/people/polzehl/COVID-19.jsp),   teilweise auf anderer Datengrundlage und mit Darstellung für die US-Bundesstaaten
+    - eine mathematische Analyse meiner Kollegen [M. Kantner und Th. Koprucki](https://arxiv.org/abs/2004.09471)
      zur mögkichen Steuerung in der Lockerungsphase
-   - Coronavirus Charts auf [xkcd](https://xkcd.com/2294/)
-
+    - Coronavirus Charts auf [xkcd](https://xkcd.com/2294/)
+   
 ## Einführung
 
 Die weit verbreitete Darstellung der absoluten Zahlen der bestätigten Infektionen sagt viel über die Anfangsphase
@@ -49,7 +53,9 @@ beschrieben. Hier wird dieselbe Methodik benutzt, allerdings wird die Berechnung
 
 ## Änderungen
 Hier werden wesentliche Änderungen neben der Aktualisierung der Daten dokumentiert.
-
+### 2020-05-10
+- Zusätzliche Darstellung auf der Grundlage der Nowcast-Daten des RKI (diese sind alledings nur
+  für Deutschland insgesamt verfügbar)
 ### 2020-05-06 
 - Umstellung der Plots. Hier sind die letzten "alten" Plots zu sehen.
 <img src="https://github.com/j-fu/coronaplot/raw/master/docs/de-infected.png" width="200"> 
