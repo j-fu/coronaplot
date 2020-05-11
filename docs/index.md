@@ -47,7 +47,8 @@ eine gleitendes 7-Tage-Mittel der Infektionszahlen berechnet.
 Die vom Robert-Koch-Institut benutzte Methodik zur Abschätzung der Reproduktionszahl
 ist z.B. [hier](https://www.heise.de/newsticker/meldung/Corona-Pandemie-Die-Mathematik-hinter-den-Reproduktionszahlen-R-4712676.html)
 beschrieben. Hier wird dieselbe Methodik benutzt, allerdings wird die Berechnung nicht aufgrund der 
-"Nowcast"- Daten vorgenommen, sondern aufgrund des 7-tägigen gleitenden Mittels der Infektionszahlen.
+"Nowcast"- Daten vorgenommen, sondern aufgrund des 7-tägigen gleitenden Mittels der Infektionszahlen,
+und es werde zwei aufeinanderfolgende Perioden von 5 anstelle von 4 Tagen verglichen.
 
 
 
