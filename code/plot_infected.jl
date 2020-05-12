@@ -817,7 +817,7 @@ end
 
 
     
-function plot_active_r0(;download=false, world=true )
+function plot_active_r0(;download=false, world=true, infection_period=5)
     if world
         data=alldata_world(download=download)
         countries=countrylist()
@@ -852,12 +852,12 @@ function plot_active_r0(;download=false, world=true )
                                 world=world,
                                 avg_window=7, # Window for moving average of time series of infected people
                                 active_period=15, # Period during which we assume an infection is active 
-                                infection_period=5, # Time it takes for an infected person to infect the next (RKI uses 4)
+                                infection_period=infection_period, # Time it takes for an infected person to infect the next (RKI uses 4)
                                 population_base=population_base)
         PyPlot.plot_date(results.dates[d0:end],results.est_active[d0:end],label=country[1],country[2])
     end
     if !world
-        results=nowcast_results(nowcast,active_period=15,infection_period=5,population_base=population_base)
+        results=nowcast_results(nowcast,active_period=15,infection_period=infection_period,population_base=population_base)
         PyPlot.plot_date(results.dates[d0:end],results.est_active[d0:end],label="nowcast","r*-",linewidth=2)
     end
 
@@ -886,14 +886,14 @@ function plot_active_r0(;download=false, world=true )
     PyPlot.ylim(0,2)
     for country in countries
         @show country[1]
-        results=country_results(data,country[1],world=world)
+        results=country_results(data,country[1],world=world,infection_period=infection_period)
         PyPlot.plot_date(results.dates[d0:end],results.est_r0[d0:end],label=country[1],country[2])
         if country[1]=="Italy" || country[1]=="BY"
             PyPlot.plot_date(results.dates[d0:end],[1.0 for i=d0:length(results.dates)],"k--",linewidth=2)
         end
     end
     if !world
-        results=nowcast_results(nowcast,active_period=15,infection_period=5,population_base=population_base)
+        results=nowcast_results(nowcast,active_period=15,infection_period=infection_period,population_base=population_base)
         PyPlot.plot_date(results.dates[d0:end],results.est_r0[d0:end],label="nowcast","r*-")
     end
     if world
@@ -919,11 +919,11 @@ function plot_active_r0(;download=false, world=true )
     end
     fig.set_size_inches(10,5)
     for country in countries
-        results=country_results(data,country[1],world=world)
+        results=country_results(data,country[1],world=world,infection_period=infection_period)
         PyPlot.plot_date(results.dates[d0:end],results.mvavg_new[d0:end],label=country[1],country[2])
     end
     if !world
-        results=nowcast_results(nowcast,active_period=15,infection_period=5,population_base=population_base)
+        results=nowcast_results(nowcast,active_period=15,infection_period=infection_period,population_base=population_base)
         PyPlot.plot_date(results.dates[d0:end],results.est_new[d0:end],label="nowcast","r*-")
     end
     if world
