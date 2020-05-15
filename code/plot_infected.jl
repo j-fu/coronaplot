@@ -1,6 +1,7 @@
 using PyPlot
 using Dates
 using CSV
+using XLSX
 using DataFrames
 using Printf
 
@@ -780,7 +781,7 @@ function countrylist()
     ["Switzerland", "-"],
     ["Netherlands", "-"],
     ["Austria", "-"],
-    ["Sweden", "-"],
+    ["Sweden", "o-"],
     ["Turkey", "-"],
     ["Canada","y-"],
     ["Russia","mo-"],
