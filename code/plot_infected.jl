@@ -722,7 +722,7 @@ function nowcast_results(nowcast;
 end
 
 
-function plot_active_r0(country;download=false,world=true)
+function plot_active_r0(country;download=false,world=true,avg_window=7)
 
     if world
         data=alldata_world(download=download)
@@ -733,7 +733,7 @@ function plot_active_r0(country;download=false,world=true)
     population_base=100_000
     results=country_results(data,country,
                             world=world,
-                            avg_window=7, # Window for moving average of time series of infected people
+                            avg_window=avg_window, # Window for moving average of time series of infected people
                             active_period=15, # Period during which we assume an infection is active 
                             infection_period=5, # Time it takes for an infected person to infect the next (RKI uses 4)
                             population_base=population_base)
@@ -779,7 +779,7 @@ function countrylist()
     ["Korea, South","o-"],
     ["China","o-"],
     ["Switzerland", "-"],
-    ["Netherlands", "-"],
+    ["India", "-"],
     ["Austria", "-"],
     ["Sweden", "o-"],
     ["Turkey", "-"],
@@ -809,8 +809,8 @@ function blaenderlist()
 ["ST","-"   ],
 ["SH","y-"  ],
 ["TH","k-"  ],
+["DE","r-o" ],
 ["BE","g-o" ],
-["DE","r-o" ]
 ]
 end
 
@@ -818,7 +818,7 @@ end
 
 
     
-function plot_active_r0(;download=false, world=true, infection_period=5)
+function plot_active_r0(;download=false, world=true, infection_period=5,avg_window=7)
     if world
         data=alldata_world(download=download)
         countries=countrylist()
@@ -851,7 +851,7 @@ function plot_active_r0(;download=false, world=true, infection_period=5)
     for country in countries
         results=country_results(data,country[1],
                                 world=world,
-                                avg_window=7, # Window for moving average of time series of infected people
+                                avg_window=avg_window, # Window for moving average of time series of infected people
                                 active_period=15, # Period during which we assume an infection is active 
                                 infection_period=infection_period, # Time it takes for an infected person to infect the next (RKI uses 4)
                                 population_base=population_base)
@@ -887,7 +887,7 @@ function plot_active_r0(;download=false, world=true, infection_period=5)
     PyPlot.ylim(0,2)
     for country in countries
         @show country[1]
-        results=country_results(data,country[1],world=world,infection_period=infection_period)
+        results=country_results(data,country[1],world=world,infection_period=infection_period,avg_window=avg_window)
         PyPlot.plot_date(results.dates[d0:end],results.est_r0[d0:end],label=country[1],country[2])
         if country[1]=="Italy" || country[1]=="BY"
             PyPlot.plot_date(results.dates[d0:end],[1.0 for i=d0:length(results.dates)],"k--",linewidth=2)
@@ -920,7 +920,7 @@ function plot_active_r0(;download=false, world=true, infection_period=5)
     end
     fig.set_size_inches(10,5)
     for country in countries
-        results=country_results(data,country[1],world=world,infection_period=infection_period)
+        results=country_results(data,country[1],world=world,infection_period=infection_period,avg_window=avg_window)
         PyPlot.plot_date(results.dates[d0:end],results.mvavg_new[d0:end],label=country[1],country[2])
     end
     if !world
