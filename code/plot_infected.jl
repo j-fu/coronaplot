@@ -914,7 +914,7 @@ function plot_active_r0(;download=false, world=true, infection_period=5,avg_wind
     fig = PyPlot.gcf()
     PyPlot.clf()
     if world
-        PyPlot.title("Number of newly infected SARS-CoV2 infections in the last 7 days\n$(trailer)")
+        PyPlot.title("Number of newly observed SARS-CoV2 infections in the last 7 days\n$(trailer)")
     else
         PyPlot.title("Anzahl der Neuinfektionen in den zurückliegenden 7 Tagen\n$(trailer)")
     end
