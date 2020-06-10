@@ -81,7 +81,7 @@ function alldata_world(;download=false)
 end
 
 function alldata_blaender(;download=false)
-    (dead=nothing,
+    (dead=CSV.read("rki_dead.csv"),
      infected=CSV.read("rki.csv"),
      recovered=nothing,
      #     https://www.statistik-bw.de/VGRdL/tbls/tab.jsp?rev=RV2014&tbl=tab20&lang=de-DE
@@ -633,8 +633,9 @@ function country_results(data, country;
         ts_recovered=create_countries_timeseries(recovered,[country]).*popfac
         mvavg_dead=mvavg(ts_dead,avg_window)
     else
+        ts_dead=Array{Float64}(dead[Symbol(country)]).*popfac
         ts_infected=Array{Float64}(infected[Symbol(country)]).*popfac
-        mvavg_dead=nothing
+        mvavg_dead=mvavg(ts_dead,avg_window)
     end
 
     
@@ -938,7 +939,32 @@ function plot_active_r0(;download=false, world=true, infection_period=5,avg_wind
     PyPlot.grid()
     PyPlot.show()
     PyPlot.savefig("../docs/$(prefix)-new.png")
-
+    
+    ###########################################################################################################################
+    fig = PyPlot.figure(4)
+    fig = PyPlot.gcf()
+    PyPlot.clf()
+    if world
+        PyPlot.title("Number of COVID-19 deaths\n$(trailer)")
+    else
+        PyPlot.title("Anzahl der COVID-19-Toten\n$(trailer)")
+    end
+    fig.set_size_inches(10,5)
+    for country in countries
+        results=country_results(data,country[1],world=world,infection_period=infection_period,avg_window=avg_window)
+        PyPlot.plot_date(results.dates[d0:end],results.mvavg_dead[d0:end],label=country[1],country[2])
+    end
+    if world
+        PyPlot.xlabel("Date")
+        PyPlot.ylabel("Cases per $(population_base) inhabitants")
+    else
+        PyPlot.xlabel("Datum")
+        PyPlot.ylabel("Fälle pro $(population_base) Einwohner")
+    end
+    PyPlot.legend(loc="upper left")
+    PyPlot.grid()
+    PyPlot.show()
+    PyPlot.savefig("../docs/$(prefix)-dead.png")
 end
 
 function create_plots()
