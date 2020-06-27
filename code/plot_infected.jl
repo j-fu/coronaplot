@@ -781,15 +781,15 @@ function countrylist()
     ["China","o-"],
     ["Switzerland", "-"],
     ["India", "-"],
-    ["Austria", "-"],
+    ["Poland", "-"],
     ["Sweden", "o-"],
     ["Turkey", "-"],
     ["Canada","y-"],
     ["Russia","mo-"],
     ["Brazil","g-"],
     ["Germany","r-o"],
-    ["US","k-"],
-    ["United Kingdom","k-o"]
+    ["US","k-o"],
+    ["United Kingdom","k-"]
    ]
 end
 
