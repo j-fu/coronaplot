@@ -779,7 +779,7 @@ function countrylist()
     ["Iran", "-"],
     ["Korea, South","o-"],
     ["China","o-"],
-    ["Switzerland", "-"],
+    ["Israel", "-"],
     ["India", "-"],
     ["Poland", "-"],
     ["Sweden", "o-"],
