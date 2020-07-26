@@ -559,6 +559,10 @@ end
 
 
 #####################################################################
+#####################################################################
+#####################################################################
+#####################################################################
+#####################################################################
 # New plots for active cases and r0
 
 
@@ -637,7 +641,6 @@ function country_results(data, country;
         ts_infected=Array{Float64}(infected[Symbol(country)]).*popfac
         mvavg_dead=mvavg(ts_dead,avg_window)
     end
-
     
     mvavg_infected=mvavg(ts_infected,avg_window)
 
@@ -952,7 +955,8 @@ function plot_active_r0(;download=false, world=true, infection_period=5,avg_wind
     fig.set_size_inches(10,5)
     for country in countries
         results=country_results(data,country[1],world=world,infection_period=infection_period,avg_window=avg_window)
-        PyPlot.plot_date(results.dates[d0:end],results.mvavg_dead[d0:end],label=country[1],country[2])
+        ndead=length(results.mvavg_dead[d0:end])
+        PyPlot.plot_date(results.dates[d0:d0+ndead-1],results.mvavg_dead[d0:end],label=country[1],country[2])
     end
     if world
         PyPlot.xlabel("Date")
