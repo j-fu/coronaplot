@@ -833,7 +833,7 @@ function plot_active_r0(;download=false, world=true, infection_period=5,avg_wind
         countries=blaenderlist()
         trailer="Datenquelle: RKI via de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland $(Dates.today())\nDatenverarbeitung: https://github.com/j-fu/coronaplot  Lizenz: CC-BY 2.0"
         prefix="de"
-        nowcast=load_nowcast(download=download)
+        nowcast=load_nowcast(download=false)
     end
     fig = PyPlot.figure(1)
     fig = PyPlot.gcf()
