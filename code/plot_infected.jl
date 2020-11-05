@@ -95,6 +95,7 @@ end
 function select_countries_rows(df_jhu,countries)
     countries_mask=BitArray(undef,length(countries),size(df_jhu,1))
     for i=1:length(countries)
+        @show countries[i]
         countries_mask[i,:].=df_jhu[:,c_country].==countries[i]
     end
     mask=vec(reduce(|,countries_mask,dims=1))
