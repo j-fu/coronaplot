@@ -4,7 +4,8 @@ using CSV
 using XLSX
 using DataFrames
 using Printf
-
+using Gumbo
+using HTTP
 
 # Number of column containing country name
 c_country=2
@@ -48,7 +49,55 @@ function load_jhu_deaths(;download=true)
     end
     CSV.read("jhu_deaths.csv")
 end
+############################################################################
 
+
+
+function scrape_rki_from_wikipedia()
+    function find_table(element,text)
+	if isa(element,HTMLText)
+     	    return nothing
+        end
+	if length(element.children)>0 && element[1] isa Gumbo.HTMLElement{:caption} && occursin(text,String(element[1][1].text))
+	    return element
+	else
+	    for i=1:length(element.children)
+		result=find_table(element.children[i],text)
+                if result!=nothing
+		    return result
+		end
+	    end
+	end
+    end
+    header(t)=push!([t[2][1][i][1][1].text for i=3:18],"DE")
+    nrows(t)=length(t[2].children)-2
+    function row(t,i)
+	tr=t[2][i+1]
+	start=2
+	if haskey(tr[1].attributes,"rowspan")
+	    start=3
+	end
+	[ replace(tr[i][1].text, r"\n|\t|\." => s"")  for i=start:length(tr.children)-2]
+    end
+    num(s)= try parse(Int64,s) catch e 0 end
+    
+    function dataframe(t)
+        date_start=Date(2020,2,23)
+        df=DataFrame(Datum=[date_start+Day(i) for i=1:nrows(t)])
+        for icol=1:length(header(t))
+	    df[Symbol(header(t)[icol])]=[num(row(t,i)[icol]) for i=1:nrows(t)]
+        end
+        df
+    end
+    
+    rawpage=HTTP.get("https://de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland/Statistik");
+    parsed_page=parsehtml(String(rawpage.body));
+    CSV.write("rki.csv",dataframe(find_table(parsed_page.root,"Infektionsfälle")))
+    CSV.write("rki_dead.csv",dataframe(find_table(parsed_page.root,"Todesfälle")))
+end
+
+
+############################################################
 # Download and read data for confirmed infection cases
 # This creates a dataframe
 function load_rki()
@@ -111,10 +160,6 @@ function create_countries_timeseries(df_jhu,countries)
     data=convert(Vector{Float64},vec(data))
 end
 
-
-function create_rki_timeseries(df_rki,countries)
-
-end
 
 # Calculate growth factor from growth rate (in %)
 growth_factor(growth_rate)=growth_rate/100.0+1
@@ -830,9 +875,12 @@ function plot_active_r0(;download=false, world=true, infection_period=5,avg_wind
         trailer="Data source: JHU $(Dates.today())\nData processing: https://github.com/j-fu/coronaplot  License: CC-BY 2.0"
         prefix="world"
     else
+        if download
+            scrape_rki_from_wikipedia()
+        end
         data=alldata_blaender()
         countries=blaenderlist()
-        trailer="Datenquelle: RKI via de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland $(Dates.today())\nDatenverarbeitung: https://github.com/j-fu/coronaplot  Lizenz: CC-BY 2.0"
+        trailer="Datenquelle: RKI via de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland/Statistik $(Dates.today())\nDatenverarbeitung: https://github.com/j-fu/coronaplot  Lizenz: CC-BY 2.0"
         prefix="de"
         nowcast=load_nowcast(download=false)
     end
