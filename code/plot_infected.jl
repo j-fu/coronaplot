@@ -49,8 +49,9 @@ function load_jhu_deaths(;download=true)
     end
     CSV.read("jhu_deaths.csv")
 end
-############################################################################
 
+############################################################################
+# web scraping for rki data
 
 
 function scrape_rki_from_wikipedia()
@@ -81,8 +82,7 @@ function scrape_rki_from_wikipedia()
     end
     num(s)= try parse(Int64,s) catch e 0 end
     
-    function dataframe(t)
-        date_start=Date(2020,2,23)
+    function dataframe(t,date_start)        
         df=DataFrame(Datum=[date_start+Day(i) for i=1:nrows(t)])
         for icol=1:length(header(t))
 	    df[Symbol(header(t)[icol])]=[num(row(t,i)[icol]) for i=1:nrows(t)]
@@ -92,8 +92,12 @@ function scrape_rki_from_wikipedia()
     
     rawpage=HTTP.get("https://de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland/Statistik");
     parsed_page=parsehtml(String(rawpage.body));
-    CSV.write("rki.csv",dataframe(find_table(parsed_page.root,"Infektionsfälle")))
-    CSV.write("rki_dead.csv",dataframe(find_table(parsed_page.root,"Todesfälle")))
+    df=dataframe(find_table(parsed_page.root,"Infektionsfälle"),Date(2020,2,23))
+    println(df[:Datum][end])
+    CSV.write("rki.csv",df)
+    df=dataframe(find_table(parsed_page.root,"Todesfälle"),Date(2020,3,7))
+    println(df[:Datum][end])
+    CSV.write("rki_dead.csv",df)
 end
 
 
