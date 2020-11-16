@@ -1,4 +1,5 @@
-using PyPlot
+import PyPlot
+import PlotlyBase, Plotly
 using Dates
 using CSV
 using XLSX
@@ -34,20 +35,20 @@ function load_jhu_infected(;download=true)
     if download
         Base.download(jhu_infected,"jhu_infected.csv")
     end
-    CSV.read("jhu_infected.csv")
+    CSV.read("jhu_infected.csv",DataFrame)
 end
 
 function load_jhu_recovered(;download=true)
     if download
         Base.download(jhu_recovered,"jhu_recovered.csv")
     end
-    CSV.read("jhu_recovered.csv")
+    CSV.read("jhu_recovered.csv",DataFrame)
 end
 function load_jhu_deaths(;download=true)
     if download
         Base.download(jhu_deaths,"jhu_deaths.csv")
     end
-    CSV.read("jhu_deaths.csv")
+    CSV.read("jhu_deaths.csv",DataFrame)
 end
 
 ############################################################################
@@ -85,7 +86,7 @@ function scrape_rki_from_wikipedia()
     function dataframe(t,date_start)        
         df=DataFrame(Datum=[date_start+Day(i) for i=1:nrows(t)])
         for icol=1:length(header(t))
-	    df[Symbol(header(t)[icol])]=[num(row(t,i)[icol]) for i=1:nrows(t)]
+	    df[!,Symbol(header(t)[icol])]=[num(row(t,i)[icol]) for i=1:nrows(t)]
         end
         df
     end
@@ -93,10 +94,10 @@ function scrape_rki_from_wikipedia()
     rawpage=HTTP.get("https://de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland/Statistik");
     parsed_page=parsehtml(String(rawpage.body));
     df=dataframe(find_table(parsed_page.root,"Infektionsfälle"),Date(2020,2,23))
-    println(df[:Datum][end])
+    println(df[!,:Datum][end])
     CSV.write("rki.csv",df)
     df=dataframe(find_table(parsed_page.root,"Todesfälle"),Date(2020,3,7))
-    println(df[:Datum][end])
+    println(df[!,:Datum][end])
     CSV.write("rki_dead.csv",df)
 end
 
@@ -105,7 +106,7 @@ end
 # Download and read data for confirmed infection cases
 # This creates a dataframe
 function load_rki()
-    csv=CSV.read("rki.csv")
+    csv=CSV.read("rki.csv",DataFrame)
 end
 
 function load_nowcast(;download=false)
@@ -130,15 +131,17 @@ function alldata_world(;download=false)
      infected=load_jhu_infected(download=download),
      recovered=load_jhu_recovered(download=download),
      #     https://data.worldbank.org/indicator/SP.POP.TOTL
-     popdata=CSV.read("population.csv"))
+     popdata=CSV.read("population.csv",DataFrame))
 end
 
 function alldata_blaender(;download=false)
-    (dead=CSV.read("rki_dead.csv"),
-     infected=CSV.read("rki.csv"),
-     recovered=nothing,
-     #     https://www.statistik-bw.de/VGRdL/tbls/tab.jsp?rev=RV2014&tbl=tab20&lang=de-DE
-     popdata=CSV.read("einwohnerzahl-bundeslaender.csv"))
+    (
+        dead=CSV.read("rki_dead.csv",DataFrame),
+        infected=CSV.read("rki.csv",DataFrame),
+        recovered=nothing,
+        #     https://www.statistik-bw.de/VGRdL/tbls/tab.jsp?rev=RV2014&tbl=tab20&lang=de-DE
+        popdata=CSV.read("einwohnerzahl-bundeslaender.csv",DataFrame)
+    )
 end
 
 
@@ -307,7 +310,7 @@ function plotcountries(df_jhu,df_rki,
         "Poland",
         "Portugal",
         "Romania",
-        "Slovakia",
+        "Turkey",
         "Slovenia",
         "Spain",
         "Sweden",
@@ -687,8 +690,8 @@ function country_results(data, country;
         ts_recovered=create_countries_timeseries(recovered,[country]).*popfac
         mvavg_dead=mvavg(ts_dead,avg_window)
     else
-        ts_dead=Array{Float64}(dead[Symbol(country)]).*popfac
-        ts_infected=Array{Float64}(infected[Symbol(country)]).*popfac
+        ts_dead=Array{Float64}(dead[!,Symbol(country)]).*popfac
+        ts_infected=Array{Float64}(infected[!,Symbol(country)]).*popfac
         mvavg_dead=mvavg(ts_dead,avg_window)
     end
     
@@ -1033,4 +1036,204 @@ end
 function publish(;msg="data update")
     run(`git commit -a -m $(msg)`)
     run(`git push`)
+end
+
+########################################################################################################
+
+
+function plot_plotly(;download=false, world=true, infection_period=5,avg_window=7)
+    if world
+        data=alldata_world(download=download)
+        countries=countrylist()
+        trailer="Data source: JHU $(Dates.today())\nData processing: https://github.com/j-fu/coronaplot  License: CC-BY 2.0"
+        prefix="world"
+    else
+        if download
+            scrape_rki_from_wikipedia()
+        end
+        data=alldata_blaender()
+        countries=blaenderlist()
+        trailer="Datenquelle: RKI via de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland/Statistik $(Dates.today())\nDatenverarbeitung: https://github.com/j-fu/coronaplot  Lizenz: CC-BY 2.0"
+        prefix="de"
+        nowcast=load_nowcast(download=false)
+    end
+    d0=10
+    if world
+        d0=40
+    end
+
+
+    ###########################################################################################################################
+    title="Anzahl der Neuinfektionen in den zurückliegenden 7 Tagen\n$(trailer)"
+    if world
+        title="Number of newly observed SARS-CoV2 infections in the last 7 days\n$(trailer)"
+    end
+    traces=Plotly.GenericTrace{Dict{Symbol,Any}}[]
+    for country in countries
+        results=country_results(data,country[1],world=world,infection_period=infection_period,avg_window=avg_window)
+        trace=Plotly.scatter(x=results.dates[d0:end],y=results.mvavg_new[d0:end], mode="lines",name=country[1])
+        push!(traces,trace)
+        #        PyPlot.plot_date(results.dates[d0:end],results.mvavg_new[d0:end],label=country[1],country[2])
+    end
+    # if !world
+    #     results=nowcast_results(nowcast,active_period=15,infection_period=infection_period,population_base=population_base)
+    #     PyPlot.plot_date(results.dates[d0:end],results.est_new[d0:end],label="nowcast","r*-")
+    # end
+    # if world
+    #     PyPlot.xlabel("Date")
+    #     PyPlot.ylabel("Cases per $(population_base) inhabitants")
+    # else
+    #     PyPlot.xlabel("Datum")
+    #     PyPlot.ylabel("Fälle pro $(population_base) Einwohner")
+    # end
+    # PyPlot.legend(loc="upper left")
+    # PyPlot.grid()
+    # PyPlot.show()
+    # PyPlot.savefig("../docs/$(prefix)-new.png")
+#    layout = Plotly.Layout(;title="Plot")
+    
+    
+#    p=Plotly.plot([scatter(x=x,y=y)], Layout(title="My plot"))
+
+    p=Plotly.plot(traces,Layout(title=title))
+    Plotly.savehtml(p,"../docs/$(prefix)-new.html",:remote)
+
+    return
+
+    
+    ################################################################################
+    fig = PyPlot.figure(1)
+    fig = PyPlot.gcf()
+    PyPlot.clf()
+    fig.set_size_inches(10,5)
+    if world
+        d0=40
+    else
+        d0=10
+    end
+    population_base=100_000
+
+    if world
+        PyPlot.title("Estimated number of infectious persons in selected countries\n$(trailer)")
+    else
+        PyPlot.title("Schätzung der Zahl der infektiösen Personen\n$(trailer)")
+    end
+    
+    for country in countries
+        results=country_results(data,country[1],
+                                world=world,
+                                avg_window=avg_window, # Window for moving average of time series of infected people
+                                active_period=15, # Period during which we assume an infection is active 
+                                infection_period=infection_period, # Time it takes for an infected person to infect the next (RKI uses 4)
+                                population_base=population_base)
+        PyPlot.plot_date(results.dates[d0:end],results.est_active[d0:end],label=country[1],country[2])
+    end
+    if !world
+        results=nowcast_results(nowcast,active_period=15,infection_period=infection_period,population_base=population_base)
+        PyPlot.plot_date(results.dates[d0:end],results.est_active[d0:end],label="nowcast","r*-",linewidth=2)
+    end
+
+    if world
+        PyPlot.xlabel("Date")
+        PyPlot.ylabel("Cases per $(population_base) inhabitants")
+    else
+        PyPlot.xlabel("Datum")
+        PyPlot.ylabel("Fälle pro $(population_base) Einwohner")
+    end
+    PyPlot.legend(loc="upper left")
+    PyPlot.grid()
+    PyPlot.show()
+    PyPlot.savefig("../docs/$(prefix)-active.png")
+
+    ###########################################################################################################################
+    fig = PyPlot.figure(2)
+    fig = PyPlot.gcf()
+    PyPlot.clf()
+    if world
+        PyPlot.title("Estimated reproduction number of SARS CoV-2 infections in selected countries\n$(trailer)")
+    else
+        PyPlot.title("Schätzung der Reproduktionszahl für die SARS CoV-2 Pandemie in den Bundesländern\n$(trailer)")
+    end
+    fig.set_size_inches(10,5)
+    PyPlot.ylim(0,2)
+    for country in countries
+        @show country[1]
+        results=country_results(data,country[1],world=world,infection_period=infection_period,avg_window=avg_window)
+        PyPlot.plot_date(results.dates[d0:end],results.est_r0[d0:end],label=country[1],country[2])
+        if country[1]=="Italy" || country[1]=="BY"
+            PyPlot.plot_date(results.dates[d0:end],[1.0 for i=d0:length(results.dates)],"k--",linewidth=2)
+        end
+    end
+    if !world
+        results=nowcast_results(nowcast,active_period=15,infection_period=infection_period,population_base=population_base)
+        PyPlot.plot_date(results.dates[d0:end],results.est_r0[d0:end],label="nowcast","r*-")
+    end
+    if world
+        PyPlot.xlabel("Date")
+        PyPlot.ylabel("Reproduction number")
+    else
+        PyPlot.xlabel("Datum")
+        PyPlot.ylabel("Reproduktionszahl")
+    end
+    PyPlot.legend(loc="upper left")
+    PyPlot.grid()
+    PyPlot.show()
+    PyPlot.savefig("../docs/$(prefix)-repro.png")
+
+    ###########################################################################################################################
+    fig = PyPlot.figure(3)
+    fig = PyPlot.gcf()
+    PyPlot.clf()
+    if world
+        PyPlot.title("Number of newly observed SARS-CoV2 infections in the last 7 days\n$(trailer)")
+    else
+        PyPlot.title("Anzahl der Neuinfektionen in den zurückliegenden 7 Tagen\n$(trailer)")
+    end
+    fig.set_size_inches(10,5)
+    for country in countries
+        results=country_results(data,country[1],world=world,infection_period=infection_period,avg_window=avg_window)
+        PyPlot.plot_date(results.dates[d0:end],results.mvavg_new[d0:end],label=country[1],country[2])
+    end
+    if !world
+        results=nowcast_results(nowcast,active_period=15,infection_period=infection_period,population_base=population_base)
+        PyPlot.plot_date(results.dates[d0:end],results.est_new[d0:end],label="nowcast","r*-")
+    end
+    if world
+        PyPlot.xlabel("Date")
+        PyPlot.ylabel("Cases per $(population_base) inhabitants")
+    else
+        PyPlot.xlabel("Datum")
+        PyPlot.ylabel("Fälle pro $(population_base) Einwohner")
+    end
+    PyPlot.legend(loc="upper left")
+    PyPlot.grid()
+    PyPlot.show()
+    PyPlot.savefig("../docs/$(prefix)-new.png")
+    
+    ###########################################################################################################################
+    fig = PyPlot.figure(4)
+    fig = PyPlot.gcf()
+    PyPlot.clf()
+    if world
+        PyPlot.title("Number of COVID-19 deaths\n$(trailer)")
+    else
+        PyPlot.title("Anzahl der COVID-19-Toten\n$(trailer)")
+    end
+    fig.set_size_inches(10,5)
+    for country in countries
+        results=country_results(data,country[1],world=world,infection_period=infection_period,avg_window=avg_window)
+        ndead=length(results.mvavg_dead[d0:end])
+        PyPlot.plot_date(results.dates[d0:d0+ndead-1],results.mvavg_dead[d0:end],label=country[1],country[2])
+    end
+    if world
+        PyPlot.xlabel("Date")
+        PyPlot.ylabel("Cases per $(population_base) inhabitants")
+    else
+        PyPlot.xlabel("Datum")
+        PyPlot.ylabel("Fälle pro $(population_base) Einwohner")
+    end
+    PyPlot.legend(loc="upper left")
+    PyPlot.grid()
+    PyPlot.show()
+    PyPlot.savefig("../docs/$(prefix)-dead.png")
 end
