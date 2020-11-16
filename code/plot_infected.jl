@@ -1065,6 +1065,30 @@ function countrylist2()
    ]
 end
 
+
+function blaenderlist2()
+    [
+        ["BE","g-o" ],
+        ["BW","y-o" ],
+        ["BY","k-o" ],
+        ["BB","-"   ],
+        ["HB","-"   ],
+        ["HH","-"   ],
+        ["HE","-"   ],
+        ["MV","-"   ],
+        ["NI","-"   ],
+        ["NW","b-o" ],
+        ["RP","-"   ],
+        ["SL","-"   ],
+        ["SN","-"   ],
+        ["ST","-"   ],
+        ["SH","y-"  ],
+        ["TH","k-"  ],
+        ["DE","r-o" ],
+    ]
+end
+
+
 function plot_plotly(;download=false, world=true, infection_period=5,avg_window=7)
     if world
         data=alldata_world(download=download)
@@ -1076,7 +1100,7 @@ function plot_plotly(;download=false, world=true, infection_period=5,avg_window=
             scrape_rki_from_wikipedia()
         end
         data=alldata_blaender()
-        countries=blaenderlist()
+        countries=blaenderlist2()
         trailer="<br>Datenquelle: RKI via de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland/Statistik $(Dates.today())<br> Datenverarbeitung: https://github.com/j-fu/coronaplot  Lizenz: CC-BY 2.0"
         prefix="de"
         nowcast=load_nowcast(download=false)
@@ -1187,8 +1211,8 @@ end
 
 function create_plots()
     plot_active_r0(download=true, world=true )
-    plot_active_r0(download=false, world=false )
-    plot_plotly(download=true, world=true )
+    plot_active_r0(download=true, world=false )
+    plot_plotly(download=false, world=true )
     plot_plotly(download=false, world=false )
 end
 

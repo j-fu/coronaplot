@@ -44,6 +44,13 @@ und es werden zwei aufeinanderfolgende Perioden von 5 anstelle von 4 Tagen vergl
 <iframe id="igraph4"  src="de-repro.html"  scrolling="no" style="border:none;" seamless="seamless" height="500" width="100%"></iframe>
 
 
+## Anzahl der an COVID19 Verstorbenen  pro 100000 Einwohner.
+
+![](de-dead.png)
+
+<iframe id="igraph1"  src="de-dead.html"  scrolling="no" style="border:none;" seamless="seamless" height="500" width="100%"></iframe>
+
+
 
 
 ## Änderungen
@@ -55,6 +62,7 @@ Hier werden wesentliche Änderungen neben der Aktualisierung der Daten dokumenti
 - Interaktive plots mit Plotly.jl
 - Layout mit mehr Platz für Plots
 - Löschung nicht aktueller Links
+- Plot der Anzahl der an COVID19 verstorbenen
 
 ### 2020-05-10
 - Zusätzliche Darstellung auf der Grundlage der Nowcast-Daten des RKI (diese sind alledings nur

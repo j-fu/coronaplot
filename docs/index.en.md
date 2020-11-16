@@ -9,28 +9,20 @@ title: Development of the COVID-19 pandemic
      partially based on different data sources and including plots for the US states
    - a mathematical analysis by my colleagues [M. Kantner and Th. Koprucki](https://arxiv.org/abs/2004.09471)
      on possible strategies during the opening period
-   - Coronavirus Charts on [xkcd](https://xkcd.com/2294/)
      
-## Introduction
-
-The widespread depiction of absolute numbers of confirmed infections tells a lot about
-the initial phase of a pandemic. It however does not help to understand the next phases.
-The same is true for the relative increase of infection numbers and the doubling times.
-These are useful for understanding the lockdown phase.
-
-To understand the development during the opening period, some other numbers are more useful.
 
 
 ## Number of new infections during the previous 7 Tagen per 100000 inhabitants
 
 ![](world-new.png)
 
-This number is inspired by the "emergency brake" criterion introduced in Germany
-on May 6, 2020.
+<iframe id="igraph1"  src="world-new.html"  scrolling="no" style="border:none;" seamless="seamless" height="500" width="100%"></iframe>
 
 ## Estimate of the number of infectious persons
 
 ![](world-active.png)
+
+<iframe id="igraph2"  src="world-active.html"  scrolling="no" style="border:none;" seamless="seamless" height="500" width="100%"></iframe>
 
 Here we try a conservative estimate of the number of  infectious persons.
 We assume that an infected person is infectious on average 15 days.
@@ -40,21 +32,34 @@ average of the number of infected people.
 
 
 ## Estimate of the reproduction numbers
-![](world-repro.png)
-
 The German Robert Koch Institute (RKI) uses estimates the reproduction number based
 on a method e.g. described [here](https://www.heise.de/newsticker/meldung/Corona-Pandemie-Die-Mathematik-hinter-den-Reproduktionszahlen-R-4712676.html).
 Here, we use the same method, howver based on the 7 day moving 
 average of the number of infected people instead of  RKI's "nowcast".
 
+![](world-repro.png)
+
+<iframe id="igraph2"  src="world-repro.html"  scrolling="no" style="border:none;" seamless="seamless" height="500" width="100%"></iframe>
+
+
+##  Number of dead per 100000 inhabitants
+
+![](world-dead.png)
+
+<iframe id="igraph1"  src="world-dead.html"  scrolling="no" style="border:none;" seamless="seamless" height="500" width="100%"></iframe>
+
 
 
 ## Changes
+### 2020-11-16
+- New layout with more space for graphs
+- Additonal interactive graphs via Plotly.jl
+- Plots of numebers of corona deaths
+
 We document here significant changes besides data updates. 
 
 ### 2020-05-06 
 - We plot different data now. The last "old" plots are here:
-
 
 
 <img src="https://github.com/j-fu/coronaplot/raw/master/docs/infected-exp.png" width="200">
