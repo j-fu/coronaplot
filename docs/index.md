@@ -5,55 +5,57 @@ title: Entwicklung der COVID-19 - Pandemie in Deutschland
 - [This page in English](index.en.md) with the plots for selected countries.
 - [Quellcode](https://github.com/j-fu/coronaplot)
 - Weitere Links
-    - Die Mathematik hinter den Reporduktionszahlen [(heise.de)](https://www.heise.de/newsticker/meldung/Corona-Pandemie-Die-Mathematik-hinter-den-Reproduktionszahlen-R-4712676.html)
+    - Die Mathematik hinter den Reproduktionszahlen [(heise.de)](https://www.heise.de/newsticker/meldung/Corona-Pandemie-Die-Mathematik-hinter-den-Reproduktionszahlen-R-4712676.html)
     - Seite des RKI zu [Nowcasting](https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Projekte_RKI/Nowcasting.html)
-    - Beitrag des [NDR](https://www.ndr.de/nachrichten/info/Corona-Daten-unter-Verschluss-RKI-bremst-Diskurs-aus,rki118.html)
-      zur Datentransparenz des RKI
     - die Darstellungen sind inspiriert durch die sehr ähnliche [Analyse meines Kollegen J. Polzehl](https://www.wias-berlin.de/people/polzehl/COVID-19.jsp),   teilweise auf anderer Datengrundlage und mit Darstellung für die US-Bundesstaaten
-    - eine mathematische Analyse meiner Kollegen [M. Kantner und Th. Koprucki](https://arxiv.org/abs/2004.09471)
-     zur mögkichen Steuerung in der Lockerungsphase
-    - Coronavirus Charts auf [xkcd](https://xkcd.com/2294/)
    
-## Einführung
-
-Die weit verbreitete Darstellung der absoluten Zahlen der bestätigten Infektionen sagt viel über die Anfangsphase
-der Pandemie aus, ist aber ungeignet, die Entwicklung in weiteren Infektionsphasen darzustellen. Dasselbe gilt für
-die Darstellung der relativen Zunahme und der Verdopplungszeiten, welche gut  geeignet sind, den Effekt der Maßnahmen zum
-Stopp der akuten exponentiellen Ausbreitung abzubilden. 
-
-Der Verlauf der Öffnungsphase lässt sich mit anderen Kennzahlen besser verstehen.
-
 
 ## Anzahl der Neuinfektionen in den zurückliegenden 7 Tagen pro 100000 Einwohner.
 
 ![](de-new.png)
 
-Diese Darstellung richtet sich nach dem Kriterium für die am 6.5.2020 festgelegte
-"Notbremse" für die Öffnung.
+<iframe id="igraph1"  src="de-new.html"  scrolling="no" style="border:none;" seamless="seamless" height="500" width="100%"></iframe>
+
+
+
+
 
 ## Schätzung der Anzahl der aktiven Infektionen pro 100000 Einwohner
-
-![](de-active.png)
 
 Hier wird versucht, eine konservative Schätzung der aktiv infizierten Personen vorzunehmen. 
 Es wird angenommen, dass eine als infiziert gemeldete Patientin im Mittel 15 Tage lang infektiös ist.
 Um tägliche Schwankugen herauszurechnen und längerfristige Trends zu sehen, wird zunächst 
 eine gleitendes 7-Tage-Mittel der Infektionszahlen berechnet. 
 
+![](de-active.png)
+
+<iframe id="igraph3"  src="de-active.html"  scrolling="no" style="border:none;" seamless="seamless" height="500" width="100%"></iframe>
+
+
 
 ## Abschätzung der Reproduktionszahl
-![](de-repro.png)
-
 Die vom Robert-Koch-Institut benutzte Methodik zur Abschätzung der Reproduktionszahl
 ist z.B. [hier](https://www.heise.de/newsticker/meldung/Corona-Pandemie-Die-Mathematik-hinter-den-Reproduktionszahlen-R-4712676.html)
 beschrieben. Hier wird dieselbe Methodik benutzt, allerdings wird die Berechnung nicht aufgrund der 
 "Nowcast"- Daten vorgenommen, sondern aufgrund des 7-tägigen gleitenden Mittels der Infektionszahlen,
-und es werde zwei aufeinanderfolgende Perioden von 5 anstelle von 4 Tagen verglichen.
+und es werden zwei aufeinanderfolgende Perioden von 5 anstelle von 4 Tagen verglichen.
+
+![](de-repro.png)
+<iframe id="igraph4"  src="de-repro.html"  scrolling="no" style="border:none;" seamless="seamless" height="500" width="100%"></iframe>
+
 
 
 
 ## Änderungen
+
+
 Hier werden wesentliche Änderungen neben der Aktualisierung der Daten dokumentiert.
+
+### 2020-11-16
+- Interaktive plots mit Plotly.jl
+- Layout mit mehr Platz für Plots
+- Löschung nicht aktueller Links
+
 ### 2020-05-10
 - Zusätzliche Darstellung auf der Grundlage der Nowcast-Daten des RKI (diese sind alledings nur
   für Deutschland insgesamt verfügbar)
@@ -64,6 +66,7 @@ Hier werden wesentliche Änderungen neben der Aktualisierung der Daten dokumenti
 <img src="https://github.com/j-fu/coronaplot/raw/master/docs/de-infected-growthrate.png" width="200"> 
 
 <img src="https://github.com/j-fu/coronaplot/raw/master/docs/de-infected-growthrate-weeklyavg.png" width="200">
+
 
 ### 2020-04-13
 - Auftragung der Wachstumsraten nach Verdopplungszeiten (Vertauschung der Y-Achsen)
@@ -85,5 +88,4 @@ zu haben. Siehe auch die [Ankündigung der JHU](https://github.com/CSSEGISandDat
 <img src="https://github.com/j-fu/coronaplot/raw/51326c1522407fca8a5c32ba280460d8924d2f06/infected-growthrate.png" width="200">
 
 
-- [test](test.md) 
 
