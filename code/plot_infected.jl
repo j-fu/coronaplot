@@ -1132,7 +1132,7 @@ function plot_plotly(;download=false, world=true, infection_period=5,avg_window=
         push!(traces,Plotly.scatter(x=results.dates[d0:end],y=results.est_new[d0:end],mode="markers",name="nowcast"))
     end              
     
-    layout=Layout(;title=title, yaxis_title=ylabel)
+    layout=Plotly.Layout(;title=title, yaxis_title=ylabel)
     p=Plotly.plot(traces,layout)
     Plotly.savehtml(p,"../docs/$(prefix)-new.html",:remote)
 
@@ -1162,7 +1162,7 @@ function plot_plotly(;download=false, world=true, infection_period=5,avg_window=
         push!(traces,Plotly.scatter(x=results.dates[d0:end],y=results.est_new[d0:end],mode="markers",name="nowcast"))
     end
     
-    layout=Layout(;title=title, yaxis_title=ylabel)
+    layout=Plotly.Layout(;title=title, yaxis_title=ylabel)
     p=Plotly.plot(traces,layout)
     Plotly.savehtml(p,"../docs/$(prefix)-active.html",:remote)
 
@@ -1184,7 +1184,7 @@ function plot_plotly(;download=false, world=true, infection_period=5,avg_window=
         push!(traces,Plotly.scatter(x=results.dates[d0:end],y=results.est_r0[d0:end],mode="markers",name="nowcast"))
     end
 
-    layout=Layout(;title=title, yaxis_title=ylabel, yaxis_range=[0,3])
+    layout=Plotly.Layout(;title=title, yaxis_title=ylabel, yaxis_range=[0,3])
     p=Plotly.plot(traces,layout)
     Plotly.savehtml(p,"../docs/$(prefix)-repro.html",:remote)
 
@@ -1203,11 +1203,10 @@ function plot_plotly(;download=false, world=true, infection_period=5,avg_window=
         trace=Plotly.scatter(x=results.dates[d0:d0+ndead-1],y=results.mvavg_dead[d0:end], mode="lines",name=country[1])
         push!(traces,trace)
     end
-    layout=Layout(;title=title, yaxis_title=ylabel)
+    layout=Plotly.Layout(;title=title, yaxis_title=ylabel)
     p=Plotly.plot(traces,layout)
     Plotly.savehtml(p,"../docs/$(prefix)-dead.html",:remote)
 end
-
 
 function create_plots()
     plot_active_r0(download=true, world=true )
