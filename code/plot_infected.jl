@@ -73,26 +73,44 @@ function scrape_rki_from_wikipedia()
     end
     header(t)=push!([t[2][1][i][1][1].text for i=3:18],"DE")
     nrows(t)=length(t[2].children)-2
+
     function row(t,i)
 	tr=t[2][i+1]
 	start=2
 	if haskey(tr[1].attributes,"rowspan")
 	    start=3
 	end
+        @show start
 	[ replace(tr[i][1].text, r"\n|\t|\." => s"")  for i=start:length(tr.children)-2]
     end
+
     num(s)= try parse(Int64,s) catch e 0 end
     
     function dataframe(t,date_start)        
         df=DataFrame(Datum=[date_start+Day(i) for i=1:nrows(t)])
         for icol=1:length(header(t))
-	    df[!,Symbol(header(t)[icol])]=[num(row(t,i)[icol]) for i=1:nrows(t)]
+	    df[!,Symbol(header(t)[icol])]=[num(row(t,irow)[icol]) for irow=1:nrows(t)]
         end
         df
     end
     
     rawpage=HTTP.get("https://de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland/Statistik");
     parsed_page=parsehtml(String(rawpage.body));
+    t=find_table(parsed_page.root,"Infektionsfälle")
+    @show t
+    @show header(t)
+    @show nrows(t)
+    @show row(t,1)
+
+    @show t[2][269+1].children[18]
+    @show t[2][270+1].children[18]
+
+
+    @show row(t,269)
+    @show row(t,270)
+    
+    
+
     df=dataframe(find_table(parsed_page.root,"Infektionsfälle"),Date(2020,2,23))
     println(df[!,:Datum][end])
     CSV.write("rki.csv",df)
