@@ -80,8 +80,7 @@ function scrape_rki_from_wikipedia()
 	if haskey(tr[1].attributes,"rowspan")
 	    start=3
 	end
-        @show start
-	[ replace(tr[i][1].text, r"\n|\t|\." => s"")  for i=start:length(tr.children)-2]
+	[ isa(tr[i][1],HTMLText) ? replace(tr[i][1].text, r"\n|\t|\." => s"") : "" for i=start:length(tr.children)-1]
     end
 
     num(s)= try parse(Int64,s) catch e 0 end
@@ -97,17 +96,6 @@ function scrape_rki_from_wikipedia()
     rawpage=HTTP.get("https://de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland/Statistik");
     parsed_page=parsehtml(String(rawpage.body));
     t=find_table(parsed_page.root,"Infektionsfälle")
-    @show t
-    @show header(t)
-    @show nrows(t)
-    @show row(t,1)
-
-    @show t[2][269+1].children[18]
-    @show t[2][270+1].children[18]
-
-
-    @show row(t,269)
-    @show row(t,270)
     
     
 
