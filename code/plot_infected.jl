@@ -851,7 +851,9 @@ function countrylist()
     ["Brazil","g-"],
     ["Germany","r-o"],
     ["US","k-o"],
-    ["United Kingdom","k-"]
+    ["United Kingdom","k-"],
+    ["Poland", "-"],
+    ["Austria", "-"],
    ]
 end
 
