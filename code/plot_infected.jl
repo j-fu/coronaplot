@@ -169,8 +169,7 @@ end
 # Create timeseries for list of countries
 function create_countries_timeseries(df_jhu,countries)
     crows=select_countries_rows(df_jhu,countries)
-    data=sum(convert(Array,crows[:,c_timeseries_start:end]),dims=1)'
-    data=convert(Vector{Float64},vec(data))
+    data=sum(Matrix(crows[:,c_timeseries_start:end]),dims=1)'
 end
 
 
